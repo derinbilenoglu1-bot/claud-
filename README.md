@@ -1,6 +1,6 @@
-# Kampüs Ajandam
+# Checkpoint
 
-Derin'e özel, tek dosyalık üniversite ajandası — 2026-2027 ve sonrası için.
+A personal daily planner for university life at UofT St. George — 2026-27 and beyond. Fully English UI, mood check-in with tailored suggestions, and a chic racing-green editorial design.
 
 ## Özellikler
 

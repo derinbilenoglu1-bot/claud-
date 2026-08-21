@@ -1,5 +1,10 @@
-<title>Kampüs Ajandam</title>
+<title>Checkpoint</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1E4B39">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Checkpoint">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400..700;1,400..600&display=swap">
 <style>
@@ -46,7 +51,7 @@ input,select,textarea{font:inherit;color:var(--ink)}
   padding:30px 18px;border-right:1px solid var(--line);
   display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;
 }
-.brand{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:25px;letter-spacing:.01em;margin-bottom:2px;padding-left:12px}
+.brand{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:27px;letter-spacing:.01em;margin-bottom:2px;padding-left:12px}
 .brand small{display:block;font-family:"Instrument Sans",sans-serif;font-style:normal;font-weight:600;font-size:10.5px;color:var(--brass);letter-spacing:.22em;text-transform:uppercase;margin-top:4px}
 #sidebar hr{border:none;border-top:1px solid var(--line);margin:14px 0;width:100%}
 .nav-btn{
@@ -86,16 +91,31 @@ input,select,textarea{font:inherit;color:var(--ink)}
 .chip.ok{background:var(--ok-soft);color:var(--ok)} .chip.warn{background:var(--danger-soft);color:var(--danger)}
 .chip.brass{background:var(--brass-soft);color:var(--brass)}
 
-.quote{margin:0 0 26px;padding:2px 0 0 22px;position:relative;max-width:620px}
-.quote::before{
+.mood-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:22px}
+.mood-q{font-family:"Instrument Serif",Georgia,serif;font-size:21px;margin-bottom:13px}
+.mood-btns{display:flex;gap:8px;flex-wrap:wrap}
+.mood-btns button{
+  flex:1;min-width:74px;display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:11px 6px;border-radius:14px;border:1px solid var(--line);transition:background .15s,transform .1s;
+}
+.mood-btns button:hover{background:var(--surface2);transform:translateY(-1px)}
+.mood-btns .e{font-size:25px;line-height:1}
+.mood-btns .l{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.mood-msg{padding:2px 0 0 22px;position:relative}
+.mood-msg::before{
   content:"\201C";font-family:"Instrument Serif",Georgia,serif;font-size:58px;line-height:1;
-  color:var(--brass);position:absolute;left:-6px;top:-8px;
+  color:var(--brass);position:absolute;left:-4px;top:-8px;
 }
-.quote blockquote{
+.mood-msg p{
   margin:0;font-family:"Instrument Serif",Georgia,serif;font-style:italic;
-  font-size:22.5px;line-height:1.32;letter-spacing:.005em;
+  font-size:21.5px;line-height:1.34;letter-spacing:.005em;
 }
-.quote figcaption{margin-top:7px;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.mood-foot{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.mood-foot .who{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mood-strip{display:flex;gap:5px;margin-left:auto;align-items:flex-end}
+.mood-strip .d{display:flex;flex-direction:column;align-items:center;gap:1px;font-size:8.5px;color:var(--muted);font-weight:600}
+.mood-strip .d span{font-size:15px;line-height:1.2}
+.linkish{color:var(--accent);font-weight:600;font-size:12px;cursor:pointer;background:none;border:none}
 
 .btn{
   display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:99px;
@@ -143,9 +163,9 @@ input,select,textarea{font:inherit;color:var(--ink)}
 .task .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:3px;font-size:12px;color:var(--muted);align-items:center}
 .tag{padding:1.5px 9px;border-radius:99px;font-size:11px;font-weight:600;background:var(--surface2);color:var(--muted);letter-spacing:.04em}
 .tag.course{color:#fff}
-.tag.type-sınav,.tag.type-quiz{background:var(--danger-soft);color:var(--danger)}
-.tag.type-ödev,.tag.type-proje{background:var(--accent-soft);color:var(--accent)}
-.tag.type-okuma,.tag.type-lab{background:var(--brass-soft);color:var(--brass)}
+.tag.type-exam,.tag.type-quiz{background:var(--danger-soft);color:var(--danger)}
+.tag.type-assignment,.tag.type-project{background:var(--accent-soft);color:var(--accent)}
+.tag.type-reading,.tag.type-lab{background:var(--brass-soft);color:var(--brass)}
 .due{font-variant-numeric:tabular-nums;font-weight:600}
 .due.over{color:var(--danger)} .due.today{color:var(--accent)}
 .imp{color:var(--danger);font-weight:700}
@@ -164,7 +184,7 @@ input,select,textarea{font:inherit;color:var(--ink)}
 .empty b{display:block;font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:17px;color:var(--ink);margin-bottom:4px}
 
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.cal-head h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:23px;text-transform:capitalize}
+.cal-head h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:23px}
 .cal-nav{display:flex;gap:6px}
 .cal-nav button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;font-size:16px}
 .cal-nav button:hover{background:var(--surface2)}
@@ -242,15 +262,15 @@ input,select,textarea{font:inherit;color:var(--ink)}
 
 <div id="app">
   <aside id="sidebar">
-    <div class="brand">Kampüs Ajandam<small>UofT St. George · 2026–27</small></div>
+    <div class="brand">Checkpoint<small>UofT St. George · 2026–27</small></div>
     <hr>
     <nav id="nav-side"></nav>
-    <div id="savechip"><span class="dot"></span><span class="lbl">Yükleniyor…</span></div>
+    <div id="savechip"><span class="dot"></span><span class="lbl">Loading…</span></div>
   </aside>
   <main id="main"></main>
 </div>
 <nav id="tabbar"></nav>
-<button class="fab" id="fab" aria-label="Görev ekle">+</button>
+<button class="fab" id="fab" aria-label="Add to-do">+</button>
 <div id="modal-root"></div>
 <div id="toast-root"></div>
 
@@ -258,10 +278,11 @@ input,select,textarea{font:inherit;color:var(--ink)}
 "use strict";
 /* ---------- constants ---------- */
 const LS="kampus-ajandam-v1", LS_NOTIF="kampus-ajandam-notified";
-const DAYS=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
-const DAYS_S=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
-const MONTHS=["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
-const TYPES=["ödev","sınav","quiz","proje","lab","okuma","kişisel","diğer"];
+const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const DAYS_S=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const TYPES=["assignment","exam","quiz","project","lab","reading","personal","other"];
+const TYPE_MIGRATE={"ödev":"assignment","sınav":"exam","proje":"project","okuma":"reading","kişisel":"personal","diğer":"other"};
 const COLORS=["#1E4B39","#28418F","#8A3B2E","#9C7A2F","#5B3A6E","#2E6E70","#7A2E4D","#4A5568"];
 const ICONS={
   today:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
@@ -271,54 +292,63 @@ const ICONS={
   gear:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.4 2.6a7 7 0 0 0-2.1 1.2l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.4-2.6a7 7 0 0 0 2.1-1.2l2.4 1 2-3.4-2-1.6c.06-.4.1-.8.1-1.2z"/></svg>',
   bell:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>'
 };
-const QUOTES=[
-  {t:"The secret of getting ahead is getting started.",a:"Mark Twain"},
-  {t:"It always seems impossible until it's done.",a:"Nelson Mandela"},
-  {t:"Well begun is half done.",a:"Aristotle"},
-  {t:"We are what we repeatedly do. Excellence, then, is not an act, but a habit.",a:"Will Durant"},
-  {t:"The future depends on what you do today.",a:"Mahatma Gandhi"},
-  {t:"Success is the sum of small efforts, repeated day in and day out.",a:"Robert Collier"},
-  {t:"Don't watch the clock; do what it does. Keep going.",a:"Sam Levenson"},
-  {t:"Action is the foundational key to all success.",a:"Pablo Picasso"},
-  {t:"You don't have to be great to start, but you have to start to be great.",a:"Zig Ziglar"},
-  {t:"Motivation gets you going, but discipline keeps you growing.",a:"John C. Maxwell"},
-  {t:"A year from now you may wish you had started today.",a:"Karen Lamb"},
-  {t:"The expert in anything was once a beginner.",a:""},
-  {t:"Dream big. Start small. Act now.",a:"Robin Sharma"},
-  {t:"Done is better than perfect.",a:""},
-  {t:"Whether you think you can or you think you can't, you're right.",a:"Henry Ford"},
-  {t:"Genius is one percent inspiration, ninety-nine percent perspiration.",a:"Thomas Edison"},
-  {t:"The best way to predict the future is to create it.",a:"Peter Drucker"},
-  {t:"Fall seven times, stand up eight.",a:"Japanese proverb"},
-  {t:"Push yourself, because no one else is going to do it for you.",a:""},
-  {t:"Great things never come from comfort zones.",a:""},
-  {t:"Hard work beats talent when talent doesn't work hard.",a:"Tim Notke"},
-  {t:"If you get tired, learn to rest, not to quit.",a:"Banksy"},
-  {t:"Believe you can and you're halfway there.",a:"Theodore Roosevelt"},
-  {t:"Start where you are. Use what you have. Do what you can.",a:"Arthur Ashe"},
-  {t:"It does not matter how slowly you go as long as you do not stop.",a:"Confucius"},
-  {t:"Perseverance is not a long race; it is many short races one after the other.",a:"Walter Elliot"},
-  {t:"The beautiful thing about learning is that no one can take it away from you.",a:"B.B. King"},
-  {t:"Education is the most powerful weapon which you can use to change the world.",a:"Nelson Mandela"},
-  {t:"An investment in knowledge pays the best interest.",a:"Benjamin Franklin"},
-  {t:"Discipline is the bridge between goals and accomplishment.",a:"Jim Rohn"},
-  {t:"Strive for progress, not perfection.",a:""},
-  {t:"What we learn with pleasure we never forget.",a:"Alfred Mercier"},
-  {t:"Little by little, one travels far.",a:""},
-  {t:"Winners are not people who never fail, but people who never quit.",a:""},
-  {t:"Your only limit is you.",a:""},
-  {t:"Make each day your masterpiece.",a:"John Wooden"}
+
+/* ---------- mood check-in ---------- */
+const MOODS=[
+  {id:"stressed",e:"😮‍💨",l:"Stressed"},
+  {id:"down",e:"😔",l:"Down"},
+  {id:"meh",e:"😐",l:"Meh"},
+  {id:"good",e:"🙂",l:"Good"},
+  {id:"great",e:"😄",l:"Great"}
 ];
-function quoteOfDay(){
-  const d=new Date(), start=new Date(d.getFullYear(),0,0);
-  const doy=Math.floor((d-start)/864e5);
-  return QUOTES[(doy+d.getFullYear())%QUOTES.length];
+const MOOD_MSGS={
+  stressed:[
+    "Deep breath. Pick the smallest task on your list and finish just that — momentum beats pressure.",
+    "You don't have to do everything today. Choose the one thing that matters most and let the rest wait.",
+    "Try 25 minutes of focused work, then a 5-minute walk. Stress shrinks the moment the work starts.",
+    "Step outside for ten minutes of fresh air before your next task — your brain will thank you.",
+    "Write down everything on your mind, then cross out what can wait until tomorrow. Half of it can."
+  ],
+  down:[
+    "Be as kind to yourself today as you would be to a friend. One small win is enough.",
+    "Low days pass. Do something gentle: a warm drink, a short walk, one tiny task.",
+    "Text someone you like talking to. Connection is the fastest way out of a grey day.",
+    "It's okay to move slowly today. Showing up at all counts.",
+    "Put on your favorite song and do one small thing. Tiny actions lift heavy moods."
+  ],
+  meh:[
+    "Neutral days are perfect for boring-but-important work. Knock one thing out.",
+    "Start with a two-minute task. Motivation usually shows up after you begin.",
+    "Change your scenery — a library seat or a café table can reset the whole day.",
+    "Make today one percent better: one task, one walk, one glass of water.",
+    "No spark? Borrow one: put on a playlist, set a 20-minute timer, and go."
+  ],
+  good:[
+    "Nice — ride that energy. Start with the task you've been putting off.",
+    "A good mood is fuel. Bank a win on something meaningful today.",
+    "Feeling steady? Perfect time to get ahead of next week.",
+    "Keep the streak going — finish one thing before the day gets busy.",
+    "Good days compound. One focused hour now is a gift to future you."
+  ],
+  great:[
+    "You're glowing today — aim it at your biggest challenge.",
+    "Great days are for bold moves. Tackle the hardest thing on your list first.",
+    "Save this feeling: crush one big task, then celebrate properly.",
+    "Energy like this is rare — invest it where it counts the most.",
+    "Unstoppable mode: pick the scariest item on your list and make it small."
+  ]
+};
+function moodMsg(id){
+  const pool=MOOD_MSGS[id]||MOOD_MSGS.good;
+  let h=0; const k=todayKey()+id;
+  for(let i=0;i<k.length;i++)h=(h*31+k.charCodeAt(i))>>>0;
+  return pool[h%pool.length];
 }
 
 /* ---------- state ---------- */
 const defaultState=()=>({
   v:1, updatedAt:new Date().toISOString(),
-  courses:[], schedule:[], tasks:[], meta:{},
+  courses:[], schedule:[], tasks:[], mood:{}, meta:{},
   settings:{
     name:"Derin", notif:false,
     guzStart:"2026-09-08", guzEnd:"2026-12-07",
@@ -327,18 +357,43 @@ const defaultState=()=>({
   }
 });
 function hydrate(p){
-  return Object.assign(defaultState(),p,{
+  const s=Object.assign(defaultState(),p,{
     settings:Object.assign(defaultState().settings,p.settings||{}),
-    meta:p.meta||{}
+    meta:p.meta||{}, mood:p.mood||{}
   });
+  (s.tasks||[]).forEach(x=>{ if(TYPE_MIGRATE[x.type])x.type=TYPE_MIGRATE[x.type]; });
+  return s;
 }
 let S=defaultState();
 try{ const raw=localStorage.getItem(LS); if(raw){ const p=JSON.parse(raw); if(p&&p.v===1) S=hydrate(p); } }catch(e){}
 
 /* ---------- UofT 2026-27 seed (from course calendar .ics) ---------- */
-const SEED_FLAG="uoft-2026-27";
+const SEED_V1="uoft-2026-27", SEED_V2="uoft-2026-27-en";
+const SEED_HOLIDAYS=[
+  {from:"2026-09-07",to:"2026-09-07",name:"Labour Day"},
+  {from:"2026-10-12",to:"2026-10-12",name:"Thanksgiving"},
+  {from:"2026-10-26",to:"2026-10-30",name:"Fall Reading Week"},
+  {from:"2026-12-23",to:"2027-01-03",name:"Winter Break"},
+  {from:"2027-02-15",to:"2027-02-15",name:"Family Day"},
+  {from:"2027-02-15",to:"2027-02-19",name:"Winter Reading Week"},
+  {from:"2027-03-26",to:"2027-03-26",name:"Good Friday"}
+];
+const SEED_KEYDATES=[
+  {from:"2026-09-08",to:"2026-09-08",name:"Fall classes begin 🎬"},
+  {from:"2026-12-07",to:"2026-12-07",name:"Last day of fall classes"},
+  {from:"2026-12-09",to:"2026-12-22",name:"Fall exam period (approx.)"},
+  {from:"2027-01-11",to:"2027-01-11",name:"Winter classes begin 🎬"},
+  {from:"2027-04-09",to:"2027-04-09",name:"Last day of winter classes"},
+  {from:"2027-04-12",to:"2027-04-30",name:"Winter exam period (approx.)"}
+];
 function ensureSeed(){
-  if(S.meta&&S.meta.seed===SEED_FLAG)return false;
+  const cur=S.meta&&S.meta.seed;
+  if(cur===SEED_V2)return false;
+  if(cur===SEED_V1){
+    S.settings.holidays=SEED_HOLIDAYS; S.settings.keyDates=SEED_KEYDATES;
+    S.meta=Object.assign({},S.meta,{seed:SEED_V2});
+    return true;
+  }
   const defs=[
     ["CSC108H1","Introduction to Computer Programming","#28418F"],
     ["ECO320H1","Economic Analysis of Law","#8A3B2E"],
@@ -359,7 +414,6 @@ function ensureSeed(){
   });
   const F={from:"2026-09-08",to:"2026-12-07"}, W={from:"2027-01-11",to:"2027-04-09"};
   const rows=[
-    // Güz 2026
     ["CSC108H1",0,"12:00","13:00","MP 103","LEC",F],
     ["CSC108H1",2,"11:00","13:00","AH 100","LEC",F],
     ["ECO320H1",1,"11:00","13:00","RW 117","LEC",F],
@@ -369,7 +423,6 @@ function ensureSeed(){
     ["MGT250H1",3,"09:00","11:00","OI G162","LEC",F],
     ["TRN250Y1",1,"15:00","17:00","GI 102","LEC",F],
     ["TRN250Y1",2,"16:00","17:00","TL 1016","TUT",F],
-    // Kış/Bahar 2027
     ["ECO359H1",1,"09:00","11:00","FE 230","LEC",W],
     ["ECO359H1",3,"10:00","11:00","SS 2135","LEC",W],
     ["ECO365H1",2,"11:00","13:00","RW 110","LEC",W],
@@ -385,29 +438,13 @@ function ensureSeed(){
       courseId:idOf[r[0]],day:r[1],start:r[2],end:r[3],loc:r[4],kind:r[5],from:r[6].from,to:r[6].to});
   });
   Object.assign(S.settings,{guzStart:"2026-09-08",guzEnd:"2026-12-07",baharStart:"2027-01-11",baharEnd:"2027-04-09",
-    holidays:[
-      {from:"2026-09-07",to:"2026-09-07",name:"Labour Day"},
-      {from:"2026-10-12",to:"2026-10-12",name:"Thanksgiving"},
-      {from:"2026-10-26",to:"2026-10-30",name:"Güz Okuma Haftası"},
-      {from:"2026-12-23",to:"2027-01-03",name:"Kış Tatili"},
-      {from:"2027-02-15",to:"2027-02-15",name:"Family Day"},
-      {from:"2027-02-15",to:"2027-02-19",name:"Kış Okuma Haftası"},
-      {from:"2027-03-26",to:"2027-03-26",name:"Good Friday"}
-    ],
-    keyDates:[
-      {from:"2026-09-08",to:"2026-09-08",name:"Güz dersleri başlıyor 🎬"},
-      {from:"2026-12-07",to:"2026-12-07",name:"Güz derslerinin son günü"},
-      {from:"2026-12-09",to:"2026-12-22",name:"Güz sınav dönemi (yaklaşık)"},
-      {from:"2027-01-11",to:"2027-01-11",name:"Kış dersleri başlıyor 🎬"},
-      {from:"2027-04-09",to:"2027-04-09",name:"Kış derslerinin son günü"},
-      {from:"2027-04-12",to:"2027-04-30",name:"Kış sınav dönemi (yaklaşık)"}
-    ]});
-  S.meta=Object.assign({},S.meta,{seed:SEED_FLAG});
+    holidays:SEED_HOLIDAYS,keyDates:SEED_KEYDATES});
+  S.meta=Object.assign({},S.meta,{seed:SEED_V2});
   return true;
 }
 if(ensureSeed()){ S.updatedAt=new Date().toISOString(); try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){} }
 
-const UI={view:"today", selDate:null, calY:null, calM:null, taskFilter:"açık", schedTerm:null};
+const UI={view:"today", selDate:null, calY:null, calM:null, taskFilter:"open", schedTerm:null};
 
 /* ---------- helpers ---------- */
 const $=s=>document.querySelector(s);
@@ -418,8 +455,8 @@ const dkey=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
 const todayKey=()=>dkey(new Date());
 const parseKey=k=>{const[y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d);};
 const dowIdx=d=>(d.getDay()+6)%7;
-const fmtLong=d=>DAYS[dowIdx(d)]+", "+d.getDate()+" "+MONTHS[d.getMonth()];
-const fmtShort=k=>{const d=parseKey(k);return d.getDate()+" "+MONTHS[d.getMonth()].slice(0,3);};
+const fmtLong=d=>DAYS[dowIdx(d)]+", "+MONTHS[d.getMonth()]+" "+d.getDate();
+const fmtShort=k=>{const d=parseKey(k);return MONTHS[d.getMonth()].slice(0,3)+" "+d.getDate();};
 const daysDiff=k=>Math.round((parseKey(k)-parseKey(todayKey()))/864e5);
 const nowMin=()=>{const n=new Date();return n.getHours()*60+n.getMinutes();};
 const toMin=t=>{if(!t)return null;const[h,m]=t.split(":").map(Number);return h*60+m;};
@@ -436,22 +473,22 @@ function weekChip(){
   const t=todayKey(),s=S.settings;
   const inR=(a,b)=>a&&b&&t>=a&&t<=b;
   let name=null,start=null;
-  if(inR(s.guzStart,s.guzEnd)){name="Güz";start=s.guzStart;}
-  else if(inR(s.baharStart,s.baharEnd)){name="Bahar";start=s.baharStart;}
+  if(inR(s.guzStart,s.guzEnd)){name="Fall";start=s.guzStart;}
+  else if(inR(s.baharStart,s.baharEnd)){name="Winter";start=s.baharStart;}
   if(!name){
-    if(s.guzStart&&t<s.guzStart){const d=daysDiff(s.guzStart);return `Güz dönemine ${d} gün`;}
-    if(s.baharStart&&t<s.baharStart&&t>s.guzEnd){const d=daysDiff(s.baharStart);return `Bahar dönemine ${d} gün`;}
-    return "Dönem arası";
+    if(s.guzStart&&t<s.guzStart){const d=daysDiff(s.guzStart);return `Fall starts in ${d} day${d===1?"":"s"}`;}
+    if(s.baharStart&&t<s.baharStart&&t>s.guzEnd){const d=daysDiff(s.baharStart);return `Winter starts in ${d} day${d===1?"":"s"}`;}
+    return "Term break";
   }
   const wk=Math.floor((parseKey(t)-parseKey(start))/(7*864e5))+1;
-  return `${name} dönemi · ${wk}. hafta`;
+  return `${name} · Week ${wk}`;
 }
 function relDue(k){
   const d=daysDiff(k);
-  if(d<0)return{cls:"over",txt:Math.abs(d)+" gün gecikti"};
-  if(d===0)return{cls:"today",txt:"Bugün"};
-  if(d===1)return{cls:"",txt:"Yarın"};
-  if(d<=7)return{cls:"",txt:DAYS[dowIdx(parseKey(k))]+" ("+d+" gün)"};
+  if(d<0)return{cls:"over",txt:Math.abs(d)+(d===-1?" day late":" days late")};
+  if(d===0)return{cls:"today",txt:"Today"};
+  if(d===1)return{cls:"",txt:"Tomorrow"};
+  if(d<=7)return{cls:"",txt:DAYS[dowIdx(parseKey(k))]+" ("+d+"d)"};
   return{cls:"",txt:fmtShort(k)};
 }
 
@@ -465,7 +502,7 @@ function persist(){
   S.updatedAt=new Date().toISOString();
   try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}
   if(cloudMode==="files"){
-    setChip("saving","Kaydediliyor…");
+    setChip("saving","Saving…");
     clearTimeout(saveTimer); saveTimer=setTimeout(cloudSave,2500);
   }
 }
@@ -475,14 +512,14 @@ async function cloudSave(){
   cloudBusy=true; cloudDirty=false;
   try{
     await artifactNS.publish({"data/state.json":JSON.stringify(S)});
-    setChip("saved","Kaydedildi · her yerden erişilebilir");
+    setChip("saved","Saved · syncs everywhere");
   }catch(err){
     const c=err&&err.code;
     if(["capability_disabled","not_granted","not_writer","not_declared"].includes(c)){
-      cloudMode="local"; setChip("local","Bu tarayıcıda kayıtlı");
+      cloudMode="local"; setChip("local","Stored in this browser");
     }else if(c==="conflict"){ /* shell reloads to winner */ }
     else if(c==="rate_limited"){ clearTimeout(saveTimer); saveTimer=setTimeout(cloudSave,20000); }
-    else { setChip("error","Kaydedilemedi, tekrar denenecek"); clearTimeout(saveTimer); saveTimer=setTimeout(cloudSave,8000); }
+    else { setChip("error","Save failed, retrying"); clearTimeout(saveTimer); saveTimer=setTimeout(cloudSave,8000); }
   }
   cloudBusy=false;
   if(cloudDirty){clearTimeout(saveTimer); saveTimer=setTimeout(cloudSave,2500);}
@@ -501,10 +538,10 @@ async function initCloud(){
   }
   try{ artifactNS=window.claude&&window.claude.use?await window.claude.use("artifact"):null; }catch(e){artifactNS=null;}
   if(artifactNS){
-    cloudMode="files"; setChip("saved","Kaydedildi · her yerden erişilebilir");
+    cloudMode="files"; setChip("saved","Saved · syncs everywhere");
     if(!remote||S.updatedAt>remote.updatedAt){clearTimeout(saveTimer); saveTimer=setTimeout(cloudSave,1500);}
   }else{
-    cloudMode="local"; setChip("local","Bu tarayıcıda kayıtlı");
+    cloudMode="local"; setChip("local","Stored in this browser");
   }
 }
 
@@ -514,17 +551,17 @@ function sendNotif(title,body){ if(!S.settings.notif||!notifOK())return; try{new
 function notifLog(){ try{return JSON.parse(localStorage.getItem(LS_NOTIF)||"{}");}catch(e){return{};} }
 function notifMark(k){ const l=notifLog(); l[k]=1; const t=todayKey(); Object.keys(l).forEach(x=>{if(!x.startsWith(t))delete l[x];}); try{localStorage.setItem(LS_NOTIF,JSON.stringify(l));}catch(e){} }
 function notifTick(){
-  const t=todayKey(), log=notifLog();
+  const t=todayKey(), log=notifLog(), hour=new Date().getHours();
   if(!log[t+":digest"]){
     const due=S.tasks.filter(x=>!x.done&&x.due===t).length;
     const over=S.tasks.filter(x=>!x.done&&x.due&&x.due<t).length;
     const cls=lessonsOn(t).length;
     if(due+over+cls>0){
       const parts=[];
-      if(cls)parts.push(cls+" ders");
-      if(due)parts.push(due+" görev bugün");
-      if(over)parts.push(over+" gecikmiş görev");
-      sendNotif("Günaydın "+(S.settings.name||"")+" 👋","Bugün: "+parts.join(" · "));
+      if(cls)parts.push(cls+(cls===1?" class":" classes"));
+      if(due)parts.push(due+" due today");
+      if(over)parts.push(over+" overdue");
+      sendNotif("Good morning "+(S.settings.name||"")+" 👋","Today: "+parts.join(" · "));
     }
     notifMark(t+":digest");
   }
@@ -534,17 +571,33 @@ function notifTick(){
     const k=t+":cls:"+e.id;
     if(st-nm>0&&st-nm<=20&&!log[k]){
       const c=courseOf(e.courseId);
-      sendNotif((c?c.name:"Ders")+" birazdan başlıyor","Saat "+e.start+(e.loc?" · "+e.loc:""));
+      sendNotif((c?c.name:"Class")+" starts soon","At "+e.start+(e.loc?" · "+e.loc:""));
       notifMark(k);
     }
   });
   S.tasks.filter(x=>!x.done&&x.due===t&&x.time).forEach(x=>{
     const tm=toMin(x.time), k=t+":task:"+x.id;
     if(tm-nm>0&&tm-nm<=60&&!log[k]){
-      sendNotif("Teslim yaklaşıyor: "+x.title,"Bugün saat "+x.time);
+      sendNotif("Due soon: "+x.title,"Today at "+x.time);
       notifMark(k);
     }
   });
+  if(hour>=17&&!S.mood[t]&&!log[t+":mood"]){
+    sendNotif("How are you feeling?","Log today's mood in Checkpoint 🌿");
+    notifMark(t+":mood");
+  }
+  if(hour>=20&&!log[t+":tomorrow"]){
+    const tomorrow=dkey(new Date(Date.now()+864e5));
+    const due=S.tasks.filter(x=>!x.done&&x.due===tomorrow);
+    const cls=lessonsOn(tomorrow);
+    if(due.length+cls.length>0){
+      const parts=[];
+      if(due.length)parts.push(due.length+" due");
+      if(cls.length)parts.push("first class at "+cls[0].start);
+      sendNotif("Tomorrow's preview 🌙",parts.join(" · "));
+    }
+    notifMark(t+":tomorrow");
+  }
 }
 
 /* ---------- toast ---------- */
@@ -555,7 +608,7 @@ function toast(msg){
 }
 
 /* ---------- nav ---------- */
-const NAV=[["today","Bugün",ICONS.today],["cal","Takvim",ICONS.cal],["tasks","Görevler",ICONS.tasks],["sched","Program",ICONS.sched],["settings","Ayarlar",ICONS.gear]];
+const NAV=[["today","Today",ICONS.today],["cal","Calendar",ICONS.cal],["tasks","To-Dos",ICONS.tasks],["sched","Schedule",ICONS.sched],["settings","Settings",ICONS.gear]];
 function renderNav(){
   const t=todayKey();
   const badge=S.tasks.filter(x=>!x.done&&x.due&&x.due<=t).length;
@@ -568,11 +621,11 @@ function taskHTML(x,showDue=true){
   const c=courseOf(x.courseId);
   const due=x.due?relDue(x.due):null;
   return `<div class="task ${x.done?"done":""}" data-tid="${x.id}">
-    <input type="checkbox" class="cb" ${x.done?"checked":""} data-toggle="${x.id}" aria-label="Tamamlandı">
+    <input type="checkbox" class="cb" ${x.done?"checked":""} data-toggle="${x.id}" aria-label="Done">
     <div class="tx" data-edit-task="${x.id}">
       <div class="tt">${x.priority?'<span class="imp">! </span>':""}${esc(x.title)}</div>
       <div class="meta">
-        ${x.type&&x.type!=="diğer"?`<span class="tag type-${x.type}">${x.type}</span>`:""}
+        ${x.type&&x.type!=="other"?`<span class="tag type-${x.type}">${x.type}</span>`:""}
         ${c?`<span class="tag course" style="background:${c.color}">${esc(c.code||c.name)}</span>`:""}
         ${showDue&&due?`<span class="due ${due.cls}">${due.txt}${x.time?" "+x.time:""}</span>`:x.time?`<span class="due">${x.time}</span>`:""}
         ${x.notes?`<span>· ${esc(x.notes.length>60?x.notes.slice(0,60)+"…":x.notes)}</span>`:""}
@@ -585,7 +638,33 @@ function lessonHTML(e,mode){
   return `<div class="lesson ${mode||""}" data-edit-sched="${e.id}">
     <span class="time">${e.start}–${e.end}</span>
     <span class="bar" style="background:${c?c.color:"var(--muted)"}"></span>
-    <div><div class="nm">${esc(c?c.name:"Ders")}${e.kind&&e.kind!=="LEC"?`<span class="kind">${esc(e.kind)}</span>`:""}</div>${e.loc?`<div class="loc">${esc(e.loc)}</div>`:""}</div>
+    <div><div class="nm">${esc(c?c.name:"Class")}${e.kind&&e.kind!=="LEC"?`<span class="kind">${esc(e.kind)}</span>`:""}</div>${e.loc?`<div class="loc">${esc(e.loc)}</div>`:""}</div>
+  </div>`;
+}
+
+/* ---------- mood block ---------- */
+function moodBlock(){
+  const t=todayKey(), cur=S.mood[t];
+  const strip=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(Date.now()-i*864e5), k=dkey(d);
+    const m=MOODS.find(z=>z.id===S.mood[k]);
+    strip.push(`<div class="d"><span>${m?m.e:"·"}</span>${DAYS_S[dowIdx(d)][0]}</div>`);
+  }
+  if(!cur){
+    return `<div class="mood-card">
+      <div class="mood-q">How are you feeling today?</div>
+      <div class="mood-btns">${MOODS.map(m=>`<button data-mood="${m.id}"><span class="e">${m.e}</span><span class="l">${m.l}</span></button>`).join("")}</div>
+    </div>`;
+  }
+  const m=MOODS.find(z=>z.id===cur)||MOODS[3];
+  return `<div class="mood-card">
+    <div class="mood-msg"><p>${esc(moodMsg(cur))}</p></div>
+    <div class="mood-foot">
+      <span class="who">${m.e} Feeling ${m.l.toLowerCase()}</span>
+      <button class="linkish" data-act="mood-change">change</button>
+      <div class="mood-strip">${strip.join("")}</div>
+    </div>
   </div>`;
 }
 
@@ -593,28 +672,27 @@ function lessonHTML(e,mode){
 function viewToday(){
   const now=new Date(), t=todayKey(), nm=nowMin();
   const hour=now.getHours();
-  const greet=hour<12?"Günaydın":hour<18?"İyi günler":"İyi akşamlar";
+  const greet=hour<12?"Good morning":hour<18?"Good afternoon":"Good evening";
   const overdue=S.tasks.filter(x=>!x.done&&x.due&&x.due<t).sort((a,b)=>a.due.localeCompare(b.due));
   const dueToday=S.tasks.filter(x=>!x.done&&x.due===t).sort((a,b)=>(b.priority?1:0)-(a.priority?1:0)||(a.time||"99").localeCompare(b.time||"99"));
   const noDate=S.tasks.filter(x=>!x.done&&!x.due);
   const doneToday=S.tasks.filter(x=>x.done&&x.doneAt&&x.doneAt.startsWith(t));
   const lessons=lessonsOn(t);
   const hol=holidayOf(t);
+  const keys=keyDatesOf(t);
   const upcoming=S.tasks.filter(x=>!x.done&&x.due&&x.due>t&&daysDiff(x.due)<=7)
     .sort((a,b)=>a.due.localeCompare(b.due)||(b.priority?1:0)-(a.priority?1:0));
-  const q=quoteOfDay();
 
-  const keys=keyDatesOf(t);
   let digest="";
   if(keys.length){
     digest+=keys.map(kd=>`<div class="digest brass">${ICONS.bell}<span><b>${esc(kd.name)}</b></span></div>`).join("");
   }
   if(hol){
-    digest+=`<div class="digest brass">${ICONS.bell}<span><b>${esc(hol.name)}</b> — bugün ders yok. Tadını çıkar 🍂</span></div>`;
+    digest+=`<div class="digest brass">${ICONS.bell}<span><b>${esc(hol.name)}</b> — no classes today. Enjoy it 🍂</span></div>`;
   }else if(overdue.length){
-    digest+=`<div class="digest warn">${ICONS.bell}<span><b>${overdue.length} görev gecikti.</b> En eskisi: ${esc(overdue[0].title)} (${fmtShort(overdue[0].due)}). Bugün halletmeye ne dersin?</span></div>`;
+    digest+=`<div class="digest warn">${ICONS.bell}<span><b>${overdue.length} to-do${overdue.length===1?" is":"s are"} overdue.</b> Oldest: ${esc(overdue[0].title)} (${fmtShort(overdue[0].due)}). How about clearing it today?</span></div>`;
   }else if(dueToday.length===0&&lessons.length===0&&S.tasks.length>0&&!keys.length){
-    digest+=`<div class="digest">${ICONS.bell}<span>Bugün için planlı bir şey yok. Nefes al ya da öne geç 🙂</span></div>`;
+    digest+=`<div class="digest">${ICONS.bell}<span>Nothing planned for today. Take a breath — or get ahead 🙂</span></div>`;
   }
 
   return `
@@ -624,42 +702,39 @@ function viewToday(){
       <h1>${greet}, ${esc(S.settings.name||"")}.</h1>
       <div class="sub"><span class="chip">${weekChip()}</span></div>
     </div>
-    <button class="btn" data-act="add-task">+ Görev ekle</button>
+    <button class="btn" data-act="add-task">+ Add to-do</button>
   </div>
-  <figure class="quote">
-    <blockquote>${esc(q.t)}</blockquote>
-    ${q.a?`<figcaption>— ${esc(q.a)}</figcaption>`:""}
-  </figure>
+  ${moodBlock()}
   ${digest}
   <div class="stat-row">
-    <div class="stat acc"><div class="n">${dueToday.length}</div><div class="l">bugün teslim</div></div>
-    <div class="stat ${overdue.length?"warn":""}"><div class="n">${overdue.length}</div><div class="l">gecikmiş</div></div>
-    <div class="stat ok"><div class="n">${doneToday.length}</div><div class="l">tamamlandı</div></div>
+    <div class="stat acc"><div class="n">${dueToday.length}</div><div class="l">due today</div></div>
+    <div class="stat ${overdue.length?"warn":""}"><div class="n">${overdue.length}</div><div class="l">overdue</div></div>
+    <div class="stat ok"><div class="n">${doneToday.length}</div><div class="l">done today</div></div>
   </div>
   <div class="sec card">
-    <div class="card-h"><h2>Bugünün dersleri</h2><button class="btn ghost sm" data-act="add-sched">+ Ders</button></div>
+    <div class="card-h"><h2>Today's classes</h2><button class="btn ghost sm" data-act="add-sched">+ Class</button></div>
     <div class="card-b">
       ${lessons.length?lessons.map(e=>{
         const st=toMin(e.start),en=toMin(e.end);
         const mode=nm>=st&&nm<en?"now":nm>=en?"past":"";
         return lessonHTML(e,mode);
-      }).join(""):`<div class="empty"><b>${hol?esc(hol.name)+" — ders yok":"Bugün ders yok"}</b>${S.schedule.length?"Programın boş bir günündesin.":"Ders programını “Program” sekmesinden ekle."}</div>`}
+      }).join(""):`<div class="empty"><b>${hol?esc(hol.name)+" — no classes":"No classes today"}</b>${S.schedule.length?"A free day in your schedule.":"Add your schedule from the Schedule tab."}</div>`}
     </div>
   </div>
   <div class="sec card">
-    <div class="card-h"><h2>Bugün yapılacaklar</h2></div>
+    <div class="card-h"><h2>Due today</h2></div>
     <div class="card-b">
-      ${(overdue.length+dueToday.length)?overdue.map(x=>taskHTML(x)).join("")+dueToday.map(x=>taskHTML(x)).join(""):`<div class="empty"><b>Bugün teslim edilecek bir şey yok 🎉</b>Yeni görevleri “+ Görev ekle” ile ekleyebilirsin.</div>`}
-      ${noDate.length?`<div style="margin-top:10px"><div class="sec-title">Tarihsiz</div>${noDate.map(x=>taskHTML(x,false)).join("")}</div>`:""}
+      ${(overdue.length+dueToday.length)?overdue.map(x=>taskHTML(x)).join("")+dueToday.map(x=>taskHTML(x)).join(""):`<div class="empty"><b>Nothing due today 🎉</b>Add new items with “+ Add to-do”.</div>`}
+      ${noDate.length?`<div style="margin-top:10px"><div class="sec-title">No date</div>${noDate.map(x=>taskHTML(x,false)).join("")}</div>`:""}
     </div>
   </div>
   <div class="sec card">
-    <div class="card-h"><h2>Önümüzdeki 7 gün</h2></div>
+    <div class="card-h"><h2>Next 7 days</h2></div>
     <div class="card-b">
-      ${upcoming.length?upcoming.map(x=>taskHTML(x)).join(""):`<div class="empty">Önümüzdeki hafta için planlı görev yok.</div>`}
+      ${upcoming.length?upcoming.map(x=>taskHTML(x)).join(""):`<div class="empty">Nothing planned for the coming week.</div>`}
     </div>
   </div>
-  ${doneToday.length?`<div class="sec card"><div class="card-h"><h2>Bugün bitirdiklerin</h2><span class="chip ok">${doneToday.length} ✓</span></div><div class="card-b">${doneToday.map(x=>taskHTML(x,false)).join("")}</div></div>`:""}`;
+  ${doneToday.length?`<div class="sec card"><div class="card-h"><h2>Finished today</h2><span class="chip ok">${doneToday.length} ✓</span></div><div class="card-b">${doneToday.map(x=>taskHTML(x,false)).join("")}</div></div>`:""}`;
 }
 
 /* ---------- view: calendar ---------- */
@@ -683,7 +758,7 @@ function viewCal(){
     const items=(byDay[k]||[]).filter(x=>!x.done);
     const dots=items.slice(0,4).map(x=>{
       const c=courseOf(x.courseId);
-      return `<i style="background:${c?c.color:(x.type==="sınav"||x.type==="quiz")?"var(--danger)":"var(--accent)"}"></i>`;
+      return `<i style="background:${c?c.color:(x.type==="exam"||x.type==="quiz")?"var(--danger)":"var(--accent)"}"></i>`;
     }).join("");
     const holc=holidayOf(k)||keyDatesOf(k).length?"hol":"";
     cells+=`<div class="cal-cell ${other?"other":""} ${k===t?"today":""} ${k===UI.selDate?"sel":""} ${holc}" data-day="${k}">
@@ -700,26 +775,26 @@ function viewCal(){
     const lessons=lessonsOn(sel);
     const hol=holidayOf(sel);
     panel=`<div class="sec card" style="margin-top:18px">
-      <div class="card-h"><h2>${fmtLong(d)}</h2><button class="btn sm" data-act="add-task-date" data-date="${sel}">+ Ekle</button></div>
+      <div class="card-h"><h2>${fmtLong(d)}</h2><button class="btn sm" data-act="add-task-date" data-date="${sel}">+ Add</button></div>
       <div class="card-b">
         ${keyDatesOf(sel).map(kd=>`<div class="digest brass" style="margin-bottom:12px">${ICONS.bell}<span><b>${esc(kd.name)}</b></span></div>`).join("")}
-        ${hol?`<div class="digest brass" style="margin-bottom:12px">${ICONS.bell}<span><b>${esc(hol.name)}</b> — ders yok.</span></div>`:""}
-        ${lessons.length?`<div class="sec-title">Dersler</div>`+lessons.map(e=>lessonHTML(e)).join(""):""}
-        ${items.length?`<div class="sec-title" style="margin-top:${lessons.length?"12px":"0"}">Görevler</div>`+items.map(x=>taskHTML(x,false)).join(""):""}
-        ${!items.length&&!lessons.length&&!hol&&!keyDatesOf(sel).length?`<div class="empty">Bu günde bir şey yok.</div>`:""}
+        ${hol?`<div class="digest brass" style="margin-bottom:12px">${ICONS.bell}<span><b>${esc(hol.name)}</b> — no classes.</span></div>`:""}
+        ${lessons.length?`<div class="sec-title">Classes</div>`+lessons.map(e=>lessonHTML(e)).join(""):""}
+        ${items.length?`<div class="sec-title" style="margin-top:${lessons.length?"12px":"0"}">To-dos</div>`+items.map(x=>taskHTML(x,false)).join(""):""}
+        ${!items.length&&!lessons.length&&!hol&&!keyDatesOf(sel).length?`<div class="empty">Nothing on this day.</div>`:""}
       </div>
     </div>`;
   }
   return `
-  <div class="page-head"><div><div class="eyebrow">Planla</div><h1>Takvim</h1><div class="sub">Sınavlar, teslimler ve dersler tek bakışta</div></div>
-    <button class="btn" data-act="add-task">+ Görev ekle</button></div>
+  <div class="page-head"><div><div class="eyebrow">Plan ahead</div><h1>Calendar</h1><div class="sub">Exams, deadlines and classes at a glance</div></div>
+    <button class="btn" data-act="add-task">+ Add to-do</button></div>
   <div class="card" style="padding:20px">
     <div class="cal-head">
       <h2>${MONTHS[m]} ${y}</h2>
       <div class="cal-nav">
-        <button data-act="cal-prev" aria-label="Önceki ay">‹</button>
-        <button data-act="cal-today" style="width:auto;padding:0 14px;font-size:13px;font-weight:600;border-radius:99px">Bugün</button>
-        <button data-act="cal-next" aria-label="Sonraki ay">›</button>
+        <button data-act="cal-prev" aria-label="Previous month">‹</button>
+        <button data-act="cal-today" style="width:auto;padding:0 14px;font-size:13px;font-weight:600;border-radius:99px">Today</button>
+        <button data-act="cal-next" aria-label="Next month">›</button>
       </div>
     </div>
     <div class="cal-grid">
@@ -730,46 +805,46 @@ function viewCal(){
   ${panel}`;
 }
 
-/* ---------- view: tasks ---------- */
+/* ---------- view: to-dos ---------- */
 function viewTasks(){
   const t=todayKey();
   const f=UI.taskFilter;
   let list=S.tasks.slice();
-  if(f==="açık")list=list.filter(x=>!x.done);
-  else if(f==="tamamlanan")list=list.filter(x=>x.done);
-  else if(f!=="hepsi")list=list.filter(x=>x.type===f&&!x.done);
+  if(f==="open")list=list.filter(x=>!x.done);
+  else if(f==="done")list=list.filter(x=>x.done);
+  else if(f!=="all")list=list.filter(x=>x.type===f&&!x.done);
   list.sort((a,b)=>{
     if(a.done!==b.done)return a.done?1:-1;
     if(a.done)return (b.doneAt||"").localeCompare(a.doneAt||"");
     return (a.due||"9999").localeCompare(b.due||"9999")||(b.priority?1:0)-(a.priority?1:0);
   });
   const groups=[];
-  if(f!=="tamamlanan"){
+  if(f!=="done"){
     const over=list.filter(x=>!x.done&&x.due&&x.due<t);
     const today=list.filter(x=>!x.done&&x.due===t);
     const later=list.filter(x=>!x.done&&x.due&&x.due>t);
     const nod=list.filter(x=>!x.done&&!x.due);
     const done=list.filter(x=>x.done);
-    if(over.length)groups.push(["Gecikmiş",over]);
-    if(today.length)groups.push(["Bugün",today]);
-    if(later.length)groups.push(["Yaklaşan",later]);
-    if(nod.length)groups.push(["Tarihsiz",nod]);
-    if(done.length)groups.push(["Tamamlanan",done.slice(0,20)]);
+    if(over.length)groups.push(["Overdue",over]);
+    if(today.length)groups.push(["Today",today]);
+    if(later.length)groups.push(["Upcoming",later]);
+    if(nod.length)groups.push(["No date",nod]);
+    if(done.length)groups.push(["Completed",done.slice(0,20)]);
   }else{
-    groups.push(["Tamamlanan",list]);
+    groups.push(["Completed",list]);
   }
-  const pills=["açık","hepsi","tamamlanan","sınav","ödev","proje"];
+  const pills=["open","all","done","exam","assignment","project"];
   return `
-  <div class="page-head"><div><div class="eyebrow">Checklist</div><h1>Görevler</h1><div class="sub">${S.tasks.filter(x=>!x.done).length} açık görev</div></div>
-    <button class="btn" data-act="add-task">+ Görev ekle</button></div>
+  <div class="page-head"><div><div class="eyebrow">Checklist</div><h1>To-Dos</h1><div class="sub">${S.tasks.filter(x=>!x.done).length} open</div></div>
+    <button class="btn" data-act="add-task">+ Add to-do</button></div>
   <div class="filters">${pills.map(p=>`<button class="fpill ${f===p?"on":""}" data-filter="${p}">${p[0].toUpperCase()+p.slice(1)}</button>`).join("")}</div>
-  ${groups.length?groups.map(([g,items])=>`<div class="sec"><div class="sec-title">${g} · ${items.length}</div><div class="card"><div class="card-b">${items.map(x=>taskHTML(x)).join("")}</div></div></div>`).join(""):`<div class="card"><div class="card-b"><div class="empty"><b>Burada hiç görev yok</b>“+ Görev ekle” ile başla.</div></div></div>`}`;
+  ${groups.length?groups.map(([g,items])=>`<div class="sec"><div class="sec-title">${g} · ${items.length}</div><div class="card"><div class="card-b">${items.map(x=>taskHTML(x)).join("")}</div></div></div>`).join(""):`<div class="card"><div class="card-b"><div class="empty"><b>Nothing here yet</b>Start with “+ Add to-do”.</div></div></div>`}`;
 }
 
 /* ---------- view: schedule ---------- */
 function termRanges(){
   const s=S.settings;
-  return {guz:{from:s.guzStart,to:s.guzEnd,label:"Güz 2026"},bahar:{from:s.baharStart,to:s.baharEnd,label:"Bahar 2027"}};
+  return {guz:{from:s.guzStart,to:s.guzEnd,label:"Fall 2026"},bahar:{from:s.baharStart,to:s.baharEnd,label:"Winter 2027"}};
 }
 function currentTerm(){
   const t=todayKey(),s=S.settings;
@@ -785,15 +860,15 @@ function viewSched(){
   const hasWeekend=entries.some(e=>e.day>=5);
   const days=hasWeekend?[0,1,2,3,4,5,6]:[0,1,2,3,4];
   return `
-  <div class="page-head"><div><div class="eyebrow">Haftalık düzen</div><h1>Ders Programı</h1></div>
-    <div style="display:flex;gap:8px"><button class="btn ghost" data-act="add-course">+ Ders</button><button class="btn" data-act="add-sched">+ Program saati</button></div></div>
+  <div class="page-head"><div><div class="eyebrow">Weekly rhythm</div><h1>Schedule</h1></div>
+    <div style="display:flex;gap:8px"><button class="btn ghost" data-act="add-course">+ Course</button><button class="btn" data-act="add-sched">+ Class time</button></div></div>
   <div class="filters">
     ${Object.entries(terms).map(([k,v])=>`<button class="fpill ${UI.schedTerm===k?"on":""}" data-term="${k}">${v.label}</button>`).join("")}
   </div>
   <div class="sched-grid">
     ${days.map(d=>{
       const slots=entries.filter(e=>e.day===d).sort((a,b)=>a.start.localeCompare(b.start));
-      return `<div class="sched-day ${d===todayIdx?"today":""}"><h3>${DAYS[d]}${d===todayIdx?" · bugün":""}</h3>
+      return `<div class="sched-day ${d===todayIdx?"today":""}"><h3>${DAYS[d]}${d===todayIdx?" · today":""}</h3>
         ${slots.length?slots.map(e=>{
           const c=courseOf(e.courseId);
           return `<div class="slot" style="border-left-color:${c?c.color:"var(--muted)"}" data-edit-sched="${e.id}">
@@ -804,12 +879,12 @@ function viewSched(){
     }).join("")}
   </div>
   <div class="sec card" style="margin-top:26px">
-    <div class="card-h"><h2>Derslerim</h2><button class="btn ghost sm" data-act="add-course">+ Ekle</button></div>
+    <div class="card-h"><h2>My courses</h2><button class="btn ghost sm" data-act="add-course">+ Add</button></div>
     <div class="card-b">
       ${S.courses.length?S.courses.map(c=>`<div class="course-row" data-edit-course="${c.id}">
         <span class="sw" style="background:${c.color}"></span>
         <div><div class="cn">${esc(c.name)}</div>${c.code?`<div class="cc">${esc(c.code)}</div>`:""}</div>
-      </div>`).join(""):`<div class="empty"><b>Henüz ders eklemedin</b>Önce derslerini ekle, sonra program saatlerini gir.</div>`}
+      </div>`).join(""):`<div class="empty"><b>No courses yet</b>Add your courses first, then their class times.</div>`}
     </div>
   </div>`;
 }
@@ -817,41 +892,41 @@ function viewSched(){
 /* ---------- view: settings ---------- */
 function viewSettings(){
   const s=S.settings;
-  const notifState=!("Notification" in window)?"yok":Notification.permission;
+  const notifState=!("Notification" in window)?"none":Notification.permission;
   return `
-  <div class="page-head"><div><div class="eyebrow">Kişiselleştir</div><h1>Ayarlar</h1></div></div>
-  <div class="sec card"><div class="card-h"><h2>Kişisel</h2></div><div class="card-b">
-    <div class="f"><label>Adın</label><input id="set-name" value="${esc(s.name||"")}" placeholder="Adın"></div>
+  <div class="page-head"><div><div class="eyebrow">Make it yours</div><h1>Settings</h1></div></div>
+  <div class="sec card"><div class="card-h"><h2>Personal</h2></div><div class="card-b">
+    <div class="f"><label>Your name</label><input id="set-name" value="${esc(s.name||"")}" placeholder="Your name"></div>
   </div></div>
-  <div class="sec card"><div class="card-h"><h2>Dönem tarihleri</h2></div><div class="card-b">
-    <div class="sub" style="margin-bottom:10px">Hafta sayacı ve program dönemleri bu tarihlere göre hesaplanır. Sonraki yıllarda güncelleyip kullanmaya devam edebilirsin.</div>
-    <div class="f-row"><div class="f"><label>Güz başlangıç</label><input type="date" id="set-gs" value="${s.guzStart||""}"></div>
-    <div class="f"><label>Güz bitiş</label><input type="date" id="set-ge" value="${s.guzEnd||""}"></div></div>
-    <div class="f-row"><div class="f"><label>Bahar başlangıç</label><input type="date" id="set-bs" value="${s.baharStart||""}"></div>
-    <div class="f"><label>Bahar bitiş</label><input type="date" id="set-be" value="${s.baharEnd||""}"></div></div>
-    <button class="btn sm" data-act="save-settings">Kaydet</button>
+  <div class="sec card"><div class="card-h"><h2>Term dates</h2></div><div class="card-b">
+    <div class="sub" style="margin-bottom:10px">The week counter and schedule terms follow these dates. Update them each year and keep using the app.</div>
+    <div class="f-row"><div class="f"><label>Fall start</label><input type="date" id="set-gs" value="${s.guzStart||""}"></div>
+    <div class="f"><label>Fall end</label><input type="date" id="set-ge" value="${s.guzEnd||""}"></div></div>
+    <div class="f-row"><div class="f"><label>Winter start</label><input type="date" id="set-bs" value="${s.baharStart||""}"></div>
+    <div class="f"><label>Winter end</label><input type="date" id="set-be" value="${s.baharEnd||""}"></div></div>
+    <button class="btn sm" data-act="save-settings">Save</button>
   </div></div>
-  <div class="sec card"><div class="card-h"><h2>Tatiller & önemli günler</h2><span class="chip brass">UofT St. George</span></div><div class="card-b">
-    ${(s.holidays||[]).map(h=>`<div class="set-row"><div><div class="sl">${esc(h.name)}</div><div class="sd">${fmtShort(h.from)}${h.from!==h.to?" – "+fmtShort(h.to):""}</div></div><span class="chip brass">ders yok</span></div>`).join("")}
-    ${(s.keyDates||[]).map(h=>`<div class="set-row"><div><div class="sl">${esc(h.name)}</div><div class="sd">${fmtShort(h.from)}${h.from!==h.to?" – "+fmtShort(h.to):""}</div></div><span class="chip">önemli gün</span></div>`).join("")}
-    ${!(s.holidays||[]).length&&!(s.keyDates||[]).length?`<div class="empty">Tanımlı tatil yok.</div>`:""}
+  <div class="sec card"><div class="card-h"><h2>Holidays & key dates</h2><span class="chip brass">UofT St. George</span></div><div class="card-b">
+    ${(s.holidays||[]).map(h=>`<div class="set-row"><div><div class="sl">${esc(h.name)}</div><div class="sd">${fmtShort(h.from)}${h.from!==h.to?" – "+fmtShort(h.to):""}</div></div><span class="chip brass">no classes</span></div>`).join("")}
+    ${(s.keyDates||[]).map(h=>`<div class="set-row"><div><div class="sl">${esc(h.name)}</div><div class="sd">${fmtShort(h.from)}${h.from!==h.to?" – "+fmtShort(h.to):""}</div></div><span class="chip">key date</span></div>`).join("")}
+    ${!(s.holidays||[]).length&&!(s.keyDates||[]).length?`<div class="empty">No holidays defined.</div>`:""}
   </div></div>
-  <div class="sec card"><div class="card-h"><h2>Bildirimler</h2></div><div class="card-b">
-    <div class="set-row"><div><div class="sl">Tarayıcı bildirimleri</div><div class="sd">Sayfa açıkken: günlük özet, ders başlamadan 20 dk önce ve saatli teslimlerden önce hatırlatır.</div></div>
-      ${notifState==="yok"?`<span class="chip">Bu tarayıcıda desteklenmiyor</span>`:
-        s.notif&&notifState==="granted"?`<button class="btn ghost sm" data-act="notif-off">Kapat</button>`:
-        notifState==="denied"?`<span class="chip warn">Tarayıcıdan engellenmiş</span>`:
-        `<button class="btn sm" data-act="notif-on">Aç</button>`}
+  <div class="sec card"><div class="card-h"><h2>Notifications</h2></div><div class="card-b">
+    <div class="set-row"><div><div class="sl">Browser notifications</div><div class="sd">While the page is open: a morning digest, 20 min before each class, before timed deadlines, a mood check-in nudge, and a preview of tomorrow after 8 pm.</div></div>
+      ${notifState==="none"?`<span class="chip">Not supported in this browser</span>`:
+        s.notif&&notifState==="granted"?`<button class="btn ghost sm" data-act="notif-off">Turn off</button>`:
+        notifState==="denied"?`<span class="chip warn">Blocked by the browser</span>`:
+        `<button class="btn sm" data-act="notif-on">Turn on</button>`}
     </div>
-    <div class="set-row"><div><div class="sl">Açılış özeti</div><div class="sd">“Bugün” ekranı her açılışta gecikmiş ve bugünkü işleri gösterir — bu her zaman açık.</div></div><span class="chip ok">Açık</span></div>
+    <div class="set-row"><div><div class="sl">Opening digest</div><div class="sd">The Today screen always shows what's due and overdue the moment you open it.</div></div><span class="chip ok">On</span></div>
   </div></div>
-  <div class="sec card"><div class="card-h"><h2>Veriler</h2></div><div class="card-b">
-    <div class="set-row"><div><div class="sl">Yedek al</div><div class="sd">Tüm verilerini JSON dosyası olarak kaydet.</div></div><button class="btn ghost sm" data-act="export">İndir</button></div>
-    <div class="set-row"><div><div class="sl">Yedekten geri yükle</div><div class="sd">Daha önce aldığın JSON yedeğini seç.</div></div>
-      <label class="btn ghost sm" style="cursor:pointer">Dosya seç<input type="file" id="import-file" accept=".json,application/json" style="display:none"></label></div>
-    <div class="set-row"><div><div class="sl">Her şeyi sıfırla</div><div class="sd">Bütün dersler ve görevler silinir. Geri alınamaz.</div></div><button class="btn danger sm" data-act="reset">Sıfırla</button></div>
+  <div class="sec card"><div class="card-h"><h2>Data</h2></div><div class="card-b">
+    <div class="set-row"><div><div class="sl">Back up</div><div class="sd">Save all your data as a JSON file.</div></div><button class="btn ghost sm" data-act="export">Download</button></div>
+    <div class="set-row"><div><div class="sl">Restore from backup</div><div class="sd">Pick a JSON backup you saved earlier.</div></div>
+      <label class="btn ghost sm" style="cursor:pointer">Choose file<input type="file" id="import-file" accept=".json,application/json" style="display:none"></label></div>
+    <div class="set-row"><div><div class="sl">Reset everything</div><div class="sd">Deletes all courses and to-dos. Cannot be undone.</div></div><button class="btn danger sm" data-act="reset">Reset</button></div>
   </div></div>
-  <div class="sub" style="text-align:center;margin-top:8px">Kampüs Ajandam · sadece sana özel 🌿</div>`;
+  <div class="sub" style="text-align:center;margin-top:8px">Checkpoint · made just for you 🌿</div>`;
 }
 
 /* ---------- modals ---------- */
@@ -862,37 +937,37 @@ function openModal(html){
   if(inp)inp.focus();
 }
 function taskModal(task,presetDate){
-  const x=task||{title:"",type:"ödev",courseId:"",due:presetDate||"",time:"",priority:false,notes:""};
+  const x=task||{title:"",type:"assignment",courseId:"",due:presetDate||"",time:"",priority:false,notes:""};
   openModal(`
-    <h2>${task?"Görevi düzenle":"Yeni görev"}</h2>
-    <div class="f"><label>Başlık</label><input id="t-title" value="${esc(x.title)}" placeholder="Örn: ECO358 problem set 2" maxlength="120"></div>
+    <h2>${task?"Edit to-do":"New to-do"}</h2>
+    <div class="f"><label>Title</label><input id="t-title" value="${esc(x.title)}" placeholder="e.g. ECO358 problem set 2" maxlength="120"></div>
     <div class="f-row">
-      <div class="f"><label>Tür</label><select id="t-type">${TYPES.map(t=>`<option ${x.type===t?"selected":""}>${t}</option>`).join("")}</select></div>
-      <div class="f"><label>Ders</label><select id="t-course"><option value="">—</option>${S.courses.map(c=>`<option value="${c.id}" ${x.courseId===c.id?"selected":""}>${esc(c.code||c.name)}</option>`).join("")}</select></div>
+      <div class="f"><label>Type</label><select id="t-type">${TYPES.map(t=>`<option ${x.type===t?"selected":""}>${t}</option>`).join("")}</select></div>
+      <div class="f"><label>Course</label><select id="t-course"><option value="">—</option>${S.courses.map(c=>`<option value="${c.id}" ${x.courseId===c.id?"selected":""}>${esc(c.code||c.name)}</option>`).join("")}</select></div>
     </div>
     <div class="f-row">
-      <div class="f"><label>Tarih</label><input type="date" id="t-due" value="${x.due||""}"></div>
-      <div class="f"><label>Saat (ops.)</label><input type="time" id="t-time" value="${x.time||""}"></div>
+      <div class="f"><label>Date</label><input type="date" id="t-due" value="${x.due||""}"></div>
+      <div class="f"><label>Time (opt.)</label><input type="time" id="t-time" value="${x.time||""}"></div>
     </div>
-    <div class="f"><label class="checklbl"><input type="checkbox" id="t-prio" ${x.priority?"checked":""}> Önemli olarak işaretle</label></div>
-    <div class="f"><label>Not</label><textarea id="t-notes" placeholder="Detaylar…" maxlength="500">${esc(x.notes||"")}</textarea></div>
+    <div class="f"><label class="checklbl"><input type="checkbox" id="t-prio" ${x.priority?"checked":""}> Mark as important</label></div>
+    <div class="f"><label>Notes</label><textarea id="t-notes" placeholder="Details…" maxlength="500">${esc(x.notes||"")}</textarea></div>
     <div class="m-actions">
-      ${task?`<button class="btn danger del" data-act="del-task" data-id="${task.id}">Sil</button>`:""}
-      <button class="btn ghost" data-close="1">Vazgeç</button>
-      <button class="btn" data-act="save-task" data-id="${task?task.id:""}">${task?"Kaydet":"Ekle"}</button>
+      ${task?`<button class="btn danger del" data-act="del-task" data-id="${task.id}">Delete</button>`:""}
+      <button class="btn ghost" data-close="1">Cancel</button>
+      <button class="btn" data-act="save-task" data-id="${task?task.id:""}">${task?"Save":"Add"}</button>
     </div>`);
 }
 function courseModal(course){
   const x=course||{name:"",code:"",color:COLORS[S.courses.length%COLORS.length]};
   openModal(`
-    <h2>${course?"Dersi düzenle":"Yeni ders"}</h2>
-    <div class="f"><label>Ders adı</label><input id="c-name" value="${esc(x.name)}" placeholder="Örn: Financial Economics I" maxlength="80"></div>
-    <div class="f"><label>Kod (ops.)</label><input id="c-code" value="${esc(x.code||"")}" placeholder="Örn: ECO358H1" maxlength="20"></div>
-    <div class="f"><label>Renk</label><div class="swatches" id="c-colors">${COLORS.map(c=>`<button style="background:${c}" data-color="${c}" class="${x.color===c?"on":""}" aria-label="Renk ${c}"></button>`).join("")}</div></div>
+    <h2>${course?"Edit course":"New course"}</h2>
+    <div class="f"><label>Course name</label><input id="c-name" value="${esc(x.name)}" placeholder="e.g. Financial Economics I" maxlength="80"></div>
+    <div class="f"><label>Code (opt.)</label><input id="c-code" value="${esc(x.code||"")}" placeholder="e.g. ECO358H1" maxlength="20"></div>
+    <div class="f"><label>Color</label><div class="swatches" id="c-colors">${COLORS.map(c=>`<button style="background:${c}" data-color="${c}" class="${x.color===c?"on":""}" aria-label="Color ${c}"></button>`).join("")}</div></div>
     <div class="m-actions">
-      ${course?`<button class="btn danger del" data-act="del-course" data-id="${course.id}">Sil</button>`:""}
-      <button class="btn ghost" data-close="1">Vazgeç</button>
-      <button class="btn" data-act="save-course" data-id="${course?course.id:""}">${course?"Kaydet":"Ekle"}</button>
+      ${course?`<button class="btn danger del" data-act="del-course" data-id="${course.id}">Delete</button>`:""}
+      <button class="btn ghost" data-close="1">Cancel</button>
+      <button class="btn" data-act="save-course" data-id="${course?course.id:""}">${course?"Save":"Add"}</button>
     </div>`);
 }
 function termOfEntry(e){
@@ -904,34 +979,34 @@ function termOfEntry(e){
   return"ozel";
 }
 function schedModal(entry){
-  if(!S.courses.length){ toast("Önce bir ders eklemelisin"); courseModal(); return; }
+  if(!S.courses.length){ toast("Add a course first"); courseModal(); return; }
   const x=entry||{courseId:S.courses[0].id,day:0,start:"09:00",end:"11:00",loc:"",kind:"LEC"};
   const term=entry?termOfEntry(entry):currentTerm();
   openModal(`
-    <h2>${entry?"Program saatini düzenle":"Programa ders ekle"}</h2>
-    <div class="f"><label>Ders</label><select id="s-course">${S.courses.map(c=>`<option value="${c.id}" ${x.courseId===c.id?"selected":""}>${esc(c.name)}</option>`).join("")}</select></div>
+    <h2>${entry?"Edit class time":"Add a class time"}</h2>
+    <div class="f"><label>Course</label><select id="s-course">${S.courses.map(c=>`<option value="${c.id}" ${x.courseId===c.id?"selected":""}>${esc(c.name)}</option>`).join("")}</select></div>
     <div class="f-row">
-      <div class="f"><label>Gün</label><select id="s-day">${DAYS.map((d,i)=>`<option value="${i}" ${x.day===i?"selected":""}>${d}</option>`).join("")}</select></div>
-      <div class="f"><label>Tür</label><select id="s-kind">${["LEC","TUT","LAB"].map(k=>`<option ${x.kind===k?"selected":""}>${k}</option>`).join("")}</select></div>
+      <div class="f"><label>Day</label><select id="s-day">${DAYS.map((d,i)=>`<option value="${i}" ${x.day===i?"selected":""}>${d}</option>`).join("")}</select></div>
+      <div class="f"><label>Type</label><select id="s-kind">${["LEC","TUT","LAB"].map(k=>`<option ${x.kind===k?"selected":""}>${k}</option>`).join("")}</select></div>
     </div>
     <div class="f-row">
-      <div class="f"><label>Başlangıç</label><input type="time" id="s-start" value="${x.start}"></div>
-      <div class="f"><label>Bitiş</label><input type="time" id="s-end" value="${x.end}"></div>
+      <div class="f"><label>Start</label><input type="time" id="s-start" value="${x.start}"></div>
+      <div class="f"><label>End</label><input type="time" id="s-end" value="${x.end}"></div>
     </div>
     <div class="f-row">
-      <div class="f"><label>Dönem</label><select id="s-term">
-        <option value="guz" ${term==="guz"?"selected":""}>Güz</option>
-        <option value="bahar" ${term==="bahar"?"selected":""}>Bahar</option>
-        <option value="yil" ${term==="yil"?"selected":""}>Tüm yıl</option>
-        <option value="hep" ${term==="hep"?"selected":""}>Süresiz</option>
-        ${term==="ozel"?`<option value="ozel" selected>Özel (${x.from||"…"} → ${x.to||"…"})</option>`:""}
+      <div class="f"><label>Term</label><select id="s-term">
+        <option value="guz" ${term==="guz"?"selected":""}>Fall</option>
+        <option value="bahar" ${term==="bahar"?"selected":""}>Winter</option>
+        <option value="yil" ${term==="yil"?"selected":""}>Full year</option>
+        <option value="hep" ${term==="hep"?"selected":""}>Always</option>
+        ${term==="ozel"?`<option value="ozel" selected>Custom (${x.from||"…"} → ${x.to||"…"})</option>`:""}
       </select></div>
-      <div class="f"><label>Yer (ops.)</label><input id="s-loc" value="${esc(x.loc||"")}" placeholder="Örn: RW 110" maxlength="60"></div>
+      <div class="f"><label>Location (opt.)</label><input id="s-loc" value="${esc(x.loc||"")}" placeholder="e.g. RW 110" maxlength="60"></div>
     </div>
     <div class="m-actions">
-      ${entry?`<button class="btn danger del" data-act="del-sched" data-id="${entry.id}">Sil</button>`:""}
-      <button class="btn ghost" data-close="1">Vazgeç</button>
-      <button class="btn" data-act="save-sched" data-id="${entry?entry.id:""}">${entry?"Kaydet":"Ekle"}</button>
+      ${entry?`<button class="btn danger del" data-act="del-sched" data-id="${entry.id}">Delete</button>`:""}
+      <button class="btn ghost" data-close="1">Cancel</button>
+      <button class="btn" data-act="save-sched" data-id="${entry?entry.id:""}">${entry?"Save":"Add"}</button>
     </div>`);
 }
 
@@ -940,10 +1015,10 @@ async function exportData(){
   const json=JSON.stringify(S,null,2);
   try{
     const dl=window.claude&&window.claude.use?await window.claude.use("downloads"):null;
-    if(dl){ await dl.save({filename:"kampus-ajandam-yedek.json",data:json}); toast("Yedek indirildi"); return; }
+    if(dl){ await dl.save({filename:"checkpoint-backup.json",data:json}); toast("Backup downloaded"); return; }
   }catch(e){}
-  try{ await navigator.clipboard.writeText(json); toast("İndirme yok — yedek panoya kopyalandı"); }
-  catch(e){ toast("Yedek alınamadı"); }
+  try{ await navigator.clipboard.writeText(json); toast("No download here — backup copied to clipboard"); }
+  catch(e){ toast("Backup failed"); }
 }
 function importData(file){
   const r=new FileReader();
@@ -952,8 +1027,8 @@ function importData(file){
       const p=JSON.parse(r.result);
       if(!p||p.v!==1||!Array.isArray(p.tasks))throw 0;
       S=hydrate(p);
-      persist(); render(); toast("Yedek geri yüklendi ✓");
-    }catch(e){ toast("Bu dosya geçerli bir yedek değil"); }
+      persist(); render(); toast("Restored from backup ✓");
+    }catch(e){ toast("That file isn't a valid backup"); }
   };
   r.readAsText(file);
 }
@@ -973,6 +1048,8 @@ document.addEventListener("click",e=>{
   if(t.closest("#fab")){taskModal();return;}
   const closer=t.closest("[data-close]");
   if(closer&&(closer.classList.contains("overlay")?t===closer:true)){closeModal();return;}
+  const mb=t.closest("[data-mood]");
+  if(mb){S.mood[todayKey()]=mb.dataset.mood;persist();render();return;}
   const day=t.closest("[data-day]");
   if(day){UI.selDate=UI.selDate===day.dataset.day?null:day.dataset.day;render();return;}
   const fil=t.closest("[data-filter]");
@@ -994,39 +1071,40 @@ document.addEventListener("click",e=>{
   else if(a==="add-task-date")taskModal(null,act.dataset.date);
   else if(a==="add-course")courseModal();
   else if(a==="add-sched")schedModal();
+  else if(a==="mood-change"){delete S.mood[todayKey()];persist();render();}
   else if(a==="cal-prev"){UI.calM--;if(UI.calM<0){UI.calM=11;UI.calY--;}render();}
   else if(a==="cal-next"){UI.calM++;if(UI.calM>11){UI.calM=0;UI.calY++;}render();}
   else if(a==="cal-today"){const n=new Date();UI.calY=n.getFullYear();UI.calM=n.getMonth();UI.selDate=todayKey();render();}
   else if(a==="save-task"){
     const title=$("#t-title").value.trim();
-    if(!title){toast("Başlık boş olamaz");return;}
+    if(!title){toast("Title can't be empty");return;}
     const data={title,type:$("#t-type").value,courseId:$("#t-course").value||null,
       due:$("#t-due").value||null,time:$("#t-time").value||null,
       priority:$("#t-prio").checked,notes:$("#t-notes").value.trim()};
     if(id){const x=S.tasks.find(z=>z.id===id);Object.assign(x,data);}
     else S.tasks.push(Object.assign({id:uid(),done:false,doneAt:null,createdAt:new Date().toISOString()},data));
-    persist();closeModal();render();toast(id?"Görev güncellendi":"Görev eklendi ✓");
+    persist();closeModal();render();toast(id?"Updated":"Added ✓");
   }
-  else if(a==="del-task"){S.tasks=S.tasks.filter(z=>z.id!==id);persist();closeModal();render();toast("Görev silindi");}
+  else if(a==="del-task"){S.tasks=S.tasks.filter(z=>z.id!==id);persist();closeModal();render();toast("Deleted");}
   else if(a==="save-course"){
     const name=$("#c-name").value.trim();
-    if(!name){toast("Ders adı boş olamaz");return;}
+    if(!name){toast("Course name can't be empty");return;}
     const colBtn=$("#c-colors button.on");
     const data={name,code:$("#c-code").value.trim(),color:colBtn?colBtn.dataset.color:COLORS[0]};
     if(id){Object.assign(S.courses.find(z=>z.id===id),data);}
     else S.courses.push(Object.assign({id:uid()},data));
-    persist();closeModal();render();toast(id?"Ders güncellendi":"Ders eklendi ✓");
+    persist();closeModal();render();toast(id?"Course updated":"Course added ✓");
   }
   else if(a==="del-course"){
-    if(!confirm("Bu ders, program saatleriyle birlikte silinecek. Görevler silinmez, dersle bağı kalkar."))return;
+    if(!confirm("This course and its class times will be deleted. To-dos stay but lose the course link."))return;
     S.schedule=S.schedule.filter(z=>z.courseId!==id);
     S.tasks.forEach(z=>{if(z.courseId===id)z.courseId=null;});
     S.courses=S.courses.filter(z=>z.id!==id);
-    persist();closeModal();render();toast("Ders silindi");
+    persist();closeModal();render();toast("Course deleted");
   }
   else if(a==="save-sched"){
     const start=$("#s-start").value,end=$("#s-end").value;
-    if(!start||!end||end<=start){toast("Bitiş saati başlangıçtan sonra olmalı");return;}
+    if(!start||!end||end<=start){toast("End time must be after start");return;}
     const s=S.settings, tv=$("#s-term").value;
     let from=null,to=null;
     if(tv==="guz"){from=s.guzStart;to=s.guzEnd;}
@@ -1037,31 +1115,31 @@ document.addEventListener("click",e=>{
       loc:$("#s-loc").value.trim(),kind:$("#s-kind").value,from,to};
     if(id){Object.assign(S.schedule.find(z=>z.id===id),data);}
     else S.schedule.push(Object.assign({id:uid()},data));
-    persist();closeModal();render();toast("Program kaydedildi ✓");
+    persist();closeModal();render();toast("Schedule saved ✓");
   }
-  else if(a==="del-sched"){S.schedule=S.schedule.filter(z=>z.id!==id);persist();closeModal();render();toast("Program saati silindi");}
+  else if(a==="del-sched"){S.schedule=S.schedule.filter(z=>z.id!==id);persist();closeModal();render();toast("Class time deleted");}
   else if(a==="save-settings"){
     S.settings.guzStart=$("#set-gs").value||null;S.settings.guzEnd=$("#set-ge").value||null;
     S.settings.baharStart=$("#set-bs").value||null;S.settings.baharEnd=$("#set-be").value||null;
     const nm=$("#set-name");if(nm)S.settings.name=nm.value.trim();
-    persist();render();toast("Ayarlar kaydedildi ✓");
+    persist();render();toast("Settings saved ✓");
   }
   else if(a==="notif-on"){
     (async()=>{
       try{
         const p=await Notification.requestPermission();
-        if(p==="granted"){S.settings.notif=true;persist();toast("Bildirimler açık 🔔");notifTick();}
-        else toast("Bildirim izni verilmedi");
-      }catch(e){toast("Bildirimler bu görünümde desteklenmiyor");}
+        if(p==="granted"){S.settings.notif=true;persist();toast("Notifications on 🔔");notifTick();}
+        else toast("Notification permission denied");
+      }catch(e){toast("Notifications aren't supported in this view");}
       render();
     })();
   }
-  else if(a==="notif-off"){S.settings.notif=false;persist();render();toast("Bildirimler kapatıldı");}
+  else if(a==="notif-off"){S.settings.notif=false;persist();render();toast("Notifications off");}
   else if(a==="export")exportData();
   else if(a==="reset"){
-    if(!confirm("Bütün veriler silinecek. Emin misin?"))return;
-    if(!confirm("Son kontrol: dersler, program ve tüm görevler kalıcı olarak silinecek."))return;
-    S=defaultState();S.meta={seed:SEED_FLAG};persist();render();toast("Her şey sıfırlandı");
+    if(!confirm("All your data will be deleted. Are you sure?"))return;
+    if(!confirm("Last check: courses, schedule and every to-do will be permanently deleted."))return;
+    S=defaultState();S.meta={seed:SEED_V2};persist();render();toast("Everything was reset");
   }
 });
 document.addEventListener("change",e=>{
@@ -1070,7 +1148,7 @@ document.addEventListener("change",e=>{
     const x=S.tasks.find(z=>z.id===t.dataset.toggle);
     if(x){x.done=t.checked;x.doneAt=t.checked?new Date().toISOString():null;persist();
       setTimeout(()=>{render();},220);
-      if(t.checked)toast("Harika, bir iş daha bitti ✓");}
+      if(t.checked)toast("Nice, one more thing done ✓");}
   }
   if(t.id==="import-file"&&t.files&&t.files[0])importData(t.files[0]);
   if(t.id==="set-name"){S.settings.name=t.value.trim();persist();renderNav();}
