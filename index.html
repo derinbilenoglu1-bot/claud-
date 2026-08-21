@@ -211,6 +211,13 @@
   .pf-hist-item .side.s{color:var(--red);background:var(--red-bg)}
   .pf-hist-item .when{margin-left:auto;color:var(--muted);font-size:.7rem}
   .pf-sub{padding:12px 18px;border-bottom:1px solid var(--border);font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  .time-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:13px 18px;border-bottom:1px solid var(--border);background:var(--card-2)}
+  .time-row .lbl{font-size:.78rem;color:var(--muted)}
+  .time-row .date{font-weight:800;font-size:.88rem}
+  .time-row .offset{font-size:.72rem;color:var(--accent);font-weight:700}
+  .time-note{font-size:.7rem;color:var(--yellow);font-weight:600}
+  .time-row .spacer{flex:1}
+  .btn.skip{padding:6px 12px;font-size:.76rem;font-weight:700}
 
   /* ---------- Modal ---------- */
   .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;place-items:center;z-index:100;padding:20px}
@@ -283,6 +290,18 @@
     </div>
 
     <div id="pf-dash" style="display:none">
+      <div class="time-row">
+        <span class="lbl">📅 Simülasyon tarihi:</span>
+        <span class="date" id="sim-date">—</span>
+        <span class="offset" id="sim-offset"></span>
+        <span class="time-note" id="sim-note" style="display:none">⏩ zaman ilerletildi — fiyatlar artık simülasyon</span>
+        <div class="spacer"></div>
+        <span class="lbl">Zamanı ilerlet:</span>
+        <button class="btn skip" data-skip="1">+1 Gün</button>
+        <button class="btn skip" data-skip="7">+1 Hafta</button>
+        <button class="btn skip" data-skip="30">+1 Ay</button>
+        <button class="btn skip" data-skip="365">+1 Yıl</button>
+      </div>
       <div class="pf-stats">
         <div class="pf-stat"><div class="v" id="pf-cash">—</div><div class="l">Nakit</div></div>
         <div class="pf-stat"><div class="v" id="pf-holdings">—</div><div class="l">Hisse Değeri</div></div>
@@ -690,13 +709,13 @@ function jitterTape() {
     d.px = d.px * (1 + step / 100);
   }
   renderTape();
-  if (!state.apiKey && typeof jitterSimPrices === 'function') {
+  if ((!state.apiKey || simState.day > 0) && typeof jitterSimPrices === 'function') {
     jitterSimPrices();
     if (typeof renderPortfolio === 'function' && pf) renderPortfolio();
   }
 }
 async function refreshTapeLive() {
-  if (!state.apiKey) return;
+  if (!state.apiKey || (typeof timeSkipped === 'function' && timeSkipped())) return;
   const real = TAPE_SYMS.filter(s => /^[A-Z]+$/.test(s));
   for (const sym of real) {
     try {
@@ -851,31 +870,105 @@ let pf = null; // {start, cash, positions:{SYM:{qty,avg}}, history:[{ts,side,sym
 try { pf = JSON.parse(localStorage.getItem('br_portfolio') || 'null'); } catch (e) {}
 function savePf() { try { localStorage.setItem('br_portfolio', JSON.stringify(pf)); } catch (e) {} }
 
-/* --- Fiyat motoru ---
-   Demo: sembole özel deterministik taban fiyat + rastgele yürüyüş.
-   Canlı: Finnhub /quote, 30 sn önbellekli. */
-const simPrices = {};   // demo fiyatları
+/* --- Fiyat & zaman motoru ---
+   Her sembolün kendi trendi var: 5–45 gün süren yükseliş/düşüş dönemleri
+   (günlük drift) + günlük dalgalanma + ara sıra "haber şoku" (1 günde ±%8–30).
+   Canlı modda (API anahtarı) zaman ilerletilmediği sürece gerçek Finnhub
+   fiyatları kullanılır; zaman ilerletilince simülasyona geçilir. */
 const quoteCache = {};  // canlı mod: {px, chg, ts}
+let simState = { day: 0, prices: {} }; // prices[sym] = {px, chg, trend, left}
+try {
+  const s = JSON.parse(localStorage.getItem('br_simstate') || 'null');
+  if (s && typeof s.day === 'number' && s.prices) simState = s;
+} catch (e) {}
+function saveSim() { try { localStorage.setItem('br_simstate', JSON.stringify(simState)); } catch (e) {} }
+const timeSkipped = () => simState.day > 0;
+
+function newTrend(e) {
+  // Günlük drift: -%1.6 .. +%2.0 arası bir eğilim, 5–45 gün sürer
+  e.trend = -1.6 + Math.random() * 3.6;
+  e.left = 5 + Math.floor(Math.random() * 41);
+}
 function ensureSimPrice(sym) {
-  if (!simPrices[sym]) {
-    if (tapeData[sym]) { simPrices[sym] = { px: tapeData[sym].px, chg: tapeData[sym].chg }; }
-    else {
-      let h = 0; for (const c of sym) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-      simPrices[sym] = { px: 15 + (h % 4850) / 10, chg: ((h % 7) - 3) * 0.4 };
-    }
+  if (!simState.prices[sym]) {
+    let px;
+    if (quoteCache[sym]) px = quoteCache[sym].px;            // gerçek fiyattan tohumla
+    else if (tapeData[sym]) px = tapeData[sym].px;
+    else { let h = 0; for (const c of sym) h = (h * 31 + c.charCodeAt(0)) >>> 0; px = 15 + (h % 4850) / 10; }
+    const e = { px, chg: 0 };
+    newTrend(e);
+    simState.prices[sym] = e;
   }
-  return simPrices[sym];
+  return simState.prices[sym];
 }
 function jitterSimPrices() {
-  for (const sym of Object.keys(simPrices)) {
-    const d = simPrices[sym];
+  for (const sym of Object.keys(simState.prices)) {
+    const d = simState.prices[sym];
     const step = (Math.random() - 0.5) * 0.3;
-    d.px = Math.max(0.5, d.px * (1 + step / 100));
-    d.chg = Math.max(-8, Math.min(8, d.chg + step / 3));
+    d.px = Math.max(0.2, d.px * (1 + step / 100));
+    d.chg = Math.max(-35, Math.min(35, d.chg + step / 3));
   }
 }
+/* Bir günlük fiyat hareketi (yüzde) */
+function dailyMove(e) {
+  if (--e.left <= 0) newTrend(e);
+  let move = e.trend + (Math.random() - 0.5) * 2 * 1.3;      // trend + günlük gürültü
+  if (Math.random() < 0.022) {                                // ~%2 olasılıkla haber şoku
+    move += (Math.random() < 0.5 ? -1 : 1) * (8 + Math.random() * 22); // ±%8–30
+  }
+  return Math.max(-40, Math.min(45, move));
+}
+function advanceDays(n) {
+  // Portföydeki tüm hisseler + bant sembolleri simüle edilsin
+  if (pf) for (const sym of Object.keys(pf.positions)) ensureSimPrice(sym);
+  for (const sym of TAPE_SYMS) if (/^[A-Z.]+$/.test(sym)) ensureSimPrice(sym);
+
+  const before = pfTotalValue();
+  for (let d = 0; d < n; d++) {
+    for (const sym of Object.keys(simState.prices)) {
+      const e = simState.prices[sym];
+      const move = dailyMove(e);
+      e.px = Math.max(0.2, e.px * (1 + move / 100));
+      e.chg = move;
+    }
+    // Endeksler daha sakin hareket etsin
+    for (const sym of TAPE_SYMS) {
+      if (simState.prices[sym]) { tapeData[sym] = { px: simState.prices[sym].px, chg: simState.prices[sym].chg }; }
+      else {
+        const t = tapeData[sym];
+        const m = (Math.random() - 0.48) * 1.6;
+        t.px = Math.max(1, t.px * (1 + m / 100));
+        t.chg = m;
+      }
+    }
+  }
+  simState.day += n;
+  saveSim();
+  renderTape();
+
+  const after = pfTotalValue();
+  const deltaPct = before > 0 ? (after / before - 1) * 100 : 0;
+  if (pf) {
+    pf.history.unshift({ ts: Date.now(), side: 'SKIP', days: n, deltaPct });
+    if (pf.history.length > 200) pf.history.length = 200;
+    savePf();
+  }
+  renderPortfolio();
+  const emoji = deltaPct > 0.005 ? '📈' : deltaPct < -0.005 ? '📉' : '➖';
+  toast(`⏩ ${n} gün geçti ${emoji} Portföyün ${deltaPct >= 0 ? '+' : ''}${deltaPct.toFixed(2)}% değişti.`);
+}
+function pfTotalValue() {
+  if (!pf) return 0;
+  let v = pf.cash;
+  for (const [sym, p] of Object.entries(pf.positions)) {
+    const q = getPriceSync(sym);
+    v += p.qty * (q ? q.px : p.avg);
+  }
+  return v;
+}
+
 async function getPrice(sym) {
-  if (state.apiKey) {
+  if (state.apiKey && !timeSkipped()) {
     const c = quoteCache[sym];
     if (c && Date.now() - c.ts < 30000) return c;
     try {
@@ -888,10 +981,10 @@ async function getPrice(sym) {
     if (c) return c;             // eski önbellek, hiç yoktan iyi
     return null;                 // canlı modda sembol bulunamadı
   }
-  return ensureSimPrice(sym);    // demo mod
+  return ensureSimPrice(sym);    // demo mod veya zaman ilerletilmiş
 }
 function getPriceSync(sym) {
-  if (state.apiKey) return quoteCache[sym] || null;
+  if (state.apiKey && !timeSkipped()) return quoteCache[sym] || null;
   return ensureSimPrice(sym);
 }
 
@@ -899,6 +992,12 @@ function renderPortfolio() {
   const setup = $('pf-setup'), dash = $('pf-dash'), reset = $('pf-reset');
   if (!pf) { setup.style.display = ''; dash.style.display = 'none'; reset.style.display = 'none'; return; }
   setup.style.display = 'none'; dash.style.display = ''; reset.style.display = '';
+
+  // Zaman göstergesi
+  const simDate = new Date(Date.now() + simState.day * 864e5);
+  $('sim-date').textContent = simDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+  $('sim-offset').textContent = simState.day > 0 ? `(+${simState.day} gün)` : '(bugün)';
+  $('sim-note').style.display = (state.apiKey && timeSkipped()) ? '' : 'none';
 
   let holdings = 0;
   const rows = Object.entries(pf.positions).map(([sym, p]) => {
@@ -931,14 +1030,22 @@ function renderPortfolio() {
   plEl.textContent = `${fmt$(pl)} (${plPct >= 0 ? '+' : ''}${plPct.toFixed(2)}%)`;
   plEl.className = 'v ' + (pl > 0.005 ? 'up' : pl < -0.005 ? 'down' : '');
 
-  $('pf-hist').innerHTML = pf.history.slice(0, 25).map(h => `
-    <div class="pf-hist-item">
+  $('pf-hist').innerHTML = pf.history.slice(0, 25).map(h => {
+    const when = `<span class="when">${new Date(h.ts).toLocaleString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>`;
+    if (h.side === 'SKIP') {
+      const cls = h.deltaPct > 0.005 ? 'up' : h.deltaPct < -0.005 ? 'down' : 'flat';
+      return `<div class="pf-hist-item">
+        <span class="side" style="color:var(--accent);background:rgba(79,140,255,.12)">⏩ +${h.days} GÜN</span>
+        <span>Zaman ilerletildi — portföy <b class="${cls}">${h.deltaPct >= 0 ? '+' : ''}${h.deltaPct.toFixed(2)}%</b></span>
+        ${when}</div>`;
+    }
+    return `<div class="pf-hist-item">
       <span class="side ${h.side === 'AL' ? 'b' : 's'}">${h.side}</span>
       <b>$${esc(h.sym)}</b>
       <span>${h.qty} adet × ${fmt$(h.px)}</span>
       ${h.realized != null ? `<span class="${h.realized >= 0 ? 'up' : 'down'}">(${h.realized >= 0 ? '+' : ''}${fmt$(h.realized)} gerçekleşen)</span>` : ''}
-      <span class="when">${new Date(h.ts).toLocaleString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
-    </div>`).join('') || `<div class="empty-note" style="padding:18px">Henüz işlem yok.</div>`;
+      ${when}</div>`;
+  }).join('') || `<div class="empty-note" style="padding:18px">Henüz işlem yok.</div>`;
 
   $('pf-pos-body').querySelectorAll('[data-sellall]').forEach(b =>
     b.addEventListener('click', () => {
@@ -1024,12 +1131,21 @@ $('pf-capital').addEventListener('keydown', e => { if (e.key === 'Enter') $('pf-
 
 $('pf-reset').addEventListener('click', () => {
   if (!pf) return;
-  if (!confirm('Portföy sıfırlansın mı? Tüm pozisyonlar ve işlem geçmişi silinir.')) return;
+  if (!confirm('Portföy sıfırlansın mı? Tüm pozisyonlar, işlem geçmişi ve simülasyon zamanı silinir.')) return;
   pf = null;
-  try { localStorage.removeItem('br_portfolio'); } catch (e) {}
+  simState = { day: 0, prices: {} };
+  try { localStorage.removeItem('br_portfolio'); localStorage.removeItem('br_simstate'); } catch (e) {}
+  seedTape(); renderTape();
   renderPortfolio();
   toast('Portföy sıfırlandı. Yeni sermaye belirleyip tekrar başlayabilirsin.');
 });
+
+/* Zamanı ilerlet butonları */
+document.querySelectorAll('[data-skip]').forEach(b =>
+  b.addEventListener('click', () => {
+    if (!pf) return;
+    advanceDays(parseInt(b.dataset.skip, 10));
+  }));
 
 /* Sinyale tıklayınca işlem kutusunu doldur */
 $('signal-list').addEventListener('click', e => {
@@ -1045,7 +1161,7 @@ $('signal-list').addEventListener('click', e => {
 
 /* Canlı modda portföydeki hisselerin fiyatlarını periyodik tazele */
 async function refreshPortfolioQuotes() {
-  if (!state.apiKey || !pf) return;
+  if (!state.apiKey || !pf || timeSkipped()) return;
   for (const sym of Object.keys(pf.positions)) await getPrice(sym);
   renderPortfolio();
 }
@@ -1111,7 +1227,7 @@ setInterval(updateClocks, 15000);
 setInterval(render, 60000); // "x dk önce" etiketlerini tazele
 renderWatchlist();
 setInterval(renderWatchlist, 60000);
-if (pf) for (const sym of Object.keys(pf.positions)) ensureSimPrice(sym);
+if (pf && (!state.apiKey || timeSkipped())) for (const sym of Object.keys(pf.positions)) ensureSimPrice(sym);
 renderPortfolio();
 refreshPortfolioQuotes();
 

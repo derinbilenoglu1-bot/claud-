@@ -11,6 +11,11 @@ Haberler anlık olarak akar, her haber otomatik duygu analizinden geçer ve hiss
   hesaplanır; işlem geçmişi tutulur; sinyaldeki hisseye tıklayınca işlem kutusu otomatik dolar.
   Demo modda simüle fiyatlar, canlı modda gerçek Finnhub fiyatları kullanılır. Portföy tarayıcıda
   saklanır; istediğin zaman sıfırlayıp yeni sermayeyle başlayabilirsin.
+- **⏩ Zaman makinesi** — simülasyon zamanını +1 gün / +1 hafta / +1 ay / +1 yıl ilerlet ve
+  portföyünün uzun vadede ne yaptığını gör. Her hissenin 5–45 gün süren kendi yükseliş/düşüş
+  trendi, günlük dalgalanması ve ara sıra yaşanan "haber şoku" (bir günde ±%8–30 hareket) vardır.
+  Her zaman atlaması işlem geçmişine portföy değişim yüzdesiyle kaydedilir. Canlı modda zaman
+  ilerletilince fiyatlar son gerçek fiyattan tohumlanarak simülasyona geçer.
 - **📰 Anlık haber akışı** — yeni haberler otomatik olarak akışın en üstüne düşer
 - **🧠 Duygu analizi** — her haber başlık + özet üzerinden pozitif / negatif / nötr olarak puanlanır
 - **🎯 Habere dayalı sinyaller** — son 24 saatin haberleri hisse bazında toplanır, yakın tarihli
