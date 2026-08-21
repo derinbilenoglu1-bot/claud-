@@ -1,1164 +1,819 @@
-<title>Checkpoint</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#1E4B39">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Checkpoint">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400..700;1,400..600&display=swap">
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BorsaRadar — ABD Borsası Anlık Haber & Sinyal Merkezi</title>
 <style>
-:root{
-  --bg:#EFF0EB; --surface:#FAFAF7; --surface2:#E4E7DF; --ink:#161D18; --muted:#66716A;
-  --line:#D8DCD3; --accent:#1E4B39; --accent-soft:#E0E9E1; --on-accent:#F4F6F0;
-  --brass:#9C7A2F; --brass-soft:#F0E8D2;
-  --ok:#2E7357; --ok-soft:#DFEBE2; --danger:#AE3F2C; --danger-soft:#F3E2DC;
-  --shadow:0 1px 2px rgba(22,29,24,.05),0 8px 28px rgba(22,29,24,.06);
-  --r:16px;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#121713; --surface:#1A201B; --surface2:#242C25; --ink:#EAEDE6; --muted:#98A399;
-    --line:#2C352D; --accent:#86BD9E; --accent-soft:#1F2F26; --on-accent:#0F1511;
-    --brass:#CFAC5F; --brass-soft:#2E2716;
-    --ok:#7FC2A0; --ok-soft:#1C2E24; --danger:#E38A73; --danger-soft:#38211B;
-    --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 28px rgba(0,0,0,.4);
+  :root{
+    --bg:#0b0e14;
+    --bg-2:#11151f;
+    --card:#151a26;
+    --card-2:#1a2030;
+    --border:#232a3b;
+    --text:#e8ecf4;
+    --muted:#8b94a7;
+    --accent:#4f8cff;
+    --green:#22c55e;
+    --green-bg:rgba(34,197,94,.12);
+    --red:#ef4444;
+    --red-bg:rgba(239,68,68,.12);
+    --yellow:#eab308;
+    --yellow-bg:rgba(234,179,8,.12);
+    --radius:14px;
+    --font:'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
   }
-}
-:root[data-theme="dark"]{
-  --bg:#121713; --surface:#1A201B; --surface2:#242C25; --ink:#EAEDE6; --muted:#98A399;
-  --line:#2C352D; --accent:#86BD9E; --accent-soft:#1F2F26; --on-accent:#0F1511;
-  --brass:#CFAC5F; --brass-soft:#2E2716;
-  --ok:#7FC2A0; --ok-soft:#1C2E24; --danger:#E38A73; --danger-soft:#38211B;
-  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 28px rgba(0,0,0,.4);
-}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{
-  background:var(--bg); color:var(--ink);
-  font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  font-size:15.5px; line-height:1.5; min-height:100vh;
-}
-h1,h2,h3{margin:0;text-wrap:balance}
-h1{font-family:"Instrument Serif",Georgia,serif;font-weight:400}
-button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
-input,select,textarea{font:inherit;color:var(--ink)}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
-@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh}
+  a{color:inherit}
+  button{font-family:inherit}
 
-#app{display:grid;grid-template-columns:236px 1fr;min-height:100vh;max-width:1200px;margin:0 auto}
-#sidebar{
-  padding:30px 18px;border-right:1px solid var(--line);
-  display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;
-}
-.brand{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:27px;letter-spacing:.01em;margin-bottom:2px;padding-left:12px}
-.brand small{display:block;font-family:"Instrument Sans",sans-serif;font-style:normal;font-weight:600;font-size:10.5px;color:var(--brass);letter-spacing:.22em;text-transform:uppercase;margin-top:4px}
-#sidebar hr{border:none;border-top:1px solid var(--line);margin:14px 0;width:100%}
-.nav-btn{
-  display:flex;align-items:center;gap:11px;padding:9px 13px;border-radius:99px;
-  font-weight:500;color:var(--muted);text-align:left;transition:background .15s,color .15s;letter-spacing:.01em;
-}
-.nav-btn:hover{background:var(--surface2)}
-.nav-btn.active{background:var(--accent);color:var(--on-accent);font-weight:600}
-.nav-btn .ic{width:18px;height:18px;flex:none}
-.nav-btn .cnt{margin-left:auto;font-size:11px;font-weight:700;background:var(--danger);color:#fff;border-radius:99px;min-width:19px;height:19px;display:grid;place-items:center;padding:0 5px;font-variant-numeric:tabular-nums}
-.nav-btn.active .cnt{background:var(--on-accent);color:var(--accent)}
-#savechip{margin-top:auto;font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:7px;padding:8px 13px;letter-spacing:.02em}
-#savechip .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex:none}
-#savechip.saved .dot{background:var(--ok)} #savechip.saving .dot{background:var(--brass)}
-#savechip.local .dot{background:var(--muted)} #savechip.error .dot{background:var(--danger)}
-
-#main{padding:34px 40px 100px;min-width:0}
-#tabbar{display:none}
-@media (max-width:820px){
-  #app{grid-template-columns:1fr}
-  #sidebar{display:none}
-  #main{padding:22px 16px 100px}
-  #tabbar{
-    display:flex;position:fixed;bottom:0;left:0;right:0;z-index:40;
-    background:var(--surface);border-top:1px solid var(--line);
-    padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+  /* ---------- Header ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(11,14,20,.92);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
   }
-  #tabbar .nav-btn{flex:1;flex-direction:column;gap:3px;font-size:10.5px;padding:7px 2px;align-items:center;position:relative;border-radius:12px}
-  #tabbar .nav-btn .cnt{position:absolute;top:2px;right:calc(50% - 22px);margin:0}
-}
+  .header-inner{
+    max-width:1400px;margin:0 auto;padding:12px 20px;
+    display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.25rem;letter-spacing:-.02em}
+  .logo .dot{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#4f8cff,#22c55e);display:grid;place-items:center;font-size:1.05rem}
+  .logo small{display:block;font-size:.62rem;font-weight:500;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+  .market-status{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:99px;padding:6px 14px;font-size:.8rem}
+  .market-status .pulse{width:9px;height:9px;border-radius:50%;background:var(--red)}
+  .market-status.open .pulse{background:var(--green);animation:pulse 1.6s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+  .clocks{display:flex;gap:14px;font-size:.78rem;color:var(--muted)}
+  .clocks b{color:var(--text);font-variant-numeric:tabular-nums}
+  .header-spacer{flex:1}
+  .btn{
+    background:var(--card);border:1px solid var(--border);color:var(--text);
+    padding:8px 14px;border-radius:10px;cursor:pointer;font-size:.82rem;
+    display:inline-flex;align-items:center;gap:7px;transition:.15s;
+  }
+  .btn:hover{border-color:var(--accent);background:var(--card-2)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  .btn.primary:hover{filter:brightness(1.12)}
+  .live-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;font-weight:700;letter-spacing:.06em;color:var(--green);border:1px solid rgba(34,197,94,.4);background:var(--green-bg);padding:4px 10px;border-radius:99px}
+  .live-badge.demo{color:var(--yellow);border-color:rgba(234,179,8,.4);background:var(--yellow-bg)}
 
-.eyebrow{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin-bottom:6px}
-.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:20px;flex-wrap:wrap}
-.page-head h1{font-size:36px;letter-spacing:.005em;line-height:1.08}
-.sub{color:var(--muted);font-size:14px;margin-top:6px}
-.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:4px 12px;border-radius:99px;background:var(--accent-soft);color:var(--accent);letter-spacing:.03em}
-.chip.ok{background:var(--ok-soft);color:var(--ok)} .chip.warn{background:var(--danger-soft);color:var(--danger)}
-.chip.brass{background:var(--brass-soft);color:var(--brass)}
+  /* ---------- Ticker tape ---------- */
+  .tape-wrap{border-bottom:1px solid var(--border);background:var(--bg-2);overflow:hidden}
+  .tape{display:flex;gap:34px;padding:8px 0;white-space:nowrap;width:max-content;animation:scroll 55s linear infinite}
+  .tape:hover{animation-play-state:paused}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .tape-item{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;font-variant-numeric:tabular-nums}
+  .tape-item .sym{font-weight:700}
+  .tape-item .chg{font-weight:600}
+  .up{color:var(--green)} .down{color:var(--red)} .flat{color:var(--muted)}
 
-.mood-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:22px}
-.mood-q{font-family:"Instrument Serif",Georgia,serif;font-size:21px;margin-bottom:13px}
-.mood-btns{display:flex;gap:8px;flex-wrap:wrap}
-.mood-btns button{
-  flex:1;min-width:74px;display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:11px 6px;border-radius:14px;border:1px solid var(--line);transition:background .15s,transform .1s;
-}
-.mood-btns button:hover{background:var(--surface2);transform:translateY(-1px)}
-.mood-btns .e{font-size:25px;line-height:1}
-.mood-btns .l{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.mood-msg{padding:2px 0 0 22px;position:relative}
-.mood-msg::before{
-  content:"\201C";font-family:"Instrument Serif",Georgia,serif;font-size:58px;line-height:1;
-  color:var(--brass);position:absolute;left:-4px;top:-8px;
-}
-.mood-msg p{
-  margin:0;font-family:"Instrument Serif",Georgia,serif;font-style:italic;
-  font-size:21.5px;line-height:1.34;letter-spacing:.005em;
-}
-.mood-foot{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
-.mood-foot .who{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.mood-strip{display:flex;gap:5px;margin-left:auto;align-items:flex-end}
-.mood-strip .d{display:flex;flex-direction:column;align-items:center;gap:1px;font-size:8.5px;color:var(--muted);font-weight:600}
-.mood-strip .d span{font-size:15px;line-height:1.2}
-.linkish{color:var(--accent);font-weight:600;font-size:12px;cursor:pointer;background:none;border:none}
+  /* ---------- Layout ---------- */
+  .container{max-width:1400px;margin:0 auto;padding:20px;display:grid;grid-template-columns:1fr 380px;gap:20px}
+  @media(max-width:1024px){.container{grid-template-columns:1fr}}
 
-.btn{
-  display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:99px;
-  font-weight:600;font-size:14px;background:var(--accent);color:var(--on-accent);
-  transition:filter .15s;white-space:nowrap;letter-spacing:.01em;
-}
-.btn:hover{filter:brightness(1.12)}
-.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
-.btn.ghost:hover{background:var(--surface2);filter:none}
-.btn.danger{background:var(--danger-soft);color:var(--danger)}
-.btn.sm{padding:6px 14px;font-size:13px}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}
+  .panel-head{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--border)}
+  .panel-head h2{font-size:1rem;font-weight:700;letter-spacing:-.01em}
+  .panel-head .count{background:var(--card-2);border:1px solid var(--border);border-radius:99px;padding:2px 10px;font-size:.72rem;color:var(--muted)}
+  .panel-head .spacer{flex:1}
 
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-.card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px 0}
-.card-h h2{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-.card-b{padding:12px 20px 16px}
+  /* ---------- Filters ---------- */
+  .filters{display:flex;gap:8px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--border)}
+  .chip{
+    background:var(--card-2);border:1px solid var(--border);color:var(--muted);
+    padding:6px 13px;border-radius:99px;font-size:.76rem;cursor:pointer;transition:.15s;font-weight:600;
+  }
+  .chip:hover{color:var(--text);border-color:var(--accent)}
+  .chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .chip.active.pos{background:var(--green);border-color:var(--green)}
+  .chip.active.neg{background:var(--red);border-color:var(--red)}
+  .search-row{padding:14px 18px 0;display:flex;gap:10px}
+  .search-row input{
+    flex:1;background:var(--bg-2);border:1px solid var(--border);border-radius:10px;
+    padding:10px 14px;color:var(--text);font-size:.85rem;outline:none;
+  }
+  .search-row input:focus{border-color:var(--accent)}
 
-.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
-.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:15px 18px;box-shadow:var(--shadow)}
-.stat .n{font-family:"Instrument Serif",Georgia,serif;font-size:34px;font-variant-numeric:tabular-nums;line-height:1.05}
-.stat .l{font-size:11px;color:var(--muted);font-weight:600;margin-top:3px;letter-spacing:.14em;text-transform:uppercase}
-.stat.warn .n{color:var(--danger)} .stat.ok .n{color:var(--ok)} .stat.acc .n{color:var(--accent)}
-@media (max-width:520px){.stat-row{gap:8px}.stat{padding:12px 13px}.stat .n{font-size:27px}.stat .l{letter-spacing:.08em}}
+  /* ---------- News feed ---------- */
+  #news-list{max-height:1180px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+  .news-item{
+    padding:16px 18px;border-bottom:1px solid var(--border);display:flex;gap:14px;
+    transition:background .15s;animation:fadeIn .5s ease;
+  }
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .news-item:hover{background:var(--card-2)}
+  .news-item.fresh{background:rgba(79,140,255,.06)}
+  .sent-bar{width:4px;border-radius:4px;flex-shrink:0;align-self:stretch}
+  .sent-bar.pos{background:var(--green)} .sent-bar.neg{background:var(--red)} .sent-bar.neu{background:var(--muted);opacity:.35}
+  .news-body{flex:1;min-width:0}
+  .news-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;font-size:.72rem;color:var(--muted)}
+  .news-meta .src{font-weight:700;color:var(--accent)}
+  .news-meta .cat{background:var(--card-2);border:1px solid var(--border);border-radius:6px;padding:1px 8px}
+  .news-title{font-size:.93rem;font-weight:650;line-height:1.45;margin-bottom:6px}
+  .news-title a{text-decoration:none}
+  .news-title a:hover{color:var(--accent)}
+  .news-sum{font-size:.8rem;color:var(--muted);line-height:1.5;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .news-tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .tk{
+    font-size:.7rem;font-weight:800;padding:2px 9px;border-radius:6px;cursor:pointer;
+    background:var(--card-2);border:1px solid var(--border);letter-spacing:.03em;
+  }
+  .tk:hover{border-color:var(--accent);color:var(--accent)}
+  .sent-badge{font-size:.68rem;font-weight:800;padding:2px 9px;border-radius:6px;letter-spacing:.04em}
+  .sent-badge.pos{color:var(--green);background:var(--green-bg)}
+  .sent-badge.neg{color:var(--red);background:var(--red-bg)}
+  .sent-badge.neu{color:var(--muted);background:var(--card-2)}
+  .empty-note{padding:40px 20px;text-align:center;color:var(--muted);font-size:.85rem}
 
-.digest{
-  border-radius:var(--r);padding:14px 18px;margin-bottom:22px;
-  background:var(--accent-soft);color:var(--accent);font-weight:500;font-size:14.5px;
-  display:flex;gap:10px;align-items:flex-start;
-}
-.digest.warn{background:var(--danger-soft);color:var(--danger)}
-.digest.brass{background:var(--brass-soft);color:var(--brass)}
-.digest .ic{flex:none;margin-top:2px}
+  /* ---------- Signals ---------- */
+  .side{display:flex;flex-direction:column;gap:20px}
+  #signal-list{padding:8px 0}
+  .signal{
+    display:flex;align-items:center;gap:12px;padding:12px 18px;
+    border-bottom:1px solid var(--border);transition:background .15s;
+  }
+  .signal:last-child{border-bottom:none}
+  .signal:hover{background:var(--card-2)}
+  .signal .avatar{
+    width:42px;height:42px;border-radius:11px;display:grid;place-items:center;
+    font-weight:800;font-size:.72rem;letter-spacing:-.02em;flex-shrink:0;
+  }
+  .signal .avatar.buy{background:var(--green-bg);color:var(--green);border:1px solid rgba(34,197,94,.35)}
+  .signal .avatar.sell{background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,.35)}
+  .signal .avatar.watch{background:var(--yellow-bg);color:var(--yellow);border:1px solid rgba(234,179,8,.3)}
+  .signal .info{flex:1;min-width:0}
+  .signal .name{font-size:.85rem;font-weight:700}
+  .signal .name small{color:var(--muted);font-weight:500;margin-left:6px}
+  .signal .why{font-size:.72rem;color:var(--muted);margin-top:2px;line-height:1.4}
+  .signal .action{text-align:right;flex-shrink:0}
+  .sig-label{font-size:.72rem;font-weight:800;letter-spacing:.05em;padding:4px 11px;border-radius:8px;white-space:nowrap}
+  .sig-label.buy{color:var(--green);background:var(--green-bg)}
+  .sig-label.sell{color:var(--red);background:var(--red-bg)}
+  .sig-label.watch{color:var(--yellow);background:var(--yellow-bg)}
+  .conf{margin-top:6px;height:4px;width:76px;background:var(--card-2);border-radius:4px;overflow:hidden;margin-left:auto}
+  .conf i{display:block;height:100%;border-radius:4px}
+  .conf.buy i{background:var(--green)} .conf.sell i{background:var(--red)} .conf.watch i{background:var(--yellow)}
 
-.task{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
-.task:last-child{border-bottom:none}
-.task .cb{
-  appearance:none;width:21px;height:21px;flex:none;margin-top:2px;cursor:pointer;
-  border:1.5px solid var(--muted);border-radius:50%;display:grid;place-items:center;transition:all .15s;background:var(--surface);
-}
-.task .cb:checked{background:var(--accent);border-color:var(--accent)}
-.task .cb:checked::after{content:"";width:9px;height:5px;border:2px solid var(--on-accent);border-top:none;border-right:none;transform:rotate(-45deg) translate(1px,-1px)}
-.task .tx{flex:1;min-width:0;cursor:pointer}
-.task .tt{font-weight:550;overflow-wrap:anywhere}
-.task.done .tt{text-decoration:line-through;color:var(--muted);font-weight:450}
-.task .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:3px;font-size:12px;color:var(--muted);align-items:center}
-.tag{padding:1.5px 9px;border-radius:99px;font-size:11px;font-weight:600;background:var(--surface2);color:var(--muted);letter-spacing:.04em}
-.tag.course{color:#fff}
-.tag.type-exam,.tag.type-quiz{background:var(--danger-soft);color:var(--danger)}
-.tag.type-assignment,.tag.type-project{background:var(--accent-soft);color:var(--accent)}
-.tag.type-reading,.tag.type-lab{background:var(--brass-soft);color:var(--brass)}
-.due{font-variant-numeric:tabular-nums;font-weight:600}
-.due.over{color:var(--danger)} .due.today{color:var(--accent)}
-.imp{color:var(--danger);font-weight:700}
+  /* ---------- Watchlist ---------- */
+  .watch-row{display:flex;gap:8px;padding:14px 18px;border-bottom:1px solid var(--border)}
+  .watch-row input{flex:1;background:var(--bg-2);border:1px solid var(--border);border-radius:10px;padding:9px 13px;color:var(--text);font-size:.83rem;outline:none;text-transform:uppercase}
+  .watch-row input:focus{border-color:var(--accent)}
+  .watch-item{display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:1px solid var(--border);font-size:.85rem}
+  .watch-item:last-child{border-bottom:none}
+  .watch-item b{width:58px}
+  .watch-item .px{font-variant-numeric:tabular-nums;color:var(--muted)}
+  .watch-item .rm{margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:2px 6px;border-radius:6px}
+  .watch-item .rm:hover{color:var(--red);background:var(--red-bg)}
 
-.lesson{display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);align-items:center;cursor:pointer}
-.lesson:last-child{border-bottom:none}
-.lesson .time{font-variant-numeric:tabular-nums;font-weight:600;font-size:13.5px;width:92px;flex:none;color:var(--muted);letter-spacing:.02em}
-.lesson .bar{width:3px;align-self:stretch;border-radius:4px;flex:none;min-height:36px}
-.lesson .nm{font-weight:600} .lesson .loc{font-size:12.5px;color:var(--muted)}
-.lesson .kind{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--brass);margin-left:7px;vertical-align:1px}
-.lesson.now{background:var(--accent-soft);border-radius:12px;padding:11px 13px;margin:2px -13px;border-bottom:none}
-.lesson.now .time{color:var(--accent)}
-.lesson.past{opacity:.42}
+  /* ---------- Stats ---------- */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:0 0 var(--radius) var(--radius);overflow:hidden}
+  .stat{background:var(--card);padding:14px;text-align:center}
+  .stat .v{font-size:1.35rem;font-weight:800;font-variant-numeric:tabular-nums}
+  .stat .l{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+  .stat.pos .v{color:var(--green)} .stat.neg .v{color:var(--red)}
 
-.empty{color:var(--muted);text-align:center;padding:28px 14px;font-size:14px}
-.empty b{display:block;font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:17px;color:var(--ink);margin-bottom:4px}
+  /* ---------- Modal ---------- */
+  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;place-items:center;z-index:100;padding:20px}
+  .modal-back.show{display:grid}
+  .modal{background:var(--card);border:1px solid var(--border);border-radius:16px;max-width:520px;width:100%;padding:26px}
+  .modal h3{font-size:1.1rem;margin-bottom:6px}
+  .modal p{font-size:.83rem;color:var(--muted);line-height:1.6;margin-bottom:16px}
+  .modal label{display:block;font-size:.78rem;font-weight:700;margin-bottom:6px}
+  .modal input{width:100%;background:var(--bg-2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:.85rem;outline:none;margin-bottom:16px}
+  .modal input:focus{border-color:var(--accent)}
+  .modal .row{display:flex;gap:10px;justify-content:flex-end}
+  .modal a{color:var(--accent)}
 
-.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.cal-head h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:23px}
-.cal-nav{display:flex;gap:6px}
-.cal-nav button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;font-size:16px}
-.cal-nav button:hover{background:var(--surface2)}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.cal-dow{text-align:center;font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--muted);padding:6px 0;text-transform:uppercase}
-.cal-cell{
-  aspect-ratio:1/.92;border-radius:12px;padding:5px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;
-  cursor:pointer;border:1px solid transparent;font-variant-numeric:tabular-nums;
-}
-.cal-cell:hover{background:var(--surface2)}
-.cal-cell .d{font-size:13.5px;font-weight:550;width:27px;height:27px;display:grid;place-items:center;border-radius:50%}
-.cal-cell.other{opacity:.3}
-.cal-cell.today .d{background:var(--accent);color:var(--on-accent);font-weight:700}
-.cal-cell.sel{border-color:var(--accent);background:var(--accent-soft)}
-.cal-cell.hol{background:var(--brass-soft)}
-.cal-cell.hol.sel{border-color:var(--brass)}
-.cal-dots{display:flex;gap:3px;flex-wrap:wrap;justify-content:center;max-width:44px}
-.cal-dots i{width:5.5px;height:5.5px;border-radius:50%;display:block}
-.cal-more{font-size:9px;color:var(--muted);font-weight:700}
+  /* ---------- Disclaimer ---------- */
+  .disclaimer{
+    max-width:1400px;margin:0 auto;padding:0 20px 26px;
+    font-size:.72rem;color:var(--muted);line-height:1.6;
+  }
+  .disclaimer strong{color:var(--yellow)}
 
-.sched-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(215px,1fr))}
-.sched-day h3{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
-.sched-day.today h3{color:var(--accent)}
-.slot{border-left:3px solid;border-radius:10px;background:var(--surface);border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:9px 12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow)}
-.slot:hover{background:var(--surface2)}
-.slot .t{font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.02em}
-.slot .n{font-weight:600;font-size:14px}
-.slot .p{font-size:12px;color:var(--muted)}
-.slot .kind{font-size:9.5px;font-weight:700;letter-spacing:.12em;color:var(--brass);margin-left:6px}
-
-.course-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer}
-.course-row:last-child{border-bottom:none}
-.course-row .sw{width:14px;height:14px;border-radius:50%;flex:none}
-.course-row .cn{font-weight:600} .course-row .cc{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
-
-.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
-.fpill{padding:6px 15px;border-radius:99px;border:1px solid var(--line);background:transparent;font-size:13px;font-weight:550;color:var(--muted)}
-.fpill.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-
-.overlay{position:fixed;inset:0;background:rgba(18,23,19,.55);z-index:50;display:grid;place-items:center;padding:16px;backdrop-filter:blur(3px)}
-.modal{background:var(--surface);border-radius:20px;box-shadow:var(--shadow);width:100%;max-width:440px;max-height:90vh;overflow:auto;padding:26px}
-.modal h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:24px;margin-bottom:18px}
-.f{margin-bottom:13px}
-.f label{display:block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
-.f input,.f select,.f textarea{
-  width:100%;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:var(--bg);
-}
-.f textarea{min-height:64px;resize:vertical}
-.f-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.swatches{display:flex;gap:8px;flex-wrap:wrap}
-.swatches button{width:30px;height:30px;border-radius:50%;border:2px solid transparent}
-.swatches button.on{border-color:var(--ink);transform:scale(1.12)}
-.m-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:20px}
-.m-actions .del{margin-right:auto}
-.checklbl{display:flex;align-items:center;gap:9px;font-weight:550;cursor:pointer;font-size:14px;text-transform:none;letter-spacing:0}
-.checklbl input{width:18px;height:18px;accent-color:var(--accent)}
-
-.sec{margin-bottom:24px}
-.sec-title{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 9px 2px}
-.set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
-.set-row:last-child{border-bottom:none}
-.set-row .sl{font-weight:550} .set-row .sd{font-size:12.5px;color:var(--muted);margin-top:1px}
-.toast{
-  position:fixed;bottom:88px;left:50%;transform:translateX(-50%);z-index:60;
-  background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:99px;font-size:14px;font-weight:550;
-  box-shadow:var(--shadow);animation:up .25s ease;max-width:90vw;text-align:center;
-}
-@keyframes up{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
-.fab{
-  position:fixed;bottom:92px;right:20px;z-index:35;width:54px;height:54px;border-radius:50%;
-  background:var(--accent);color:var(--on-accent);font-size:26px;display:none;place-items:center;box-shadow:var(--shadow);
-}
-@media (max-width:820px){.fab{display:grid}}
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+    background:var(--card-2);border:1px solid var(--accent);border-radius:12px;
+    padding:12px 20px;font-size:.83rem;z-index:200;transition:.3s;opacity:0;box-shadow:0 10px 40px rgba(0,0,0,.5);
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 </style>
+</head>
+<body>
 
-<div id="app">
-  <aside id="sidebar">
-    <div class="brand">Checkpoint<small>UofT St. George · 2026–27</small></div>
-    <hr>
-    <nav id="nav-side"></nav>
-    <div id="savechip"><span class="dot"></span><span class="lbl">Loading…</span></div>
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="dot">📡</div>
+      <div>BorsaRadar<small>ABD Borsası Haber & Sinyal Merkezi</small></div>
+    </div>
+    <div class="market-status" id="market-status">
+      <span class="pulse"></span><span id="market-status-text">Piyasa durumu…</span>
+    </div>
+    <div class="clocks">
+      <span>New York <b id="clock-ny">--:--</b></span>
+      <span>İstanbul <b id="clock-tr">--:--</b></span>
+    </div>
+    <div class="header-spacer"></div>
+    <span class="live-badge demo" id="mode-badge">● DEMO MOD</span>
+    <button class="btn" id="btn-settings">⚙️ Ayarlar</button>
+  </div>
+</header>
+
+<div class="tape-wrap"><div class="tape" id="tape"></div></div>
+
+<div class="container">
+  <!-- ===== Sol: Haber akışı ===== -->
+  <section class="panel">
+    <div class="panel-head">
+      <h2>📰 Anlık Haber Akışı</h2>
+      <span class="count" id="news-count">0 haber</span>
+      <div class="spacer"></div>
+      <span style="font-size:.72rem;color:var(--muted)" id="last-update"></span>
+    </div>
+    <div class="search-row">
+      <input id="search" type="search" placeholder="Haber veya sembol ara… (örn. AAPL, Fed, earnings)">
+    </div>
+    <div class="filters" id="filters">
+      <button class="chip active" data-f="all">Tümü</button>
+      <button class="chip pos" data-f="pos">🟢 Pozitif</button>
+      <button class="chip neg" data-f="neg">🔴 Negatif</button>
+      <button class="chip" data-f="neu">⚪ Nötr</button>
+      <button class="chip" data-f="watch">⭐ İzleme Listem</button>
+    </div>
+    <div id="news-list"></div>
+  </section>
+
+  <!-- ===== Sağ: Sinyaller + İzleme ===== -->
+  <aside class="side">
+    <section class="panel">
+      <div class="panel-head"><h2>🎯 Habere Dayalı Sinyaller</h2></div>
+      <div id="signal-list"></div>
+      <div class="stats">
+        <div class="stat pos"><div class="v" id="st-pos">0</div><div class="l">Pozitif</div></div>
+        <div class="stat neg"><div class="v" id="st-neg">0</div><div class="l">Negatif</div></div>
+        <div class="stat"><div class="v" id="st-neu">0</div><div class="l">Nötr</div></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><h2>⭐ İzleme Listem</h2></div>
+      <div class="watch-row">
+        <input id="watch-input" placeholder="Sembol ekle (örn. NVDA)" maxlength="6">
+        <button class="btn primary" id="watch-add">Ekle</button>
+      </div>
+      <div id="watch-list"></div>
+    </section>
   </aside>
-  <main id="main"></main>
 </div>
-<nav id="tabbar"></nav>
-<button class="fab" id="fab" aria-label="Add to-do">+</button>
-<div id="modal-root"></div>
-<div id="toast-root"></div>
+
+<div class="disclaimer">
+  <strong>⚠️ Yasal Uyarı:</strong> Bu sitedeki sinyaller, haber başlıklarının otomatik duygu analiziyle üretilen
+  <em>bilgilendirme amaçlı</em> göstergelerdir; <strong>yatırım tavsiyesi değildir</strong>. Haber duyarlılığı fiyat hareketini
+  garanti etmez. Alım-satım kararlarınızı kendi araştırmanıza ve/veya lisanslı bir yatırım danışmanına dayandırın.
+  Demo modda gösterilen haberler ve fiyatlar simülasyondur.
+</div>
+
+<!-- ===== Ayarlar Modal ===== -->
+<div class="modal-back" id="modal">
+  <div class="modal">
+    <h3>⚙️ Ayarlar</h3>
+    <p>
+      Gerçek canlı haber akışı için ücretsiz bir <a href="https://finnhub.io/register" target="_blank" rel="noopener">Finnhub.io</a>
+      API anahtarı alıp aşağıya yapıştırın. Anahtar yalnızca tarayıcınızda saklanır, hiçbir sunucuya gönderilmez.
+      Boş bırakırsanız site gerçekçi simüle haberlerle <b>demo modda</b> çalışır.
+    </p>
+    <label for="api-key">Finnhub API Anahtarı</label>
+    <input id="api-key" type="password" placeholder="örn. c1a2b3…" autocomplete="off">
+    <label for="refresh-sec">Yenileme aralığı (saniye, canlı mod)</label>
+    <input id="refresh-sec" type="number" min="30" max="600" value="60">
+    <div class="row">
+      <button class="btn" id="modal-close">Vazgeç</button>
+      <button class="btn primary" id="modal-save">Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-"use strict";
-/* ---------- constants ---------- */
-const LS="kampus-ajandam-v1", LS_NOTIF="kampus-ajandam-notified";
-const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-const DAYS_S=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
-const TYPES=["assignment","exam","quiz","project","lab","reading","personal","other"];
-const TYPE_MIGRATE={"ödev":"assignment","sınav":"exam","proje":"project","okuma":"reading","kişisel":"personal","diğer":"other"};
-const COLORS=["#1E4B39","#28418F","#8A3B2E","#9C7A2F","#5B3A6E","#2E6E70","#7A2E4D","#4A5568"];
-const ICONS={
-  today:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
-  cal:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>',
-  tasks:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>',
-  sched:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M9 9v12M15 9v12"/></svg>',
-  gear:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.4 2.6a7 7 0 0 0-2.1 1.2l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.4-2.6a7 7 0 0 0 2.1-1.2l2.4 1 2-3.4-2-1.6c.06-.4.1-.8.1-1.2z"/></svg>',
-  bell:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>'
+'use strict';
+
+/* =====================================================
+   Durum
+===================================================== */
+const state = {
+  news: [],            // {id, ts, source, headline, summary, url, category, tickers[], sent, score}
+  filter: 'all',
+  search: '',
+  apiKey: '',
+  refreshSec: 60,
+  watchlist: ['AAPL','NVDA','TSLA'],
+  seenIds: new Set(),
+  demoTimer: null,
+  liveTimer: null,
 };
 
-/* ---------- mood check-in ---------- */
-const MOODS=[
-  {id:"stressed",e:"😮‍💨",l:"Stressed"},
-  {id:"down",e:"😔",l:"Down"},
-  {id:"meh",e:"😐",l:"Meh"},
-  {id:"good",e:"🙂",l:"Good"},
-  {id:"great",e:"😄",l:"Great"}
+try {
+  state.apiKey = localStorage.getItem('br_apikey') || '';
+  state.refreshSec = Math.max(30, parseInt(localStorage.getItem('br_refresh') || '60', 10) || 60);
+  const wl = JSON.parse(localStorage.getItem('br_watchlist') || 'null');
+  if (Array.isArray(wl)) state.watchlist = wl;
+} catch (e) {}
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* =====================================================
+   Duygu analizi motoru
+   Haber başlığı + özetini tarayıp -N..+N puan üretir.
+===================================================== */
+const POS_WORDS = [
+  'beat','beats','surge','surges','soar','soars','soaring','rally','rallies','record','upgrade','upgraded',
+  'raises guidance','raised guidance','strong','tops estimates','buyback','dividend increase','breakthrough',
+  'approval','approved','wins','partnership','expands','expansion','outperform','buy rating','all-time high',
+  'jumps','jumped','gains','profit rises','revenue growth','better-than-expected','bullish','acquisition',
+  'contract win','raises forecast','strong demand','beats expectations','upbeat','optimism','optimistic','boosts'
 ];
-const MOOD_MSGS={
-  stressed:[
-    "Deep breath. Pick the smallest task on your list and finish just that — momentum beats pressure.",
-    "You don't have to do everything today. Choose the one thing that matters most and let the rest wait.",
-    "Try 25 minutes of focused work, then a 5-minute walk. Stress shrinks the moment the work starts.",
-    "Step outside for ten minutes of fresh air before your next task — your brain will thank you.",
-    "Write down everything on your mind, then cross out what can wait until tomorrow. Half of it can."
-  ],
-  down:[
-    "Be as kind to yourself today as you would be to a friend. One small win is enough.",
-    "Low days pass. Do something gentle: a warm drink, a short walk, one tiny task.",
-    "Text someone you like talking to. Connection is the fastest way out of a grey day.",
-    "It's okay to move slowly today. Showing up at all counts.",
-    "Put on your favorite song and do one small thing. Tiny actions lift heavy moods."
-  ],
-  meh:[
-    "Neutral days are perfect for boring-but-important work. Knock one thing out.",
-    "Start with a two-minute task. Motivation usually shows up after you begin.",
-    "Change your scenery — a library seat or a café table can reset the whole day.",
-    "Make today one percent better: one task, one walk, one glass of water.",
-    "No spark? Borrow one: put on a playlist, set a 20-minute timer, and go."
-  ],
-  good:[
-    "Nice — ride that energy. Start with the task you've been putting off.",
-    "A good mood is fuel. Bank a win on something meaningful today.",
-    "Feeling steady? Perfect time to get ahead of next week.",
-    "Keep the streak going — finish one thing before the day gets busy.",
-    "Good days compound. One focused hour now is a gift to future you."
-  ],
-  great:[
-    "You're glowing today — aim it at your biggest challenge.",
-    "Great days are for bold moves. Tackle the hardest thing on your list first.",
-    "Save this feeling: crush one big task, then celebrate properly.",
-    "Energy like this is rare — invest it where it counts the most.",
-    "Unstoppable mode: pick the scariest item on your list and make it small."
-  ]
+const NEG_WORDS = [
+  'miss','misses','missed','plunge','plunges','plunged','sink','sinks','slump','slumps','downgrade','downgraded',
+  'cuts guidance','cut guidance','lawsuit','sues','sued','investigation','probe','recall','layoff','layoffs',
+  'bankruptcy','default','warning','warns','weak','falls','fell','drops','dropped','tumbles','sell rating',
+  'underperform','fraud','fine','fined','delays','delay','halted','worse-than-expected','bearish','shortfall',
+  'lowers forecast','disappointing','sell-off','selloff','crash','sanction','sanctions','shrinks','losses widen'
+];
+function analyzeSentiment(text) {
+  const t = (text || '').toLowerCase();
+  let score = 0;
+  for (const w of POS_WORDS) if (t.includes(w)) score++;
+  for (const w of NEG_WORDS) if (t.includes(w)) score--;
+  const sent = score > 0 ? 'pos' : score < 0 ? 'neg' : 'neu';
+  return { sent, score };
+}
+
+/* Başlıktan bilinen sembolleri yakala (şirket adı → sembol) */
+const NAME_TO_TICKER = {
+  'apple':'AAPL','microsoft':'MSFT','nvidia':'NVDA','amazon':'AMZN','alphabet':'GOOGL','google':'GOOGL',
+  'meta':'META','facebook':'META','tesla':'TSLA','netflix':'NFLX','amd':'AMD','intel':'INTC','broadcom':'AVGO',
+  'jpmorgan':'JPM','goldman':'GS','morgan stanley':'MS','bank of america':'BAC','wells fargo':'WFC',
+  'boeing':'BA','disney':'DIS','coca-cola':'KO','pepsi':'PEP','walmart':'WMT','costco':'COST','mcdonald':'MCD',
+  'exxon':'XOM','chevron':'CVX','pfizer':'PFE','moderna':'MRNA','johnson & johnson':'JNJ','eli lilly':'LLY',
+  'salesforce':'CRM','oracle':'ORCL','adobe':'ADBE','paypal':'PYPL','uber':'UBER','airbnb':'ABNB',
+  'palantir':'PLTR','coinbase':'COIN','berkshire':'BRK.B','visa':'V','mastercard':'MA','ford':'F',
+  'general motors':'GM','starbucks':'SBUX','nike':'NKE','qualcomm':'QCOM','micron':'MU','arm holdings':'ARM'
 };
-function moodMsg(id){
-  const pool=MOOD_MSGS[id]||MOOD_MSGS.good;
-  let h=0; const k=todayKey()+id;
-  for(let i=0;i<k.length;i++)h=(h*31+k.charCodeAt(i))>>>0;
-  return pool[h%pool.length];
+function extractTickers(text, related) {
+  const out = new Set();
+  if (related) related.split(',').forEach(s => { s = s.trim().toUpperCase(); if (/^[A-Z.]{1,6}$/.test(s)) out.add(s); });
+  const t = (text || '').toLowerCase();
+  for (const [name, sym] of Object.entries(NAME_TO_TICKER)) if (t.includes(name)) out.add(sym);
+  return [...out].slice(0, 5);
 }
 
-/* ---------- state ---------- */
-const defaultState=()=>({
-  v:1, updatedAt:new Date().toISOString(),
-  courses:[], schedule:[], tasks:[], mood:{}, meta:{},
-  settings:{
-    name:"Derin", notif:false,
-    guzStart:"2026-09-08", guzEnd:"2026-12-07",
-    baharStart:"2027-01-11", baharEnd:"2027-04-09",
-    holidays:[], keyDates:[]
-  }
-});
-function hydrate(p){
-  const s=Object.assign(defaultState(),p,{
-    settings:Object.assign(defaultState().settings,p.settings||{}),
-    meta:p.meta||{}, mood:p.mood||{}
-  });
-  (s.tasks||[]).forEach(x=>{ if(TYPE_MIGRATE[x.type])x.type=TYPE_MIGRATE[x.type]; });
-  return s;
-}
-let S=defaultState();
-try{ const raw=localStorage.getItem(LS); if(raw){ const p=JSON.parse(raw); if(p&&p.v===1) S=hydrate(p); } }catch(e){}
-
-/* ---------- UofT 2026-27 seed (from course calendar .ics) ---------- */
-const SEED_V1="uoft-2026-27", SEED_V2="uoft-2026-27-en";
-const SEED_HOLIDAYS=[
-  {from:"2026-09-07",to:"2026-09-07",name:"Labour Day"},
-  {from:"2026-10-12",to:"2026-10-12",name:"Thanksgiving"},
-  {from:"2026-10-26",to:"2026-10-30",name:"Fall Reading Week"},
-  {from:"2026-12-23",to:"2027-01-03",name:"Winter Break"},
-  {from:"2027-02-15",to:"2027-02-15",name:"Family Day"},
-  {from:"2027-02-15",to:"2027-02-19",name:"Winter Reading Week"},
-  {from:"2027-03-26",to:"2027-03-26",name:"Good Friday"}
-];
-const SEED_KEYDATES=[
-  {from:"2026-09-08",to:"2026-09-08",name:"Fall classes begin 🎬"},
-  {from:"2026-12-07",to:"2026-12-07",name:"Last day of fall classes"},
-  {from:"2026-12-09",to:"2026-12-22",name:"Fall exam period (approx.)"},
-  {from:"2027-01-11",to:"2027-01-11",name:"Winter classes begin 🎬"},
-  {from:"2027-04-09",to:"2027-04-09",name:"Last day of winter classes"},
-  {from:"2027-04-12",to:"2027-04-30",name:"Winter exam period (approx.)"}
-];
-function ensureSeed(){
-  const cur=S.meta&&S.meta.seed;
-  if(cur===SEED_V2)return false;
-  if(cur===SEED_V1){
-    S.settings.holidays=SEED_HOLIDAYS; S.settings.keyDates=SEED_KEYDATES;
-    S.meta=Object.assign({},S.meta,{seed:SEED_V2});
-    return true;
-  }
-  const defs=[
-    ["CSC108H1","Introduction to Computer Programming","#28418F"],
-    ["ECO320H1","Economic Analysis of Law","#8A3B2E"],
-    ["ECO358H1","Financial Economics I","#1E4B39"],
-    ["MGT250H1","Fundamentals of Marketing","#9C7A2F"],
-    ["TRN250Y1","Empire & Nationalism","#5B3A6E"],
-    ["ECO359H1","Financial Economics II","#2E6E70"],
-    ["ECO365H1","International Monetary Economics","#7A2E4D"],
-    ["ECO372H1","Data Analysis & Applied Econometrics","#4A5568"],
-    ["MGT230H1","Introduction to Finance","#3E5F8A"]
-  ];
-  const byCode={}; S.courses.forEach(c=>{if(c.code)byCode[c.code]=c;});
-  const idOf={};
-  defs.forEach(d=>{
-    let c=byCode[d[0]];
-    if(!c){ c={id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),name:d[1],code:d[0],color:d[2]}; S.courses.push(c); }
-    idOf[d[0]]=c.id;
-  });
-  const F={from:"2026-09-08",to:"2026-12-07"}, W={from:"2027-01-11",to:"2027-04-09"};
-  const rows=[
-    ["CSC108H1",0,"12:00","13:00","MP 103","LEC",F],
-    ["CSC108H1",2,"11:00","13:00","AH 100","LEC",F],
-    ["ECO320H1",1,"11:00","13:00","RW 117","LEC",F],
-    ["ECO320H1",3,"13:00","15:00","BR 200","LEC",F],
-    ["ECO358H1",1,"09:00","11:00","RW 110","LEC",F],
-    ["ECO358H1",3,"15:00","16:00","RW 117","TUT",F],
-    ["MGT250H1",3,"09:00","11:00","OI G162","LEC",F],
-    ["TRN250Y1",1,"15:00","17:00","GI 102","LEC",F],
-    ["TRN250Y1",2,"16:00","17:00","TL 1016","TUT",F],
-    ["ECO359H1",1,"09:00","11:00","FE 230","LEC",W],
-    ["ECO359H1",3,"10:00","11:00","SS 2135","LEC",W],
-    ["ECO365H1",2,"11:00","13:00","RW 110","LEC",W],
-    ["ECO365H1",4,"11:00","12:00","RW 117","LEC",W],
-    ["ECO372H1",2,"09:00","11:00","SS 1073","LEC",W],
-    ["ECO372H1",0,"09:00","11:00","AH 100","TUT",W],
-    ["MGT230H1",0,"11:00","13:00","ES 1050","LEC",W],
-    ["TRN250Y1",1,"15:00","17:00","GI 102","LEC",W],
-    ["TRN250Y1",2,"16:00","17:00","TL 1016","TUT",W]
-  ];
-  rows.forEach(r=>{
-    S.schedule.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),
-      courseId:idOf[r[0]],day:r[1],start:r[2],end:r[3],loc:r[4],kind:r[5],from:r[6].from,to:r[6].to});
-  });
-  Object.assign(S.settings,{guzStart:"2026-09-08",guzEnd:"2026-12-07",baharStart:"2027-01-11",baharEnd:"2027-04-09",
-    holidays:SEED_HOLIDAYS,keyDates:SEED_KEYDATES});
-  S.meta=Object.assign({},S.meta,{seed:SEED_V2});
-  return true;
-}
-if(ensureSeed()){ S.updatedAt=new Date().toISOString(); try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){} }
-
-const UI={view:"today", selDate:null, calY:null, calM:null, taskFilter:"open", schedTerm:null};
-
-/* ---------- helpers ---------- */
-const $=s=>document.querySelector(s);
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const pad=n=>String(n).padStart(2,"0");
-const dkey=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
-const todayKey=()=>dkey(new Date());
-const parseKey=k=>{const[y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d);};
-const dowIdx=d=>(d.getDay()+6)%7;
-const fmtLong=d=>DAYS[dowIdx(d)]+", "+MONTHS[d.getMonth()]+" "+d.getDate();
-const fmtShort=k=>{const d=parseKey(k);return MONTHS[d.getMonth()].slice(0,3)+" "+d.getDate();};
-const daysDiff=k=>Math.round((parseKey(k)-parseKey(todayKey()))/864e5);
-const nowMin=()=>{const n=new Date();return n.getHours()*60+n.getMinutes();};
-const toMin=t=>{if(!t)return null;const[h,m]=t.split(":").map(Number);return h*60+m;};
-const courseOf=id=>S.courses.find(c=>c.id===id);
-const activeOn=(e,k)=>(!e.from||k>=e.from)&&(!e.to||k<=e.to);
-const holidayOf=k=>(S.settings.holidays||[]).find(h=>k>=h.from&&k<=h.to);
-const keyDatesOf=k=>(S.settings.keyDates||[]).filter(h=>k>=h.from&&k<=h.to);
-function lessonsOn(k){
-  if(holidayOf(k))return[];
-  const di=dowIdx(parseKey(k));
-  return S.schedule.filter(e=>e.day===di&&activeOn(e,k)).sort((a,b)=>a.start.localeCompare(b.start));
-}
-function weekChip(){
-  const t=todayKey(),s=S.settings;
-  const inR=(a,b)=>a&&b&&t>=a&&t<=b;
-  let name=null,start=null;
-  if(inR(s.guzStart,s.guzEnd)){name="Fall";start=s.guzStart;}
-  else if(inR(s.baharStart,s.baharEnd)){name="Winter";start=s.baharStart;}
-  if(!name){
-    if(s.guzStart&&t<s.guzStart){const d=daysDiff(s.guzStart);return `Fall starts in ${d} day${d===1?"":"s"}`;}
-    if(s.baharStart&&t<s.baharStart&&t>s.guzEnd){const d=daysDiff(s.baharStart);return `Winter starts in ${d} day${d===1?"":"s"}`;}
-    return "Term break";
-  }
-  const wk=Math.floor((parseKey(t)-parseKey(start))/(7*864e5))+1;
-  return `${name} · Week ${wk}`;
-}
-function relDue(k){
-  const d=daysDiff(k);
-  if(d<0)return{cls:"over",txt:Math.abs(d)+(d===-1?" day late":" days late")};
-  if(d===0)return{cls:"today",txt:"Today"};
-  if(d===1)return{cls:"",txt:"Tomorrow"};
-  if(d<=7)return{cls:"",txt:DAYS[dowIdx(parseKey(k))]+" ("+d+"d)"};
-  return{cls:"",txt:fmtShort(k)};
+/* =====================================================
+   Kategori tahmini (TR etiket)
+===================================================== */
+function guessCategory(text) {
+  const t = (text || '').toLowerCase();
+  if (/(earnings|revenue|profit|quarterly|q[1-4]|eps|guidance)/.test(t)) return 'Bilanço';
+  if (/(fed|federal reserve|rate|inflation|cpi|ppi|jobs report|unemployment|treasury|yield)/.test(t)) return 'Makro / Fed';
+  if (/(merger|acquisition|acquires|buyout|takeover|deal)/.test(t)) return 'Birleşme & Satın Alma';
+  if (/(ipo|listing|debut)/.test(t)) return 'Halka Arz';
+  if (/(upgrade|downgrade|price target|analyst|rating)/.test(t)) return 'Analist';
+  if (/(lawsuit|sec |probe|investigation|regulator|antitrust|fine)/.test(t)) return 'Hukuk / Düzenleme';
+  if (/(ai|artificial intelligence|chip|semiconductor|cloud|software)/.test(t)) return 'Teknoloji';
+  if (/(oil|gas|energy|opec|crude)/.test(t)) return 'Enerji';
+  if (/(fda|drug|trial|pharma|biotech)/.test(t)) return 'Sağlık';
+  if (/(crypto|bitcoin|ethereum)/.test(t)) return 'Kripto';
+  return 'Genel';
 }
 
-/* ---------- persistence: localStorage + artifact files ---------- */
-let artifactNS=null, cloudMode="pending", saveTimer=null, cloudBusy=false, cloudDirty=false;
-function setChip(st,txt){
-  const el=$("#savechip"); if(!el)return;
-  el.className=st; el.querySelector(".lbl").textContent=txt;
-}
-function persist(){
-  S.updatedAt=new Date().toISOString();
-  try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}
-  if(cloudMode==="files"){
-    setChip("saving","Saving…");
-    clearTimeout(saveTimer); saveTimer=setTimeout(cloudSave,2500);
+/* =====================================================
+   Haber ekleme + sinyal üretimi
+===================================================== */
+function addNews(items, fresh) {
+  let added = 0;
+  for (const it of items) {
+    if (state.seenIds.has(it.id)) continue;
+    state.seenIds.add(it.id);
+    state.news.push({ ...it, fresh: !!fresh });
+    added++;
   }
-}
-async function cloudSave(){
-  if(cloudMode!=="files"||!artifactNS)return;
-  if(cloudBusy){cloudDirty=true;return;}
-  cloudBusy=true; cloudDirty=false;
-  try{
-    await artifactNS.publish({"data/state.json":JSON.stringify(S)});
-    setChip("saved","Saved · syncs everywhere");
-  }catch(err){
-    const c=err&&err.code;
-    if(["capability_disabled","not_granted","not_writer","not_declared"].includes(c)){
-      cloudMode="local"; setChip("local","Stored in this browser");
-    }else if(c==="conflict"){ /* shell reloads to winner */ }
-    else if(c==="rate_limited"){ clearTimeout(saveTimer); saveTimer=setTimeout(cloudSave,20000); }
-    else { setChip("error","Save failed, retrying"); clearTimeout(saveTimer); saveTimer=setTimeout(cloudSave,8000); }
-  }
-  cloudBusy=false;
-  if(cloudDirty){clearTimeout(saveTimer); saveTimer=setTimeout(cloudSave,2500);}
-}
-async function initCloud(){
-  let remote=null;
-  try{
-    const r=await fetch("data/state.json",{cache:"no-store"});
-    if(r.ok){const p=await r.json(); if(p&&p.v===1)remote=p;}
-  }catch(e){}
-  if(remote&&(!S.updatedAt||remote.updatedAt>S.updatedAt)){
-    S=hydrate(remote);
-    if(ensureSeed())S.updatedAt=new Date().toISOString();
-    try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}
+  if (added) {
+    state.news.sort((a, b) => b.ts - a.ts);
+    if (state.news.length > 400) state.news.length = 400;
     render();
   }
-  try{ artifactNS=window.claude&&window.claude.use?await window.claude.use("artifact"):null; }catch(e){artifactNS=null;}
-  if(artifactNS){
-    cloudMode="files"; setChip("saved","Saved · syncs everywhere");
-    if(!remote||S.updatedAt>remote.updatedAt){clearTimeout(saveTimer); saveTimer=setTimeout(cloudSave,1500);}
-  }else{
-    cloudMode="local"; setChip("local","Stored in this browser");
-  }
+  return added;
 }
 
-/* ---------- notifications ---------- */
-function notifOK(){try{return "Notification" in window&&Notification.permission==="granted";}catch(e){return false;}}
-function sendNotif(title,body){ if(!S.settings.notif||!notifOK())return; try{new Notification(title,{body});}catch(e){} }
-function notifLog(){ try{return JSON.parse(localStorage.getItem(LS_NOTIF)||"{}");}catch(e){return{};} }
-function notifMark(k){ const l=notifLog(); l[k]=1; const t=todayKey(); Object.keys(l).forEach(x=>{if(!x.startsWith(t))delete l[x];}); try{localStorage.setItem(LS_NOTIF,JSON.stringify(l));}catch(e){} }
-function notifTick(){
-  const t=todayKey(), log=notifLog(), hour=new Date().getHours();
-  if(!log[t+":digest"]){
-    const due=S.tasks.filter(x=>!x.done&&x.due===t).length;
-    const over=S.tasks.filter(x=>!x.done&&x.due&&x.due<t).length;
-    const cls=lessonsOn(t).length;
-    if(due+over+cls>0){
-      const parts=[];
-      if(cls)parts.push(cls+(cls===1?" class":" classes"));
-      if(due)parts.push(due+" due today");
-      if(over)parts.push(over+" overdue");
-      sendNotif("Good morning "+(S.settings.name||"")+" 👋","Today: "+parts.join(" · "));
+/* Son 24 saatin haberlerinden hisse bazlı sinyal skoru:
+   yakın tarihli haber daha ağır basar (yarılanma ~4 saat). */
+function computeSignals() {
+  const now = Date.now();
+  const per = {}; // sym -> {score, n, pos, neg, latest}
+  for (const n of state.news) {
+    const ageH = (now - n.ts) / 36e5;
+    if (ageH > 24) continue;
+    const w = Math.pow(0.5, ageH / 4);
+    for (const sym of n.tickers) {
+      per[sym] = per[sym] || { score: 0, n: 0, pos: 0, neg: 0, latest: 0 };
+      per[sym].score += n.score * w;
+      per[sym].n++;
+      if (n.sent === 'pos') per[sym].pos++;
+      if (n.sent === 'neg') per[sym].neg++;
+      per[sym].latest = Math.max(per[sym].latest, n.ts);
     }
-    notifMark(t+":digest");
   }
-  const nm=nowMin();
-  lessonsOn(t).forEach(e=>{
-    const st=toMin(e.start); if(st==null)return;
-    const k=t+":cls:"+e.id;
-    if(st-nm>0&&st-nm<=20&&!log[k]){
-      const c=courseOf(e.courseId);
-      sendNotif((c?c.name:"Class")+" starts soon","At "+e.start+(e.loc?" · "+e.loc:""));
-      notifMark(k);
-    }
-  });
-  S.tasks.filter(x=>!x.done&&x.due===t&&x.time).forEach(x=>{
-    const tm=toMin(x.time), k=t+":task:"+x.id;
-    if(tm-nm>0&&tm-nm<=60&&!log[k]){
-      sendNotif("Due soon: "+x.title,"Today at "+x.time);
-      notifMark(k);
-    }
-  });
-  if(hour>=17&&!S.mood[t]&&!log[t+":mood"]){
-    sendNotif("How are you feeling?","Log today's mood in Checkpoint 🌿");
-    notifMark(t+":mood");
-  }
-  if(hour>=20&&!log[t+":tomorrow"]){
-    const tomorrow=dkey(new Date(Date.now()+864e5));
-    const due=S.tasks.filter(x=>!x.done&&x.due===tomorrow);
-    const cls=lessonsOn(tomorrow);
-    if(due.length+cls.length>0){
-      const parts=[];
-      if(due.length)parts.push(due.length+" due");
-      if(cls.length)parts.push("first class at "+cls[0].start);
-      sendNotif("Tomorrow's preview 🌙",parts.join(" · "));
-    }
-    notifMark(t+":tomorrow");
-  }
+  const list = Object.entries(per)
+    .filter(([, v]) => v.n >= 1)
+    .map(([sym, v]) => {
+      let type = 'watch';
+      if (v.score >= 1.2 && v.pos > v.neg) type = 'buy';
+      else if (v.score <= -1.2 && v.neg > v.pos) type = 'sell';
+      const conf = Math.min(95, Math.round(35 + Math.abs(v.score) * 18 + v.n * 4));
+      return { sym, ...v, type, conf };
+    })
+    .sort((a, b) => Math.abs(b.score) - Math.abs(a.score) || b.n - a.n);
+  return list.slice(0, 10);
 }
 
-/* ---------- toast ---------- */
-let toastT=null;
-function toast(msg){
-  $("#toast-root").innerHTML=`<div class="toast">${esc(msg)}</div>`;
-  clearTimeout(toastT); toastT=setTimeout(()=>{$("#toast-root").innerHTML="";},2600);
+/* =====================================================
+   Render
+===================================================== */
+function timeAgo(ts) {
+  const s = Math.max(0, Math.round((Date.now() - ts) / 1000));
+  if (s < 60) return `${s} sn önce`;
+  const m = Math.round(s / 60);
+  if (m < 60) return `${m} dk önce`;
+  const h = Math.round(m / 60);
+  if (h < 24) return `${h} sa önce`;
+  return new Date(ts).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
 }
+const SENT_TR = { pos: 'POZİTİF', neg: 'NEGATİF', neu: 'NÖTR' };
 
-/* ---------- nav ---------- */
-const NAV=[["today","Today",ICONS.today],["cal","Calendar",ICONS.cal],["tasks","To-Dos",ICONS.tasks],["sched","Schedule",ICONS.sched],["settings","Settings",ICONS.gear]];
-function renderNav(){
-  const t=todayKey();
-  const badge=S.tasks.filter(x=>!x.done&&x.due&&x.due<=t).length;
-  const html=NAV.map(([id,lbl,ic])=>`<button class="nav-btn ${UI.view===id?"active":""}" data-nav="${id}">${ic}<span>${lbl}</span>${id==="tasks"&&badge?`<span class="cnt">${badge}</span>`:""}</button>`).join("");
-  $("#nav-side").innerHTML=html; $("#tabbar").innerHTML=html;
-}
-
-/* ---------- shared row templates ---------- */
-function taskHTML(x,showDue=true){
-  const c=courseOf(x.courseId);
-  const due=x.due?relDue(x.due):null;
-  return `<div class="task ${x.done?"done":""}" data-tid="${x.id}">
-    <input type="checkbox" class="cb" ${x.done?"checked":""} data-toggle="${x.id}" aria-label="Done">
-    <div class="tx" data-edit-task="${x.id}">
-      <div class="tt">${x.priority?'<span class="imp">! </span>':""}${esc(x.title)}</div>
-      <div class="meta">
-        ${x.type&&x.type!=="other"?`<span class="tag type-${x.type}">${x.type}</span>`:""}
-        ${c?`<span class="tag course" style="background:${c.color}">${esc(c.code||c.name)}</span>`:""}
-        ${showDue&&due?`<span class="due ${due.cls}">${due.txt}${x.time?" "+x.time:""}</span>`:x.time?`<span class="due">${x.time}</span>`:""}
-        ${x.notes?`<span>· ${esc(x.notes.length>60?x.notes.slice(0,60)+"…":x.notes)}</span>`:""}
-      </div>
-    </div>
-  </div>`;
-}
-function lessonHTML(e,mode){
-  const c=courseOf(e.courseId);
-  return `<div class="lesson ${mode||""}" data-edit-sched="${e.id}">
-    <span class="time">${e.start}–${e.end}</span>
-    <span class="bar" style="background:${c?c.color:"var(--muted)"}"></span>
-    <div><div class="nm">${esc(c?c.name:"Class")}${e.kind&&e.kind!=="LEC"?`<span class="kind">${esc(e.kind)}</span>`:""}</div>${e.loc?`<div class="loc">${esc(e.loc)}</div>`:""}</div>
-  </div>`;
-}
-
-/* ---------- mood block ---------- */
-function moodBlock(){
-  const t=todayKey(), cur=S.mood[t];
-  const strip=[];
-  for(let i=6;i>=0;i--){
-    const d=new Date(Date.now()-i*864e5), k=dkey(d);
-    const m=MOODS.find(z=>z.id===S.mood[k]);
-    strip.push(`<div class="d"><span>${m?m.e:"·"}</span>${DAYS_S[dowIdx(d)][0]}</div>`);
+function matchesFilter(n) {
+  if (state.filter === 'watch') {
+    if (!n.tickers.some(t => state.watchlist.includes(t))) return false;
+  } else if (state.filter !== 'all' && n.sent !== state.filter) return false;
+  if (state.search) {
+    const q = state.search.toLowerCase();
+    const hay = (n.headline + ' ' + n.summary + ' ' + n.tickers.join(' ') + ' ' + n.category).toLowerCase();
+    if (!hay.includes(q)) return false;
   }
-  if(!cur){
-    return `<div class="mood-card">
-      <div class="mood-q">How are you feeling today?</div>
-      <div class="mood-btns">${MOODS.map(m=>`<button data-mood="${m.id}"><span class="e">${m.e}</span><span class="l">${m.l}</span></button>`).join("")}</div>
-    </div>`;
-  }
-  const m=MOODS.find(z=>z.id===cur)||MOODS[3];
-  return `<div class="mood-card">
-    <div class="mood-msg"><p>${esc(moodMsg(cur))}</p></div>
-    <div class="mood-foot">
-      <span class="who">${m.e} Feeling ${m.l.toLowerCase()}</span>
-      <button class="linkish" data-act="mood-change">change</button>
-      <div class="mood-strip">${strip.join("")}</div>
-    </div>
-  </div>`;
+  return true;
 }
 
-/* ---------- view: today ---------- */
-function viewToday(){
-  const now=new Date(), t=todayKey(), nm=nowMin();
-  const hour=now.getHours();
-  const greet=hour<12?"Good morning":hour<18?"Good afternoon":"Good evening";
-  const overdue=S.tasks.filter(x=>!x.done&&x.due&&x.due<t).sort((a,b)=>a.due.localeCompare(b.due));
-  const dueToday=S.tasks.filter(x=>!x.done&&x.due===t).sort((a,b)=>(b.priority?1:0)-(a.priority?1:0)||(a.time||"99").localeCompare(b.time||"99"));
-  const noDate=S.tasks.filter(x=>!x.done&&!x.due);
-  const doneToday=S.tasks.filter(x=>x.done&&x.doneAt&&x.doneAt.startsWith(t));
-  const lessons=lessonsOn(t);
-  const hol=holidayOf(t);
-  const keys=keyDatesOf(t);
-  const upcoming=S.tasks.filter(x=>!x.done&&x.due&&x.due>t&&daysDiff(x.due)<=7)
-    .sort((a,b)=>a.due.localeCompare(b.due)||(b.priority?1:0)-(a.priority?1:0));
+function render() {
+  const list = $('news-list');
+  const visible = state.news.filter(matchesFilter);
+  $('news-count').textContent = `${visible.length} haber`;
 
-  let digest="";
-  if(keys.length){
-    digest+=keys.map(kd=>`<div class="digest brass">${ICONS.bell}<span><b>${esc(kd.name)}</b></span></div>`).join("");
-  }
-  if(hol){
-    digest+=`<div class="digest brass">${ICONS.bell}<span><b>${esc(hol.name)}</b> — no classes today. Enjoy it 🍂</span></div>`;
-  }else if(overdue.length){
-    digest+=`<div class="digest warn">${ICONS.bell}<span><b>${overdue.length} to-do${overdue.length===1?" is":"s are"} overdue.</b> Oldest: ${esc(overdue[0].title)} (${fmtShort(overdue[0].due)}). How about clearing it today?</span></div>`;
-  }else if(dueToday.length===0&&lessons.length===0&&S.tasks.length>0&&!keys.length){
-    digest+=`<div class="digest">${ICONS.bell}<span>Nothing planned for today. Take a breath — or get ahead 🙂</span></div>`;
+  if (!visible.length) {
+    list.innerHTML = `<div class="empty-note">Bu filtreye uyan haber yok. Filtreyi değiştirin veya biraz bekleyin — yeni haberler otomatik düşer. 📡</div>`;
+  } else {
+    list.innerHTML = visible.slice(0, 120).map(n => `
+      <article class="news-item ${n.fresh ? 'fresh' : ''}">
+        <div class="sent-bar ${n.sent}"></div>
+        <div class="news-body">
+          <div class="news-meta">
+            <span class="src">${esc(n.source)}</span>
+            <span>·</span><span>${timeAgo(n.ts)}</span>
+            <span class="cat">${esc(n.category)}</span>
+          </div>
+          <div class="news-title">${n.url ? `<a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.headline)}</a>` : esc(n.headline)}</div>
+          ${n.summary ? `<div class="news-sum">${esc(n.summary)}</div>` : ''}
+          <div class="news-tags">
+            <span class="sent-badge ${n.sent}">${SENT_TR[n.sent]}${n.score ? ` ${n.score > 0 ? '+' : ''}${n.score}` : ''}</span>
+            ${n.tickers.map(t => `<span class="tk" data-sym="${esc(t)}">$${esc(t)}</span>`).join('')}
+          </div>
+        </div>
+      </article>`).join('');
   }
 
-  return `
-  <div class="page-head">
-    <div>
-      <div class="eyebrow">${fmtLong(now)}</div>
-      <h1>${greet}, ${esc(S.settings.name||"")}.</h1>
-      <div class="sub"><span class="chip">${weekChip()}</span></div>
-    </div>
-    <button class="btn" data-act="add-task">+ Add to-do</button>
-  </div>
-  ${moodBlock()}
-  ${digest}
-  <div class="stat-row">
-    <div class="stat acc"><div class="n">${dueToday.length}</div><div class="l">due today</div></div>
-    <div class="stat ${overdue.length?"warn":""}"><div class="n">${overdue.length}</div><div class="l">overdue</div></div>
-    <div class="stat ok"><div class="n">${doneToday.length}</div><div class="l">done today</div></div>
-  </div>
-  <div class="sec card">
-    <div class="card-h"><h2>Today's classes</h2><button class="btn ghost sm" data-act="add-sched">+ Class</button></div>
-    <div class="card-b">
-      ${lessons.length?lessons.map(e=>{
-        const st=toMin(e.start),en=toMin(e.end);
-        const mode=nm>=st&&nm<en?"now":nm>=en?"past":"";
-        return lessonHTML(e,mode);
-      }).join(""):`<div class="empty"><b>${hol?esc(hol.name)+" — no classes":"No classes today"}</b>${S.schedule.length?"A free day in your schedule.":"Add your schedule from the Schedule tab."}</div>`}
-    </div>
-  </div>
-  <div class="sec card">
-    <div class="card-h"><h2>Due today</h2></div>
-    <div class="card-b">
-      ${(overdue.length+dueToday.length)?overdue.map(x=>taskHTML(x)).join("")+dueToday.map(x=>taskHTML(x)).join(""):`<div class="empty"><b>Nothing due today 🎉</b>Add new items with “+ Add to-do”.</div>`}
-      ${noDate.length?`<div style="margin-top:10px"><div class="sec-title">No date</div>${noDate.map(x=>taskHTML(x,false)).join("")}</div>`:""}
-    </div>
-  </div>
-  <div class="sec card">
-    <div class="card-h"><h2>Next 7 days</h2></div>
-    <div class="card-b">
-      ${upcoming.length?upcoming.map(x=>taskHTML(x)).join(""):`<div class="empty">Nothing planned for the coming week.</div>`}
-    </div>
-  </div>
-  ${doneToday.length?`<div class="sec card"><div class="card-h"><h2>Finished today</h2><span class="chip ok">${doneToday.length} ✓</span></div><div class="card-b">${doneToday.map(x=>taskHTML(x,false)).join("")}</div></div>`:""}`;
+  // Sembole tıklayınca arama filtresi
+  list.querySelectorAll('.tk').forEach(el => el.addEventListener('click', () => {
+    $('search').value = el.dataset.sym;
+    state.search = el.dataset.sym;
+    render();
+  }));
+
+  renderSignals();
+  renderStats();
+  $('last-update').textContent = 'Güncellendi: ' + new Date().toLocaleTimeString('tr-TR');
 }
 
-/* ---------- view: calendar ---------- */
-function viewCal(){
-  const now=new Date();
-  if(UI.calY==null){UI.calY=now.getFullYear();UI.calM=now.getMonth();}
-  const y=UI.calY,m=UI.calM;
-  const first=new Date(y,m,1), startIdx=dowIdx(first);
-  const daysIn=new Date(y,m+1,0).getDate();
-  const t=todayKey();
-  const byDay={};
-  S.tasks.forEach(x=>{if(x.due){(byDay[x.due]=byDay[x.due]||[]).push(x);}});
-  let cells="";
-  const prevDays=new Date(y,m,0).getDate();
-  for(let i=0;i<42;i++){
-    const dnum=i-startIdx+1;
-    let cm=m,cd=dnum,other=false;
-    if(dnum<1){cd=prevDays+dnum;cm=m-1;other=true;}
-    else if(dnum>daysIn){cd=dnum-daysIn;cm=m+1;other=true;}
-    const dt=new Date(y,cm,cd), k=dkey(dt);
-    const items=(byDay[k]||[]).filter(x=>!x.done);
-    const dots=items.slice(0,4).map(x=>{
-      const c=courseOf(x.courseId);
-      return `<i style="background:${c?c.color:(x.type==="exam"||x.type==="quiz")?"var(--danger)":"var(--accent)"}"></i>`;
-    }).join("");
-    const holc=holidayOf(k)||keyDatesOf(k).length?"hol":"";
-    cells+=`<div class="cal-cell ${other?"other":""} ${k===t?"today":""} ${k===UI.selDate?"sel":""} ${holc}" data-day="${k}">
-      <span class="d">${dt.getDate()}</span>
-      <span class="cal-dots">${dots}${items.length>4?`<span class="cal-more">+${items.length-4}</span>`:""}</span>
-    </div>`;
-    if(i>=34&&(i+1)%7===0&&dnum>=daysIn)break;
+function renderSignals() {
+  const sigs = computeSignals();
+  const box = $('signal-list');
+  if (!sigs.length) {
+    box.innerHTML = `<div class="empty-note">Henüz yeterli haber yok. Haberler biriktikçe sinyaller burada belirecek. 🎯</div>`;
+    return;
   }
-  const sel=UI.selDate;
-  let panel="";
-  if(sel){
-    const d=parseKey(sel);
-    const items=(byDay[sel]||[]).sort((a,b)=>(a.done?1:0)-(b.done?1:0)||(a.time||"99").localeCompare(b.time||"99"));
-    const lessons=lessonsOn(sel);
-    const hol=holidayOf(sel);
-    panel=`<div class="sec card" style="margin-top:18px">
-      <div class="card-h"><h2>${fmtLong(d)}</h2><button class="btn sm" data-act="add-task-date" data-date="${sel}">+ Add</button></div>
-      <div class="card-b">
-        ${keyDatesOf(sel).map(kd=>`<div class="digest brass" style="margin-bottom:12px">${ICONS.bell}<span><b>${esc(kd.name)}</b></span></div>`).join("")}
-        ${hol?`<div class="digest brass" style="margin-bottom:12px">${ICONS.bell}<span><b>${esc(hol.name)}</b> — no classes.</span></div>`:""}
-        ${lessons.length?`<div class="sec-title">Classes</div>`+lessons.map(e=>lessonHTML(e)).join(""):""}
-        ${items.length?`<div class="sec-title" style="margin-top:${lessons.length?"12px":"0"}">To-dos</div>`+items.map(x=>taskHTML(x,false)).join(""):""}
-        ${!items.length&&!lessons.length&&!hol&&!keyDatesOf(sel).length?`<div class="empty">Nothing on this day.</div>`:""}
-      </div>
-    </div>`;
-  }
-  return `
-  <div class="page-head"><div><div class="eyebrow">Plan ahead</div><h1>Calendar</h1><div class="sub">Exams, deadlines and classes at a glance</div></div>
-    <button class="btn" data-act="add-task">+ Add to-do</button></div>
-  <div class="card" style="padding:20px">
-    <div class="cal-head">
-      <h2>${MONTHS[m]} ${y}</h2>
-      <div class="cal-nav">
-        <button data-act="cal-prev" aria-label="Previous month">‹</button>
-        <button data-act="cal-today" style="width:auto;padding:0 14px;font-size:13px;font-weight:600;border-radius:99px">Today</button>
-        <button data-act="cal-next" aria-label="Next month">›</button>
-      </div>
-    </div>
-    <div class="cal-grid">
-      ${DAYS_S.map(d=>`<div class="cal-dow">${d}</div>`).join("")}
-      ${cells}
-    </div>
-  </div>
-  ${panel}`;
-}
-
-/* ---------- view: to-dos ---------- */
-function viewTasks(){
-  const t=todayKey();
-  const f=UI.taskFilter;
-  let list=S.tasks.slice();
-  if(f==="open")list=list.filter(x=>!x.done);
-  else if(f==="done")list=list.filter(x=>x.done);
-  else if(f!=="all")list=list.filter(x=>x.type===f&&!x.done);
-  list.sort((a,b)=>{
-    if(a.done!==b.done)return a.done?1:-1;
-    if(a.done)return (b.doneAt||"").localeCompare(a.doneAt||"");
-    return (a.due||"9999").localeCompare(b.due||"9999")||(b.priority?1:0)-(a.priority?1:0);
-  });
-  const groups=[];
-  if(f!=="done"){
-    const over=list.filter(x=>!x.done&&x.due&&x.due<t);
-    const today=list.filter(x=>!x.done&&x.due===t);
-    const later=list.filter(x=>!x.done&&x.due&&x.due>t);
-    const nod=list.filter(x=>!x.done&&!x.due);
-    const done=list.filter(x=>x.done);
-    if(over.length)groups.push(["Overdue",over]);
-    if(today.length)groups.push(["Today",today]);
-    if(later.length)groups.push(["Upcoming",later]);
-    if(nod.length)groups.push(["No date",nod]);
-    if(done.length)groups.push(["Completed",done.slice(0,20)]);
-  }else{
-    groups.push(["Completed",list]);
-  }
-  const pills=["open","all","done","exam","assignment","project"];
-  return `
-  <div class="page-head"><div><div class="eyebrow">Checklist</div><h1>To-Dos</h1><div class="sub">${S.tasks.filter(x=>!x.done).length} open</div></div>
-    <button class="btn" data-act="add-task">+ Add to-do</button></div>
-  <div class="filters">${pills.map(p=>`<button class="fpill ${f===p?"on":""}" data-filter="${p}">${p[0].toUpperCase()+p.slice(1)}</button>`).join("")}</div>
-  ${groups.length?groups.map(([g,items])=>`<div class="sec"><div class="sec-title">${g} · ${items.length}</div><div class="card"><div class="card-b">${items.map(x=>taskHTML(x)).join("")}</div></div></div>`).join(""):`<div class="card"><div class="card-b"><div class="empty"><b>Nothing here yet</b>Start with “+ Add to-do”.</div></div></div>`}`;
-}
-
-/* ---------- view: schedule ---------- */
-function termRanges(){
-  const s=S.settings;
-  return {guz:{from:s.guzStart,to:s.guzEnd,label:"Fall 2026"},bahar:{from:s.baharStart,to:s.baharEnd,label:"Winter 2027"}};
-}
-function currentTerm(){
-  const t=todayKey(),s=S.settings;
-  if(s.baharStart&&t>=s.baharStart)return"bahar";
-  return"guz";
-}
-function viewSched(){
-  if(!UI.schedTerm)UI.schedTerm=currentTerm();
-  const terms=termRanges(), tr=terms[UI.schedTerm];
-  const overlaps=e=>(!e.from&&!e.to)||((!e.from||!tr.to||e.from<=tr.to)&&(!e.to||!tr.from||e.to>=tr.from));
-  const entries=S.schedule.filter(overlaps);
-  const todayIdx=dowIdx(new Date());
-  const hasWeekend=entries.some(e=>e.day>=5);
-  const days=hasWeekend?[0,1,2,3,4,5,6]:[0,1,2,3,4];
-  return `
-  <div class="page-head"><div><div class="eyebrow">Weekly rhythm</div><h1>Schedule</h1></div>
-    <div style="display:flex;gap:8px"><button class="btn ghost" data-act="add-course">+ Course</button><button class="btn" data-act="add-sched">+ Class time</button></div></div>
-  <div class="filters">
-    ${Object.entries(terms).map(([k,v])=>`<button class="fpill ${UI.schedTerm===k?"on":""}" data-term="${k}">${v.label}</button>`).join("")}
-  </div>
-  <div class="sched-grid">
-    ${days.map(d=>{
-      const slots=entries.filter(e=>e.day===d).sort((a,b)=>a.start.localeCompare(b.start));
-      return `<div class="sched-day ${d===todayIdx?"today":""}"><h3>${DAYS[d]}${d===todayIdx?" · today":""}</h3>
-        ${slots.length?slots.map(e=>{
-          const c=courseOf(e.courseId);
-          return `<div class="slot" style="border-left-color:${c?c.color:"var(--muted)"}" data-edit-sched="${e.id}">
-            <div class="t">${e.start} – ${e.end}</div><div class="n">${esc(c?c.name:"?")}${e.kind&&e.kind!=="LEC"?`<span class="kind">${esc(e.kind)}</span>`:""}</div>${e.loc?`<div class="p">${esc(e.loc)}</div>`:""}
-          </div>`;
-        }).join(""):`<div class="empty" style="padding:14px 6px">—</div>`}
+  const LABEL = { buy: 'YÜKSELİŞ · AL', sell: 'DÜŞÜŞ · SAT', watch: 'İZLE' };
+  box.innerHTML = sigs.map(s => {
+    const why = s.type === 'buy'
+      ? `Son 24 saatte ${s.pos} pozitif haber${s.neg ? `, ${s.neg} negatif` : ''} — haber akışı güçlü, yükseliş beklentisi.`
+      : s.type === 'sell'
+      ? `Son 24 saatte ${s.neg} negatif haber${s.pos ? `, ${s.pos} pozitif` : ''} — baskı var, düşüş riski.`
+      : `${s.n} haber, yön belirsiz (${s.pos}➕/${s.neg}➖) — netleşene kadar izle.`;
+    return `
+      <div class="signal">
+        <div class="avatar ${s.type}">${esc(s.sym)}</div>
+        <div class="info">
+          <div class="name">$${esc(s.sym)} <small>${s.n} haber · ${timeAgo(s.latest)}</small></div>
+          <div class="why">${why}</div>
+        </div>
+        <div class="action">
+          <span class="sig-label ${s.type}">${LABEL[s.type]}</span>
+          <div class="conf ${s.type}" title="Güven: %${s.conf}"><i style="width:${s.conf}%"></i></div>
+        </div>
       </div>`;
-    }).join("")}
-  </div>
-  <div class="sec card" style="margin-top:26px">
-    <div class="card-h"><h2>My courses</h2><button class="btn ghost sm" data-act="add-course">+ Add</button></div>
-    <div class="card-b">
-      ${S.courses.length?S.courses.map(c=>`<div class="course-row" data-edit-course="${c.id}">
-        <span class="sw" style="background:${c.color}"></span>
-        <div><div class="cn">${esc(c.name)}</div>${c.code?`<div class="cc">${esc(c.code)}</div>`:""}</div>
-      </div>`).join(""):`<div class="empty"><b>No courses yet</b>Add your courses first, then their class times.</div>`}
-    </div>
-  </div>`;
+  }).join('');
 }
 
-/* ---------- view: settings ---------- */
-function viewSettings(){
-  const s=S.settings;
-  const notifState=!("Notification" in window)?"none":Notification.permission;
-  return `
-  <div class="page-head"><div><div class="eyebrow">Make it yours</div><h1>Settings</h1></div></div>
-  <div class="sec card"><div class="card-h"><h2>Personal</h2></div><div class="card-b">
-    <div class="f"><label>Your name</label><input id="set-name" value="${esc(s.name||"")}" placeholder="Your name"></div>
-  </div></div>
-  <div class="sec card"><div class="card-h"><h2>Term dates</h2></div><div class="card-b">
-    <div class="sub" style="margin-bottom:10px">The week counter and schedule terms follow these dates. Update them each year and keep using the app.</div>
-    <div class="f-row"><div class="f"><label>Fall start</label><input type="date" id="set-gs" value="${s.guzStart||""}"></div>
-    <div class="f"><label>Fall end</label><input type="date" id="set-ge" value="${s.guzEnd||""}"></div></div>
-    <div class="f-row"><div class="f"><label>Winter start</label><input type="date" id="set-bs" value="${s.baharStart||""}"></div>
-    <div class="f"><label>Winter end</label><input type="date" id="set-be" value="${s.baharEnd||""}"></div></div>
-    <button class="btn sm" data-act="save-settings">Save</button>
-  </div></div>
-  <div class="sec card"><div class="card-h"><h2>Holidays & key dates</h2><span class="chip brass">UofT St. George</span></div><div class="card-b">
-    ${(s.holidays||[]).map(h=>`<div class="set-row"><div><div class="sl">${esc(h.name)}</div><div class="sd">${fmtShort(h.from)}${h.from!==h.to?" – "+fmtShort(h.to):""}</div></div><span class="chip brass">no classes</span></div>`).join("")}
-    ${(s.keyDates||[]).map(h=>`<div class="set-row"><div><div class="sl">${esc(h.name)}</div><div class="sd">${fmtShort(h.from)}${h.from!==h.to?" – "+fmtShort(h.to):""}</div></div><span class="chip">key date</span></div>`).join("")}
-    ${!(s.holidays||[]).length&&!(s.keyDates||[]).length?`<div class="empty">No holidays defined.</div>`:""}
-  </div></div>
-  <div class="sec card"><div class="card-h"><h2>Notifications</h2></div><div class="card-b">
-    <div class="set-row"><div><div class="sl">Browser notifications</div><div class="sd">While the page is open: a morning digest, 20 min before each class, before timed deadlines, a mood check-in nudge, and a preview of tomorrow after 8 pm.</div></div>
-      ${notifState==="none"?`<span class="chip">Not supported in this browser</span>`:
-        s.notif&&notifState==="granted"?`<button class="btn ghost sm" data-act="notif-off">Turn off</button>`:
-        notifState==="denied"?`<span class="chip warn">Blocked by the browser</span>`:
-        `<button class="btn sm" data-act="notif-on">Turn on</button>`}
-    </div>
-    <div class="set-row"><div><div class="sl">Opening digest</div><div class="sd">The Today screen always shows what's due and overdue the moment you open it.</div></div><span class="chip ok">On</span></div>
-  </div></div>
-  <div class="sec card"><div class="card-h"><h2>Data</h2></div><div class="card-b">
-    <div class="set-row"><div><div class="sl">Back up</div><div class="sd">Save all your data as a JSON file.</div></div><button class="btn ghost sm" data-act="export">Download</button></div>
-    <div class="set-row"><div><div class="sl">Restore from backup</div><div class="sd">Pick a JSON backup you saved earlier.</div></div>
-      <label class="btn ghost sm" style="cursor:pointer">Choose file<input type="file" id="import-file" accept=".json,application/json" style="display:none"></label></div>
-    <div class="set-row"><div><div class="sl">Reset everything</div><div class="sd">Deletes all courses and to-dos. Cannot be undone.</div></div><button class="btn danger sm" data-act="reset">Reset</button></div>
-  </div></div>
-  <div class="sub" style="text-align:center;margin-top:8px">Checkpoint · made just for you 🌿</div>`;
+function renderStats() {
+  const now = Date.now();
+  let pos = 0, neg = 0, neu = 0;
+  for (const n of state.news) {
+    if (now - n.ts > 24 * 36e5) continue;
+    if (n.sent === 'pos') pos++; else if (n.sent === 'neg') neg++; else neu++;
+  }
+  $('st-pos').textContent = pos;
+  $('st-neg').textContent = neg;
+  $('st-neu').textContent = neu;
 }
 
-/* ---------- modals ---------- */
-function closeModal(){$("#modal-root").innerHTML="";}
-function openModal(html){
-  $("#modal-root").innerHTML=`<div class="overlay" data-close="1"><div class="modal">${html}</div></div>`;
-  const inp=$("#modal-root .modal input,#modal-root .modal select");
-  if(inp)inp.focus();
+/* =====================================================
+   İzleme listesi
+===================================================== */
+function renderWatchlist() {
+  const box = $('watch-list');
+  if (!state.watchlist.length) {
+    box.innerHTML = `<div class="empty-note">İzleme listeniz boş. Yukarıdan sembol ekleyin.</div>`;
+    return;
+  }
+  box.innerHTML = state.watchlist.map(sym => {
+    const cnt = state.news.filter(n => n.tickers.includes(sym) && Date.now() - n.ts < 24 * 36e5).length;
+    return `<div class="watch-item"><b>$${esc(sym)}</b><span class="px">${cnt} haber / 24s</span><button class="rm" data-sym="${esc(sym)}" title="Kaldır">✕</button></div>`;
+  }).join('');
+  box.querySelectorAll('.rm').forEach(b => b.addEventListener('click', () => {
+    state.watchlist = state.watchlist.filter(s => s !== b.dataset.sym);
+    saveWatchlist(); renderWatchlist(); if (state.filter === 'watch') render();
+  }));
 }
-function taskModal(task,presetDate){
-  const x=task||{title:"",type:"assignment",courseId:"",due:presetDate||"",time:"",priority:false,notes:""};
-  openModal(`
-    <h2>${task?"Edit to-do":"New to-do"}</h2>
-    <div class="f"><label>Title</label><input id="t-title" value="${esc(x.title)}" placeholder="e.g. ECO358 problem set 2" maxlength="120"></div>
-    <div class="f-row">
-      <div class="f"><label>Type</label><select id="t-type">${TYPES.map(t=>`<option ${x.type===t?"selected":""}>${t}</option>`).join("")}</select></div>
-      <div class="f"><label>Course</label><select id="t-course"><option value="">—</option>${S.courses.map(c=>`<option value="${c.id}" ${x.courseId===c.id?"selected":""}>${esc(c.code||c.name)}</option>`).join("")}</select></div>
-    </div>
-    <div class="f-row">
-      <div class="f"><label>Date</label><input type="date" id="t-due" value="${x.due||""}"></div>
-      <div class="f"><label>Time (opt.)</label><input type="time" id="t-time" value="${x.time||""}"></div>
-    </div>
-    <div class="f"><label class="checklbl"><input type="checkbox" id="t-prio" ${x.priority?"checked":""}> Mark as important</label></div>
-    <div class="f"><label>Notes</label><textarea id="t-notes" placeholder="Details…" maxlength="500">${esc(x.notes||"")}</textarea></div>
-    <div class="m-actions">
-      ${task?`<button class="btn danger del" data-act="del-task" data-id="${task.id}">Delete</button>`:""}
-      <button class="btn ghost" data-close="1">Cancel</button>
-      <button class="btn" data-act="save-task" data-id="${task?task.id:""}">${task?"Save":"Add"}</button>
-    </div>`);
-}
-function courseModal(course){
-  const x=course||{name:"",code:"",color:COLORS[S.courses.length%COLORS.length]};
-  openModal(`
-    <h2>${course?"Edit course":"New course"}</h2>
-    <div class="f"><label>Course name</label><input id="c-name" value="${esc(x.name)}" placeholder="e.g. Financial Economics I" maxlength="80"></div>
-    <div class="f"><label>Code (opt.)</label><input id="c-code" value="${esc(x.code||"")}" placeholder="e.g. ECO358H1" maxlength="20"></div>
-    <div class="f"><label>Color</label><div class="swatches" id="c-colors">${COLORS.map(c=>`<button style="background:${c}" data-color="${c}" class="${x.color===c?"on":""}" aria-label="Color ${c}"></button>`).join("")}</div></div>
-    <div class="m-actions">
-      ${course?`<button class="btn danger del" data-act="del-course" data-id="${course.id}">Delete</button>`:""}
-      <button class="btn ghost" data-close="1">Cancel</button>
-      <button class="btn" data-act="save-course" data-id="${course?course.id:""}">${course?"Save":"Add"}</button>
-    </div>`);
-}
-function termOfEntry(e){
-  const s=S.settings;
-  if(!e.from&&!e.to)return"hep";
-  if(e.from===s.guzStart&&e.to===s.baharEnd)return"yil";
-  if(e.from===s.baharStart)return"bahar";
-  if(e.from===s.guzStart)return"guz";
-  return"ozel";
-}
-function schedModal(entry){
-  if(!S.courses.length){ toast("Add a course first"); courseModal(); return; }
-  const x=entry||{courseId:S.courses[0].id,day:0,start:"09:00",end:"11:00",loc:"",kind:"LEC"};
-  const term=entry?termOfEntry(entry):currentTerm();
-  openModal(`
-    <h2>${entry?"Edit class time":"Add a class time"}</h2>
-    <div class="f"><label>Course</label><select id="s-course">${S.courses.map(c=>`<option value="${c.id}" ${x.courseId===c.id?"selected":""}>${esc(c.name)}</option>`).join("")}</select></div>
-    <div class="f-row">
-      <div class="f"><label>Day</label><select id="s-day">${DAYS.map((d,i)=>`<option value="${i}" ${x.day===i?"selected":""}>${d}</option>`).join("")}</select></div>
-      <div class="f"><label>Type</label><select id="s-kind">${["LEC","TUT","LAB"].map(k=>`<option ${x.kind===k?"selected":""}>${k}</option>`).join("")}</select></div>
-    </div>
-    <div class="f-row">
-      <div class="f"><label>Start</label><input type="time" id="s-start" value="${x.start}"></div>
-      <div class="f"><label>End</label><input type="time" id="s-end" value="${x.end}"></div>
-    </div>
-    <div class="f-row">
-      <div class="f"><label>Term</label><select id="s-term">
-        <option value="guz" ${term==="guz"?"selected":""}>Fall</option>
-        <option value="bahar" ${term==="bahar"?"selected":""}>Winter</option>
-        <option value="yil" ${term==="yil"?"selected":""}>Full year</option>
-        <option value="hep" ${term==="hep"?"selected":""}>Always</option>
-        ${term==="ozel"?`<option value="ozel" selected>Custom (${x.from||"…"} → ${x.to||"…"})</option>`:""}
-      </select></div>
-      <div class="f"><label>Location (opt.)</label><input id="s-loc" value="${esc(x.loc||"")}" placeholder="e.g. RW 110" maxlength="60"></div>
-    </div>
-    <div class="m-actions">
-      ${entry?`<button class="btn danger del" data-act="del-sched" data-id="${entry.id}">Delete</button>`:""}
-      <button class="btn ghost" data-close="1">Cancel</button>
-      <button class="btn" data-act="save-sched" data-id="${entry?entry.id:""}">${entry?"Save":"Add"}</button>
-    </div>`);
+function saveWatchlist() { try { localStorage.setItem('br_watchlist', JSON.stringify(state.watchlist)); } catch (e) {} }
+
+$('watch-add').addEventListener('click', addWatch);
+$('watch-input').addEventListener('keydown', e => { if (e.key === 'Enter') addWatch(); });
+function addWatch() {
+  const v = $('watch-input').value.trim().toUpperCase();
+  if (!v || !/^[A-Z.]{1,6}$/.test(v)) { toast('Geçerli bir sembol girin (örn. NVDA).'); return; }
+  if (!state.watchlist.includes(v)) { state.watchlist.push(v); saveWatchlist(); renderWatchlist(); }
+  $('watch-input').value = '';
 }
 
-/* ---------- export / import ---------- */
-async function exportData(){
-  const json=JSON.stringify(S,null,2);
-  try{
-    const dl=window.claude&&window.claude.use?await window.claude.use("downloads"):null;
-    if(dl){ await dl.save({filename:"checkpoint-backup.json",data:json}); toast("Backup downloaded"); return; }
-  }catch(e){}
-  try{ await navigator.clipboard.writeText(json); toast("No download here — backup copied to clipboard"); }
-  catch(e){ toast("Backup failed"); }
+/* =====================================================
+   Ticker bandı (demo fiyatlar; canlı modda Finnhub /quote)
+===================================================== */
+const TAPE_SYMS = ['S&P 500','NASDAQ','DOW','AAPL','MSFT','NVDA','AMZN','GOOGL','META','TSLA','AMD','NFLX','JPM','XOM','BTC/USD'];
+const tapeData = {};
+function seedTape() {
+  const base = {'S&P 500':6420,'NASDAQ':21850,'DOW':45320,'AAPL':232,'MSFT':512,'NVDA':178,'AMZN':226,'GOOGL':198,'META':742,'TSLA':332,'AMD':172,'NFLX':1215,'JPM':298,'XOM':112,'BTC/USD':114500};
+  for (const s of TAPE_SYMS) tapeData[s] = { px: base[s], chg: (Math.random() * 3 - 1.5) };
 }
-function importData(file){
-  const r=new FileReader();
-  r.onload=()=>{
-    try{
-      const p=JSON.parse(r.result);
-      if(!p||p.v!==1||!Array.isArray(p.tasks))throw 0;
-      S=hydrate(p);
-      persist(); render(); toast("Restored from backup ✓");
-    }catch(e){ toast("That file isn't a valid backup"); }
+function renderTape() {
+  const items = TAPE_SYMS.map(s => {
+    const d = tapeData[s];
+    const cls = d.chg > 0.05 ? 'up' : d.chg < -0.05 ? 'down' : 'flat';
+    const arrow = d.chg > 0.05 ? '▲' : d.chg < -0.05 ? '▼' : '■';
+    return `<span class="tape-item"><span class="sym">${esc(s)}</span><span>${d.px.toLocaleString('en-US',{maximumFractionDigits:2})}</span><span class="chg ${cls}">${arrow} ${Math.abs(d.chg).toFixed(2)}%</span></span>`;
+  }).join('');
+  $('tape').innerHTML = items + items; // sonsuz kaydırma için çiftle
+}
+function jitterTape() {
+  for (const s of TAPE_SYMS) {
+    const d = tapeData[s];
+    const step = (Math.random() - 0.5) * 0.12;
+    d.chg = Math.max(-6, Math.min(6, d.chg + step));
+    d.px = d.px * (1 + step / 100);
+  }
+  renderTape();
+}
+async function refreshTapeLive() {
+  if (!state.apiKey) return;
+  const real = TAPE_SYMS.filter(s => /^[A-Z]+$/.test(s));
+  for (const sym of real) {
+    try {
+      const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=${sym}&token=${encodeURIComponent(state.apiKey)}`);
+      if (!r.ok) continue;
+      const q = await r.json();
+      if (q && q.c) tapeData[sym] = { px: q.c, chg: q.dp ?? 0 };
+    } catch (e) {}
+  }
+  renderTape();
+}
+
+/* =====================================================
+   Saatler + piyasa durumu (NYSE: 09:30–16:00 ET, hafta içi)
+===================================================== */
+function updateClocks() {
+  const now = new Date();
+  const fmt = tz => now.toLocaleTimeString('tr-TR', { timeZone: tz, hour: '2-digit', minute: '2-digit' });
+  $('clock-ny').textContent = fmt('America/New_York');
+  $('clock-tr').textContent = fmt('Europe/Istanbul');
+
+  const p = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour12: false, weekday: 'short', hour: 'numeric', minute: 'numeric' }).formatToParts(now);
+  const get = t => p.find(x => x.type === t)?.value;
+  const wd = get('weekday'), mins = parseInt(get('hour'), 10) * 60 + parseInt(get('minute'), 10);
+  const weekday = !['Sat', 'Sun'].includes(wd);
+  const el = $('market-status'), txt = $('market-status-text');
+  if (weekday && mins >= 570 && mins < 960) { el.classList.add('open'); txt.textContent = 'NYSE Açık'; }
+  else if (weekday && mins >= 240 && mins < 570) { el.classList.remove('open'); txt.textContent = 'Açılış Öncesi (Pre-market)'; }
+  else if (weekday && mins >= 960 && mins < 1200) { el.classList.remove('open'); txt.textContent = 'Kapanış Sonrası (After-hours)'; }
+  else { el.classList.remove('open'); txt.textContent = 'NYSE Kapalı'; }
+}
+
+/* =====================================================
+   DEMO haber üretici
+===================================================== */
+const DEMO_POOL = [
+  { h: 'Nvidia beats Q2 earnings estimates as data center revenue surges 62%', s: 'Chipmaker posted record revenue driven by strong demand for AI accelerators; management raised full-year guidance.', src: 'MarketWatch', rel: 'NVDA' },
+  { h: 'Apple upgraded to Buy at major bank on strong iPhone upgrade cycle', s: 'Analysts see better-than-expected demand ahead of the fall launch and raised their price target.', src: 'Reuters', rel: 'AAPL' },
+  { h: 'Tesla shares slump after deliveries miss expectations in key markets', s: 'The EV maker reported disappointing delivery figures in Europe and China, raising concerns over demand.', src: 'Bloomberg', rel: 'TSLA' },
+  { h: 'Fed officials signal rates could stay higher for longer as inflation stays sticky', s: 'Latest CPI print came in above forecasts; markets trimmed bets on a near-term rate cut.', src: 'CNBC', rel: '' },
+  { h: 'Microsoft expands AI partnership, wins major cloud contract with Fortune 100 retailer', s: 'The multi-year deal strengthens Azure growth outlook; analysts remain bullish on the stock.', src: 'Reuters', rel: 'MSFT' },
+  { h: 'Boeing faces new FAA probe after fresh quality warning on 737 line', s: 'Regulators opened an investigation into production issues; shares fell in pre-market trading.', src: 'WSJ', rel: 'BA' },
+  { h: 'Amazon announces record Prime event sales, raises Q3 revenue forecast', s: 'Strong consumer demand and AWS growth push the company to lift guidance above street estimates.', src: 'CNBC', rel: 'AMZN' },
+  { h: 'Pfizer wins FDA approval for new oncology drug in breakthrough decision', s: 'The approval opens a multi-billion dollar market; analysts upgraded their outlook.', src: 'Reuters', rel: 'PFE' },
+  { h: 'Intel cuts guidance and announces layoffs as foundry losses widen', s: 'The chipmaker warned of weak demand and delayed its factory expansion plans.', src: 'Bloomberg', rel: 'INTC' },
+  { h: 'Meta rallies after strong ad revenue and upbeat AI monetization commentary', s: 'Advertising growth topped estimates; management highlighted early success in AI-driven ad tools.', src: 'MarketWatch', rel: 'META' },
+  { h: 'Oil prices jump 3% as OPEC+ signals deeper supply cuts; Exxon and Chevron gain', s: 'Energy stocks rallied on the news, with crude touching a three-month high.', src: 'Reuters', rel: 'XOM,CVX' },
+  { h: 'Netflix tops subscriber estimates, announces price increase for premium tier', s: 'The streamer added more subscribers than expected and raised its operating margin forecast.', src: 'CNBC', rel: 'NFLX' },
+  { h: 'AMD unveils next-gen AI chip, claims performance edge over rivals', s: 'The launch intensifies competition in the AI accelerator market; shares gained in early trading.', src: 'The Verge', rel: 'AMD' },
+  { h: 'JPMorgan warns of rising credit card delinquencies in cautious consumer outlook', s: 'The bank flagged weakening lower-income consumer trends despite beating profit estimates.', src: 'WSJ', rel: 'JPM' },
+  { h: 'Disney streaming turns profitable ahead of schedule; parks revenue hits record', s: 'The company beat on both earnings and revenue, and raised its dividend.', src: 'Bloomberg', rel: 'DIS' },
+  { h: 'SEC opens investigation into Coinbase over staking products', s: 'Shares dropped after the regulator signaled a probe; the company says it will contest.', src: 'Reuters', rel: 'COIN' },
+  { h: 'Eli Lilly surges as weight-loss drug trial shows better-than-expected results', s: 'Late-stage data beat expectations, strengthening its lead in the obesity drug market.', src: 'CNBC', rel: 'LLY' },
+  { h: 'Ford recalls 250,000 vehicles over brake defect concerns', s: 'The recall covers popular SUV models; the automaker faces potential warranty costs.', src: 'AP', rel: 'F' },
+  { h: 'Palantir wins major government AI contract, shares jump', s: 'The multi-year defense deal expands its government segment backlog significantly.', src: 'Bloomberg', rel: 'PLTR' },
+  { h: 'US jobs report comes in stronger than expected; futures slip on rate worries', s: 'Payrolls beat forecasts, complicating the case for near-term Fed easing.', src: 'CNBC', rel: '' },
+  { h: 'Salesforce raises guidance on strong AI product adoption', s: 'The software giant beat estimates and lifted its full-year outlook on Agentforce momentum.', src: 'MarketWatch', rel: 'CRM' },
+  { h: 'Broadcom beats estimates as AI networking revenue soars', s: 'Custom chip demand from hyperscalers drove another record quarter.', src: 'Reuters', rel: 'AVGO' },
+  { h: 'Starbucks sales fall as China weakness persists; CEO warns of slow recovery', s: 'Same-store sales dropped again, and the company lowered its forecast.', src: 'WSJ', rel: 'SBUX' },
+  { h: 'Micron jumps on upbeat memory pricing outlook driven by AI servers', s: 'Management said HBM capacity is sold out through next year.', src: 'Bloomberg', rel: 'MU' },
+  { h: 'Moderna slumps after cutting revenue forecast on weak vaccine demand', s: 'The company lowered guidance and announced cost reduction measures.', src: 'Reuters', rel: 'MRNA' },
+  { h: 'Uber posts record bookings, announces $5B buyback program', s: 'Strong mobility and delivery growth beat expectations; shares rallied.', src: 'CNBC', rel: 'UBER' },
+  { h: 'Treasury yields spike after hot inflation data; tech stocks under pressure', s: 'The 10-year yield hit its highest level in months, weighing on growth names.', src: 'Bloomberg', rel: '' },
+  { h: 'Qualcomm wins smartphone chip contract extension, easing modem worries', s: 'The agreement secures revenue through 2027; analysts called it a positive surprise.', src: 'Reuters', rel: 'QCOM' },
+];
+let demoIdx = 0;
+function makeDemoItem(ts) {
+  const tpl = DEMO_POOL[demoIdx % DEMO_POOL.length]; demoIdx++;
+  const text = tpl.h + ' ' + tpl.s;
+  const { sent, score } = analyzeSentiment(text);
+  return {
+    id: 'demo-' + demoIdx + '-' + ts,
+    ts, source: tpl.src, headline: tpl.h, summary: tpl.s, url: '',
+    category: guessCategory(text),
+    tickers: extractTickers(text, tpl.rel),
+    sent, score,
   };
-  r.readAsText(file);
+}
+function startDemo() {
+  // Karışık sırayla başla ki her açılış aynı görünmesin
+  demoIdx = Math.floor(Math.random() * DEMO_POOL.length);
+  // Geçmiş 6 saate yayılmış 14 haber tohumla
+  const seed = [];
+  for (let i = 0; i < 14; i++) seed.push(makeDemoItem(Date.now() - Math.floor(Math.random() * 6 * 36e5)));
+  addNews(seed, false);
+  // Her 18–40 sn'de yeni haber düşür
+  const tick = () => {
+    addNews([makeDemoItem(Date.now())], true);
+    state.demoTimer = setTimeout(tick, 18000 + Math.random() * 22000);
+  };
+  state.demoTimer = setTimeout(tick, 8000);
+}
+function stopDemo() { if (state.demoTimer) { clearTimeout(state.demoTimer); state.demoTimer = null; } }
+
+/* =====================================================
+   CANLI mod — Finnhub genel piyasa haberleri
+===================================================== */
+async function fetchLiveNews() {
+  try {
+    const r = await fetch(`https://finnhub.io/api/v1/news?category=general&token=${encodeURIComponent(state.apiKey)}`);
+    if (r.status === 401 || r.status === 403) { toast('API anahtarı geçersiz görünüyor — demo moda dönülüyor.'); switchToDemo(); return; }
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const arr = await r.json();
+    if (!Array.isArray(arr)) throw new Error('Beklenmeyen yanıt');
+    const items = arr.slice(0, 80).map(a => {
+      const text = (a.headline || '') + ' ' + (a.summary || '');
+      const { sent, score } = analyzeSentiment(text);
+      return {
+        id: 'fh-' + a.id,
+        ts: (a.datetime || 0) * 1000 || Date.now(),
+        source: a.source || 'Finnhub',
+        headline: a.headline || '',
+        summary: a.summary || '',
+        url: a.url || '',
+        category: guessCategory(text),
+        tickers: extractTickers(text, a.related),
+        sent, score,
+      };
+    });
+    const added = addNews(items, true);
+    if (added) toast(`📰 ${added} yeni haber düştü`);
+  } catch (e) {
+    console.warn('Canlı haber alınamadı:', e);
+    toast('Canlı haber alınamadı, tekrar denenecek…');
+  }
+}
+function startLive() {
+  stopDemo();
+  if (state.liveTimer) clearInterval(state.liveTimer);
+  fetchLiveNews();
+  refreshTapeLive();
+  state.liveTimer = setInterval(() => { fetchLiveNews(); refreshTapeLive(); }, state.refreshSec * 1000);
+  $('mode-badge').textContent = '● CANLI';
+  $('mode-badge').classList.remove('demo');
+}
+function switchToDemo() {
+  if (state.liveTimer) { clearInterval(state.liveTimer); state.liveTimer = null; }
+  state.apiKey = '';
+  try { localStorage.removeItem('br_apikey'); } catch (e) {}
+  $('mode-badge').textContent = '● DEMO MOD';
+  $('mode-badge').classList.add('demo');
+  if (!state.demoTimer) startDemo();
 }
 
-/* ---------- render ---------- */
-function render(){
-  renderNav();
-  const v=UI.view;
-  $("#main").innerHTML=v==="today"?viewToday():v==="cal"?viewCal():v==="tasks"?viewTasks():v==="sched"?viewSched():viewSettings();
+/* =====================================================
+   UI olayları
+===================================================== */
+$('filters').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  document.querySelectorAll('#filters .chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  state.filter = chip.dataset.f;
+  render();
+});
+let searchDeb;
+$('search').addEventListener('input', e => {
+  clearTimeout(searchDeb);
+  searchDeb = setTimeout(() => { state.search = e.target.value.trim(); render(); }, 200);
+});
+
+$('btn-settings').addEventListener('click', () => {
+  $('api-key').value = state.apiKey;
+  $('refresh-sec').value = state.refreshSec;
+  $('modal').classList.add('show');
+});
+$('modal-close').addEventListener('click', () => $('modal').classList.remove('show'));
+$('modal').addEventListener('click', e => { if (e.target === $('modal')) $('modal').classList.remove('show'); });
+$('modal-save').addEventListener('click', () => {
+  const key = $('api-key').value.trim();
+  const sec = Math.min(600, Math.max(30, parseInt($('refresh-sec').value, 10) || 60));
+  state.refreshSec = sec;
+  try { localStorage.setItem('br_refresh', String(sec)); } catch (e) {}
+  $('modal').classList.remove('show');
+  if (key) {
+    state.apiKey = key;
+    try { localStorage.setItem('br_apikey', key); } catch (e) {}
+    toast('Canlı mod başlatılıyor…');
+    startLive();
+  } else {
+    switchToDemo();
+    toast('Demo modda devam ediliyor.');
+  }
+});
+
+let toastTimer;
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
 }
 
-/* ---------- events ---------- */
-document.addEventListener("click",e=>{
-  const t=e.target;
-  const nav=t.closest("[data-nav]");
-  if(nav){UI.view=nav.dataset.nav;render();window.scrollTo(0,0);return;}
-  if(t.closest("#fab")){taskModal();return;}
-  const closer=t.closest("[data-close]");
-  if(closer&&(closer.classList.contains("overlay")?t===closer:true)){closeModal();return;}
-  const mb=t.closest("[data-mood]");
-  if(mb){S.mood[todayKey()]=mb.dataset.mood;persist();render();return;}
-  const day=t.closest("[data-day]");
-  if(day){UI.selDate=UI.selDate===day.dataset.day?null:day.dataset.day;render();return;}
-  const fil=t.closest("[data-filter]");
-  if(fil){UI.taskFilter=fil.dataset.filter;render();return;}
-  const trm=t.closest("[data-term]");
-  if(trm){UI.schedTerm=trm.dataset.term;render();return;}
-  const sw=t.closest("#c-colors button");
-  if(sw){document.querySelectorAll("#c-colors button").forEach(b=>b.classList.remove("on"));sw.classList.add("on");return;}
-  const et=t.closest("[data-edit-task]");
-  if(et&&!t.closest(".cb")){const x=S.tasks.find(z=>z.id===et.dataset.editTask);if(x)taskModal(x);return;}
-  const es=t.closest("[data-edit-sched]");
-  if(es){const x=S.schedule.find(z=>z.id===es.dataset.editSched);if(x)schedModal(x);return;}
-  const ec=t.closest("[data-edit-course]");
-  if(ec){const x=S.courses.find(z=>z.id===ec.dataset.editCourse);if(x)courseModal(x);return;}
-  const act=t.closest("[data-act]");
-  if(!act)return;
-  const a=act.dataset.act, id=act.dataset.id;
-  if(a==="add-task")taskModal();
-  else if(a==="add-task-date")taskModal(null,act.dataset.date);
-  else if(a==="add-course")courseModal();
-  else if(a==="add-sched")schedModal();
-  else if(a==="mood-change"){delete S.mood[todayKey()];persist();render();}
-  else if(a==="cal-prev"){UI.calM--;if(UI.calM<0){UI.calM=11;UI.calY--;}render();}
-  else if(a==="cal-next"){UI.calM++;if(UI.calM>11){UI.calM=0;UI.calY++;}render();}
-  else if(a==="cal-today"){const n=new Date();UI.calY=n.getFullYear();UI.calM=n.getMonth();UI.selDate=todayKey();render();}
-  else if(a==="save-task"){
-    const title=$("#t-title").value.trim();
-    if(!title){toast("Title can't be empty");return;}
-    const data={title,type:$("#t-type").value,courseId:$("#t-course").value||null,
-      due:$("#t-due").value||null,time:$("#t-time").value||null,
-      priority:$("#t-prio").checked,notes:$("#t-notes").value.trim()};
-    if(id){const x=S.tasks.find(z=>z.id===id);Object.assign(x,data);}
-    else S.tasks.push(Object.assign({id:uid(),done:false,doneAt:null,createdAt:new Date().toISOString()},data));
-    persist();closeModal();render();toast(id?"Updated":"Added ✓");
-  }
-  else if(a==="del-task"){S.tasks=S.tasks.filter(z=>z.id!==id);persist();closeModal();render();toast("Deleted");}
-  else if(a==="save-course"){
-    const name=$("#c-name").value.trim();
-    if(!name){toast("Course name can't be empty");return;}
-    const colBtn=$("#c-colors button.on");
-    const data={name,code:$("#c-code").value.trim(),color:colBtn?colBtn.dataset.color:COLORS[0]};
-    if(id){Object.assign(S.courses.find(z=>z.id===id),data);}
-    else S.courses.push(Object.assign({id:uid()},data));
-    persist();closeModal();render();toast(id?"Course updated":"Course added ✓");
-  }
-  else if(a==="del-course"){
-    if(!confirm("This course and its class times will be deleted. To-dos stay but lose the course link."))return;
-    S.schedule=S.schedule.filter(z=>z.courseId!==id);
-    S.tasks.forEach(z=>{if(z.courseId===id)z.courseId=null;});
-    S.courses=S.courses.filter(z=>z.id!==id);
-    persist();closeModal();render();toast("Course deleted");
-  }
-  else if(a==="save-sched"){
-    const start=$("#s-start").value,end=$("#s-end").value;
-    if(!start||!end||end<=start){toast("End time must be after start");return;}
-    const s=S.settings, tv=$("#s-term").value;
-    let from=null,to=null;
-    if(tv==="guz"){from=s.guzStart;to=s.guzEnd;}
-    else if(tv==="bahar"){from=s.baharStart;to=s.baharEnd;}
-    else if(tv==="yil"){from=s.guzStart;to=s.baharEnd;}
-    else if(tv==="ozel"&&id){const old=S.schedule.find(z=>z.id===id);from=old.from;to=old.to;}
-    const data={courseId:$("#s-course").value,day:Number($("#s-day").value),start,end,
-      loc:$("#s-loc").value.trim(),kind:$("#s-kind").value,from,to};
-    if(id){Object.assign(S.schedule.find(z=>z.id===id),data);}
-    else S.schedule.push(Object.assign({id:uid()},data));
-    persist();closeModal();render();toast("Schedule saved ✓");
-  }
-  else if(a==="del-sched"){S.schedule=S.schedule.filter(z=>z.id!==id);persist();closeModal();render();toast("Class time deleted");}
-  else if(a==="save-settings"){
-    S.settings.guzStart=$("#set-gs").value||null;S.settings.guzEnd=$("#set-ge").value||null;
-    S.settings.baharStart=$("#set-bs").value||null;S.settings.baharEnd=$("#set-be").value||null;
-    const nm=$("#set-name");if(nm)S.settings.name=nm.value.trim();
-    persist();render();toast("Settings saved ✓");
-  }
-  else if(a==="notif-on"){
-    (async()=>{
-      try{
-        const p=await Notification.requestPermission();
-        if(p==="granted"){S.settings.notif=true;persist();toast("Notifications on 🔔");notifTick();}
-        else toast("Notification permission denied");
-      }catch(e){toast("Notifications aren't supported in this view");}
-      render();
-    })();
-  }
-  else if(a==="notif-off"){S.settings.notif=false;persist();render();toast("Notifications off");}
-  else if(a==="export")exportData();
-  else if(a==="reset"){
-    if(!confirm("All your data will be deleted. Are you sure?"))return;
-    if(!confirm("Last check: courses, schedule and every to-do will be permanently deleted."))return;
-    S=defaultState();S.meta={seed:SEED_V2};persist();render();toast("Everything was reset");
-  }
-});
-document.addEventListener("change",e=>{
-  const t=e.target;
-  if(t.matches("[data-toggle]")){
-    const x=S.tasks.find(z=>z.id===t.dataset.toggle);
-    if(x){x.done=t.checked;x.doneAt=t.checked?new Date().toISOString():null;persist();
-      setTimeout(()=>{render();},220);
-      if(t.checked)toast("Nice, one more thing done ✓");}
-  }
-  if(t.id==="import-file"&&t.files&&t.files[0])importData(t.files[0]);
-  if(t.id==="set-name"){S.settings.name=t.value.trim();persist();renderNav();}
-});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+/* =====================================================
+   Başlat
+===================================================== */
+seedTape();
+renderTape();
+setInterval(jitterTape, 4000);
+updateClocks();
+setInterval(updateClocks, 15000);
+setInterval(render, 60000); // "x dk önce" etiketlerini tazele
+renderWatchlist();
+setInterval(renderWatchlist, 60000);
 
-/* ---------- boot ---------- */
+if (state.apiKey) startLive();
+else startDemo();
 render();
-initCloud();
-notifTick();
-setInterval(notifTick,60000);
-setInterval(()=>{if(UI.view==="today")render();},5*60000);
 </script>
+</body>
+</html>

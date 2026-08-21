@@ -1,22 +1,40 @@
-# Checkpoint
+# 📡 BorsaRadar — ABD Borsası Anlık Haber & Sinyal Merkezi
 
-A personal daily planner for university life at UofT St. George — 2026-27 and beyond. Fully English UI, mood check-in with tailored suggestions, and a chic racing-green editorial design.
+ABD borsası (NYSE / NASDAQ) için KAP benzeri, tek sayfalık bir haber ve sinyal paneli.
+Haberler anlık olarak akar, her haber otomatik duygu analizinden geçer ve hisse bazında
+"Yükseliş · Al / Düşüş · Sat / İzle" sinyalleri üretilir.
 
 ## Özellikler
 
-- **Bugün ekranı**: açılışta günün özeti — bugünkü dersler, teslim edilecekler, gecikmişler, önümüzdeki 7 gün.
-- **Takvim**: ay görünümü; her günün üzerinde ders rengine göre noktalar, güne tıklayınca o günün ders ve görev listesi.
-- **Görevler**: ödev / sınav / quiz / proje / lab / okuma / kişisel türleriyle, ders etiketi, tarih-saat, önem işareti ve notlarla tam bir checklist.
-- **Ders programı**: haftalık düzen, ders başına renk ve derslik bilgisi.
-- **Bildirimler**: sayfa açıkken günlük özet, ders başlamadan 20 dk önce ve saatli teslimlerden önce tarayıcı bildirimi (Ayarlar'dan açılır).
-- **Dönem hafta sayacı**: güz/bahar tarihlerine göre "Güz dönemi · 5. hafta" gibi; tarihler Ayarlar'dan her yıl güncellenebilir.
-- **Yedekleme**: JSON olarak dışa/içe aktarma.
+- **📰 Anlık haber akışı** — yeni haberler otomatik olarak akışın en üstüne düşer
+- **🧠 Duygu analizi** — her haber başlık + özet üzerinden pozitif / negatif / nötr olarak puanlanır
+- **🎯 Habere dayalı sinyaller** — son 24 saatin haberleri hisse bazında toplanır, yakın tarihli
+  haberler daha ağır basar; skorlara göre AL / SAT / İZLE sinyali ve güven çubuğu gösterilir
+- **⭐ İzleme listesi** — sembol ekleyin, sadece kendi hisselerinizin haberlerini filtreleyin
+  (tarayıcıda saklanır)
+- **🔎 Filtre & arama** — pozitif/negatif/nötr filtreleri, sembol veya kelimeyle arama,
+  haberdeki sembole tıklayarak hızlı filtre
+- **📈 Endeks bandı** — S&P 500, NASDAQ, Dow ve büyük hisseler için kayan fiyat bandı
+- **🕐 Piyasa durumu** — New York saatiyle NYSE açık / pre-market / after-hours / kapalı göstergesi
+- **🏷️ Otomatik kategori** — Bilanço, Makro/Fed, Analist, Birleşme & Satın Alma, Teknoloji vb.
 
-## Veri saklama
+## Canlı mod ve demo mod
 
-- Claude Artifact olarak yayınlandığında veriler `data/state.json` dosyasına kaydedilir (artifact `files publish`), böylece her cihazdan aynı veriye erişilir; ayrıca `localStorage` yerel yedek olarak kullanılır ve iki kaynaktan yeni olan kazanır.
-- Düz statik barındırmada (ör. GitHub Pages) yalnızca `localStorage` kullanılır.
+- **Demo mod (varsayılan):** API anahtarı gerekmez; site gerçekçi simüle haberlerle çalışır,
+  böylece arayüz her zaman canlı görünür.
+- **Canlı mod:** Ücretsiz bir [Finnhub.io](https://finnhub.io/register) API anahtarı alıp
+  ⚙️ Ayarlar'dan yapıştırın. Anahtar yalnızca tarayıcınızın `localStorage`'ında tutulur,
+  hiçbir sunucuya gönderilmez. Gerçek piyasa haberleri ve fiyat teklifleri belirlediğiniz
+  aralıkta (varsayılan 60 sn) çekilir.
 
 ## Çalıştırma
 
-Tek dosya: `index.html`. Herhangi bir statik sunucuyla ya da doğrudan tarayıcıda açarak kullanılabilir.
+Derleme yok, sunucu yok — `index.html` dosyasını tarayıcıda açmanız yeterli.
+GitHub Pages ile de doğrudan yayınlanabilir.
+
+## ⚠️ Yasal Uyarı
+
+Bu sitedeki sinyaller, haber başlıklarının otomatik duygu analiziyle üretilen **bilgilendirme
+amaçlı** göstergelerdir; **yatırım tavsiyesi değildir**. Haber duyarlılığı fiyat hareketini
+garanti etmez. Alım-satım kararlarınızı kendi araştırmanıza ve/veya lisanslı bir yatırım
+danışmanına dayandırın.
