@@ -175,6 +175,43 @@
   .stat .l{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
   .stat.pos .v{color:var(--green)} .stat.neg .v{color:var(--red)}
 
+  /* ---------- Portföy simülasyonu ---------- */
+  .pf-wrap{max-width:1400px;margin:20px auto 0;padding:0 20px}
+  .pf-setup{padding:30px 18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center;text-align:center}
+  .pf-setup .big{width:100%;font-size:.9rem;color:var(--muted);line-height:1.6;margin-bottom:6px}
+  .pf-setup input{background:var(--bg-2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:.95rem;outline:none;width:190px;text-align:right;font-variant-numeric:tabular-nums}
+  .pf-setup input:focus{border-color:var(--accent)}
+  .pf-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
+  @media(max-width:760px){.pf-stats{grid-template-columns:repeat(2,1fr)}}
+  .pf-stat{background:var(--card);padding:15px;text-align:center}
+  .pf-stat .v{font-size:1.25rem;font-weight:800;font-variant-numeric:tabular-nums}
+  .pf-stat .l{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+  .trade-row{display:flex;gap:10px;padding:16px 18px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--border)}
+  .trade-row input{background:var(--bg-2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-size:.87rem;outline:none}
+  .trade-row input:focus{border-color:var(--accent)}
+  #trade-sym{width:140px;text-transform:uppercase}
+  #trade-qty{width:110px}
+  .trade-px{font-size:.85rem;color:var(--muted);min-width:150px;font-variant-numeric:tabular-nums}
+  .trade-px b{color:var(--text)}
+  .btn.buy{background:var(--green);border-color:var(--green);color:#052012;font-weight:800}
+  .btn.buy:hover{filter:brightness(1.1);background:var(--green)}
+  .btn.sell{background:var(--red);border-color:var(--red);color:#fff;font-weight:800}
+  .btn.sell:hover{filter:brightness(1.1);background:var(--red)}
+  .pf-scroll{overflow-x:auto}
+  .pf-table{width:100%;border-collapse:collapse;font-size:.84rem;min-width:640px}
+  .pf-table th{text-align:right;padding:10px 18px;color:var(--muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);white-space:nowrap}
+  .pf-table td{padding:11px 18px;text-align:right;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pf-table th:first-child,.pf-table td:first-child{text-align:left}
+  .pf-table td b{font-weight:800}
+  .pf-hist{max-height:230px;overflow-y:auto;scrollbar-width:thin}
+  .pf-hist-item{display:flex;gap:10px;align-items:center;padding:9px 18px;border-bottom:1px solid var(--border);font-size:.78rem}
+  .pf-hist-item:last-child{border-bottom:none}
+  .pf-hist-item .side{font-weight:800;font-size:.68rem;padding:2px 9px;border-radius:6px;letter-spacing:.04em}
+  .pf-hist-item .side.b{color:var(--green);background:var(--green-bg)}
+  .pf-hist-item .side.s{color:var(--red);background:var(--red-bg)}
+  .pf-hist-item .when{margin-left:auto;color:var(--muted);font-size:.7rem}
+  .pf-sub{padding:12px 18px;border-bottom:1px solid var(--border);font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
   /* ---------- Modal ---------- */
   .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;place-items:center;z-index:100;padding:20px}
   .modal-back.show{display:grid}
@@ -224,6 +261,57 @@
 </header>
 
 <div class="tape-wrap"><div class="tape" id="tape"></div></div>
+
+<!-- ===== Portföy Simülasyonu ===== -->
+<div class="pf-wrap">
+  <section class="panel">
+    <div class="panel-head">
+      <h2>💼 Portföyüm — Alım-Satım Simülasyonu</h2>
+      <span class="count">sanal para</span>
+      <div class="spacer"></div>
+      <button class="btn" id="pf-reset" style="display:none">🔄 Sıfırla</button>
+    </div>
+
+    <div class="pf-setup" id="pf-setup">
+      <div class="big">
+        Gerçek para riski olmadan borsayı öğren: başlangıç sermayeni belirle, güncel fiyatlardan
+        al-sat yap, kâr/zararını anlık takip et. Her şey tarayıcında saklanır.
+      </div>
+      <span style="font-size:.9rem">Başlangıç sermayem:</span>
+      <input id="pf-capital" type="number" min="100" step="100" value="10000"> <b>$</b>
+      <button class="btn primary" id="pf-start">🚀 Simülasyonu Başlat</button>
+    </div>
+
+    <div id="pf-dash" style="display:none">
+      <div class="pf-stats">
+        <div class="pf-stat"><div class="v" id="pf-cash">—</div><div class="l">Nakit</div></div>
+        <div class="pf-stat"><div class="v" id="pf-holdings">—</div><div class="l">Hisse Değeri</div></div>
+        <div class="pf-stat"><div class="v" id="pf-total">—</div><div class="l">Toplam Varlık</div></div>
+        <div class="pf-stat"><div class="v" id="pf-pl">—</div><div class="l">Toplam Kâr / Zarar</div></div>
+      </div>
+
+      <div class="trade-row">
+        <input id="trade-sym" placeholder="Sembol (AAPL)" maxlength="6">
+        <input id="trade-qty" type="number" min="1" step="1" placeholder="Adet">
+        <span class="trade-px" id="trade-px">Fiyat: —</span>
+        <button class="btn buy" id="btn-buy">▲ AL</button>
+        <button class="btn sell" id="btn-sell">▼ SAT</button>
+      </div>
+
+      <div class="pf-scroll">
+        <table class="pf-table" id="pf-positions">
+          <thead><tr>
+            <th>Hisse</th><th>Adet</th><th>Ort. Maliyet</th><th>Güncel Fiyat</th><th>Değer</th><th>Kâr / Zarar</th><th></th>
+          </tr></thead>
+          <tbody id="pf-pos-body"></tbody>
+        </table>
+      </div>
+
+      <div class="pf-sub">📜 İşlem Geçmişi</div>
+      <div class="pf-hist" id="pf-hist"></div>
+    </div>
+  </section>
+</div>
 
 <div class="container">
   <!-- ===== Sol: Haber akışı ===== -->
@@ -602,6 +690,10 @@ function jitterTape() {
     d.px = d.px * (1 + step / 100);
   }
   renderTape();
+  if (!state.apiKey && typeof jitterSimPrices === 'function') {
+    jitterSimPrices();
+    if (typeof renderPortfolio === 'function' && pf) renderPortfolio();
+  }
 }
 async function refreshTapeLive() {
   if (!state.apiKey) return;
@@ -736,7 +828,8 @@ function startLive() {
   if (state.liveTimer) clearInterval(state.liveTimer);
   fetchLiveNews();
   refreshTapeLive();
-  state.liveTimer = setInterval(() => { fetchLiveNews(); refreshTapeLive(); }, state.refreshSec * 1000);
+  refreshPortfolioQuotes();
+  state.liveTimer = setInterval(() => { fetchLiveNews(); refreshTapeLive(); refreshPortfolioQuotes(); }, state.refreshSec * 1000);
   $('mode-badge').textContent = '● CANLI';
   $('mode-badge').classList.remove('demo');
 }
@@ -747,6 +840,214 @@ function switchToDemo() {
   $('mode-badge').textContent = '● DEMO MOD';
   $('mode-badge').classList.add('demo');
   if (!state.demoTimer) startDemo();
+}
+
+/* =====================================================
+   PORTFÖY SİMÜLASYONU (paper trading)
+===================================================== */
+const fmt$ = n => (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+let pf = null; // {start, cash, positions:{SYM:{qty,avg}}, history:[{ts,side,sym,qty,px,realized}]}
+try { pf = JSON.parse(localStorage.getItem('br_portfolio') || 'null'); } catch (e) {}
+function savePf() { try { localStorage.setItem('br_portfolio', JSON.stringify(pf)); } catch (e) {} }
+
+/* --- Fiyat motoru ---
+   Demo: sembole özel deterministik taban fiyat + rastgele yürüyüş.
+   Canlı: Finnhub /quote, 30 sn önbellekli. */
+const simPrices = {};   // demo fiyatları
+const quoteCache = {};  // canlı mod: {px, chg, ts}
+function ensureSimPrice(sym) {
+  if (!simPrices[sym]) {
+    if (tapeData[sym]) { simPrices[sym] = { px: tapeData[sym].px, chg: tapeData[sym].chg }; }
+    else {
+      let h = 0; for (const c of sym) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+      simPrices[sym] = { px: 15 + (h % 4850) / 10, chg: ((h % 7) - 3) * 0.4 };
+    }
+  }
+  return simPrices[sym];
+}
+function jitterSimPrices() {
+  for (const sym of Object.keys(simPrices)) {
+    const d = simPrices[sym];
+    const step = (Math.random() - 0.5) * 0.3;
+    d.px = Math.max(0.5, d.px * (1 + step / 100));
+    d.chg = Math.max(-8, Math.min(8, d.chg + step / 3));
+  }
+}
+async function getPrice(sym) {
+  if (state.apiKey) {
+    const c = quoteCache[sym];
+    if (c && Date.now() - c.ts < 30000) return c;
+    try {
+      const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(sym)}&token=${encodeURIComponent(state.apiKey)}`);
+      if (r.ok) {
+        const q = await r.json();
+        if (q && q.c > 0) { quoteCache[sym] = { px: q.c, chg: q.dp ?? 0, ts: Date.now() }; return quoteCache[sym]; }
+      }
+    } catch (e) {}
+    if (c) return c;             // eski önbellek, hiç yoktan iyi
+    return null;                 // canlı modda sembol bulunamadı
+  }
+  return ensureSimPrice(sym);    // demo mod
+}
+function getPriceSync(sym) {
+  if (state.apiKey) return quoteCache[sym] || null;
+  return ensureSimPrice(sym);
+}
+
+function renderPortfolio() {
+  const setup = $('pf-setup'), dash = $('pf-dash'), reset = $('pf-reset');
+  if (!pf) { setup.style.display = ''; dash.style.display = 'none'; reset.style.display = 'none'; return; }
+  setup.style.display = 'none'; dash.style.display = ''; reset.style.display = '';
+
+  let holdings = 0;
+  const rows = Object.entries(pf.positions).map(([sym, p]) => {
+    const q = getPriceSync(sym);
+    const px = q ? q.px : p.avg;
+    const val = p.qty * px;
+    holdings += val;
+    const pl = (px - p.avg) * p.qty;
+    const plPct = p.avg ? (px / p.avg - 1) * 100 : 0;
+    const cls = pl > 0.005 ? 'up' : pl < -0.005 ? 'down' : 'flat';
+    return `<tr>
+      <td><b>$${esc(sym)}</b></td>
+      <td>${p.qty.toLocaleString('en-US')}</td>
+      <td>${fmt$(p.avg)}</td>
+      <td>${q ? fmt$(px) : '<span class="flat">yükleniyor…</span>'}</td>
+      <td>${fmt$(val)}</td>
+      <td class="${cls}"><b>${fmt$(pl)}</b> (${plPct >= 0 ? '+' : ''}${plPct.toFixed(2)}%)</td>
+      <td><button class="btn" style="padding:4px 10px;font-size:.72rem" data-sellall="${esc(sym)}">Tümünü Sat</button></td>
+    </tr>`;
+  }).join('');
+  $('pf-pos-body').innerHTML = rows || `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:22px">Henüz hissen yok. Yukarıdan sembol ve adet girip <b class="up">▲ AL</b>'a bas — sinyal panelindeki bir hisseye tıklayarak da başlayabilirsin.</td></tr>`;
+
+  const total = pf.cash + holdings;
+  const pl = total - pf.start;
+  const plPct = (total / pf.start - 1) * 100;
+  $('pf-cash').textContent = fmt$(pf.cash);
+  $('pf-holdings').textContent = fmt$(holdings);
+  $('pf-total').textContent = fmt$(total);
+  const plEl = $('pf-pl');
+  plEl.textContent = `${fmt$(pl)} (${plPct >= 0 ? '+' : ''}${plPct.toFixed(2)}%)`;
+  plEl.className = 'v ' + (pl > 0.005 ? 'up' : pl < -0.005 ? 'down' : '');
+
+  $('pf-hist').innerHTML = pf.history.slice(0, 25).map(h => `
+    <div class="pf-hist-item">
+      <span class="side ${h.side === 'AL' ? 'b' : 's'}">${h.side}</span>
+      <b>$${esc(h.sym)}</b>
+      <span>${h.qty} adet × ${fmt$(h.px)}</span>
+      ${h.realized != null ? `<span class="${h.realized >= 0 ? 'up' : 'down'}">(${h.realized >= 0 ? '+' : ''}${fmt$(h.realized)} gerçekleşen)</span>` : ''}
+      <span class="when">${new Date(h.ts).toLocaleString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+    </div>`).join('') || `<div class="empty-note" style="padding:18px">Henüz işlem yok.</div>`;
+
+  $('pf-pos-body').querySelectorAll('[data-sellall]').forEach(b =>
+    b.addEventListener('click', () => {
+      const sym = b.dataset.sellall;
+      const p = pf.positions[sym];
+      if (p) { $('trade-sym').value = sym; $('trade-qty').value = p.qty; executeTrade('SAT'); }
+    }));
+}
+
+async function executeTrade(side) {
+  if (!pf) return;
+  const sym = $('trade-sym').value.trim().toUpperCase();
+  const qty = Math.floor(Number($('trade-qty').value));
+  if (!/^[A-Z.]{1,6}$/.test(sym)) { toast('Geçerli bir sembol gir (örn. AAPL).'); return; }
+  if (!qty || qty < 1) { toast('Adet en az 1 olmalı.'); return; }
+
+  const bb = $('btn-buy'), sb = $('btn-sell');
+  bb.disabled = sb.disabled = true;
+  const q = await getPrice(sym);
+  bb.disabled = sb.disabled = false;
+  if (!q) { toast(`"${sym}" için fiyat bulunamadı — sembolü kontrol et.`); return; }
+  const px = q.px;
+
+  if (side === 'AL') {
+    const cost = px * qty;
+    if (cost > pf.cash + 1e-9) {
+      toast(`Yetersiz nakit: ${qty} × ${fmt$(px)} = ${fmt$(cost)}, nakit ${fmt$(pf.cash)}.`);
+      return;
+    }
+    const p = pf.positions[sym] || { qty: 0, avg: 0 };
+    p.avg = (p.qty * p.avg + cost) / (p.qty + qty);
+    p.qty += qty;
+    pf.positions[sym] = p;
+    pf.cash -= cost;
+    pf.history.unshift({ ts: Date.now(), side: 'AL', sym, qty, px });
+    toast(`✅ ${qty} adet $${sym} alındı (${fmt$(px)})`);
+  } else {
+    const p = pf.positions[sym];
+    if (!p || p.qty < qty) {
+      toast(`Elinde ${p ? p.qty : 0} adet $${sym} var — ${qty} adet satamazsın.`);
+      return;
+    }
+    const realized = (px - p.avg) * qty;
+    p.qty -= qty;
+    if (p.qty === 0) delete pf.positions[sym];
+    pf.cash += px * qty;
+    pf.history.unshift({ ts: Date.now(), side: 'SAT', sym, qty, px, realized });
+    toast(`✅ ${qty} adet $${sym} satıldı (${fmt$(px)}) — ${realized >= 0 ? 'kâr' : 'zarar'}: ${fmt$(realized)}`);
+  }
+  if (pf.history.length > 200) pf.history.length = 200;
+  savePf();
+  renderPortfolio();
+}
+
+/* Fiyat önizleme (sembol yazarken) */
+let pxDeb;
+$('trade-sym').addEventListener('input', () => {
+  clearTimeout(pxDeb);
+  pxDeb = setTimeout(async () => {
+    const sym = $('trade-sym').value.trim().toUpperCase();
+    const el = $('trade-px');
+    if (!/^[A-Z.]{1,6}$/.test(sym)) { el.innerHTML = 'Fiyat: —'; return; }
+    el.innerHTML = 'Fiyat: <span class="flat">alınıyor…</span>';
+    const q = await getPrice(sym);
+    if (!q) { el.innerHTML = `Fiyat: <span class="down">bulunamadı</span>`; return; }
+    const cls = q.chg > 0.05 ? 'up' : q.chg < -0.05 ? 'down' : 'flat';
+    el.innerHTML = `Fiyat: <b>${fmt$(q.px)}</b> <span class="${cls}">${q.chg >= 0 ? '+' : ''}${q.chg.toFixed(2)}%</span>`;
+  }, 350);
+});
+
+$('btn-buy').addEventListener('click', () => executeTrade('AL'));
+$('btn-sell').addEventListener('click', () => executeTrade('SAT'));
+
+$('pf-start').addEventListener('click', () => {
+  const cap = Number($('pf-capital').value);
+  if (!cap || cap < 100) { toast('Başlangıç sermayesi en az $100 olmalı.'); return; }
+  pf = { start: cap, cash: cap, positions: {}, history: [] };
+  savePf();
+  renderPortfolio();
+  toast(`🚀 Simülasyon başladı! ${fmt$(cap)} sanal paran var. Bol şans!`);
+});
+$('pf-capital').addEventListener('keydown', e => { if (e.key === 'Enter') $('pf-start').click(); });
+
+$('pf-reset').addEventListener('click', () => {
+  if (!pf) return;
+  if (!confirm('Portföy sıfırlansın mı? Tüm pozisyonlar ve işlem geçmişi silinir.')) return;
+  pf = null;
+  try { localStorage.removeItem('br_portfolio'); } catch (e) {}
+  renderPortfolio();
+  toast('Portföy sıfırlandı. Yeni sermaye belirleyip tekrar başlayabilirsin.');
+});
+
+/* Sinyale tıklayınca işlem kutusunu doldur */
+$('signal-list').addEventListener('click', e => {
+  const row = e.target.closest('.signal');
+  if (!row) return;
+  const sym = row.querySelector('.avatar')?.textContent.trim();
+  if (!sym) return;
+  $('trade-sym').value = sym;
+  $('trade-sym').dispatchEvent(new Event('input'));
+  document.querySelector('.pf-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  $('trade-qty').focus();
+});
+
+/* Canlı modda portföydeki hisselerin fiyatlarını periyodik tazele */
+async function refreshPortfolioQuotes() {
+  if (!state.apiKey || !pf) return;
+  for (const sym of Object.keys(pf.positions)) await getPrice(sym);
+  renderPortfolio();
 }
 
 /* =====================================================
@@ -810,6 +1111,9 @@ setInterval(updateClocks, 15000);
 setInterval(render, 60000); // "x dk önce" etiketlerini tazele
 renderWatchlist();
 setInterval(renderWatchlist, 60000);
+if (pf) for (const sym of Object.keys(pf.positions)) ensureSimPrice(sym);
+renderPortfolio();
+refreshPortfolioQuotes();
 
 if (state.apiKey) startLive();
 else startDemo();

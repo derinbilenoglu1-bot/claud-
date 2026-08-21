@@ -6,6 +6,11 @@ Haberler anlık olarak akar, her haber otomatik duygu analizinden geçer ve hiss
 
 ## Özellikler
 
+- **💼 Alım-satım simülasyonu (paper trading)** — başlangıç sermayeni kendin belirle, sanal
+  parayla güncel fiyatlardan al-sat yap; nakit, hisse değeri, toplam varlık ve kâr/zarar anlık
+  hesaplanır; işlem geçmişi tutulur; sinyaldeki hisseye tıklayınca işlem kutusu otomatik dolar.
+  Demo modda simüle fiyatlar, canlı modda gerçek Finnhub fiyatları kullanılır. Portföy tarayıcıda
+  saklanır; istediğin zaman sıfırlayıp yeni sermayeyle başlayabilirsin.
 - **📰 Anlık haber akışı** — yeni haberler otomatik olarak akışın en üstüne düşer
 - **🧠 Duygu analizi** — her haber başlık + özet üzerinden pozitif / negatif / nötr olarak puanlanır
 - **🎯 Habere dayalı sinyaller** — son 24 saatin haberleri hisse bazında toplanır, yakın tarihli
