@@ -1,31 +1,31 @@
 <title>Kampüs Ajandam</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:ital,wght@0,400..700;1,400..600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400..700;1,400..600&display=swap">
 <style>
 :root{
-  --bg:#F3F5F9; --surface:#FFFFFF; --surface2:#E9EDF4; --ink:#17202C; --muted:#5A6678;
-  --line:#D8DEE9; --accent:#1D4F91; --accent-soft:#E3EBF7; --on-accent:#FFFFFF;
-  --ok:#147D7E; --ok-soft:#DDF0EF; --danger:#C13E2C; --danger-soft:#F9E5E0;
-  --amber:#9A6A00; --amber-soft:#F5ECD4;
-  --shadow:0 1px 2px rgba(23,32,44,.06),0 6px 20px rgba(23,32,44,.07);
-  --r:14px;
+  --bg:#EFF0EB; --surface:#FAFAF7; --surface2:#E4E7DF; --ink:#161D18; --muted:#66716A;
+  --line:#D8DCD3; --accent:#1E4B39; --accent-soft:#E0E9E1; --on-accent:#F4F6F0;
+  --brass:#9C7A2F; --brass-soft:#F0E8D2;
+  --ok:#2E7357; --ok-soft:#DFEBE2; --danger:#AE3F2C; --danger-soft:#F3E2DC;
+  --shadow:0 1px 2px rgba(22,29,24,.05),0 8px 28px rgba(22,29,24,.06);
+  --r:16px;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0F1520; --surface:#171F2C; --surface2:#202A3A; --ink:#E8ECF4; --muted:#93A0B4;
-    --line:#2A3547; --accent:#6FA0E8; --accent-soft:#1E2E45; --on-accent:#0F1520;
-    --ok:#4FC0BB; --ok-soft:#12312F; --danger:#F08A76; --danger-soft:#3A211C;
-    --amber:#E0B558; --amber-soft:#32290F;
-    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35);
+    --bg:#121713; --surface:#1A201B; --surface2:#242C25; --ink:#EAEDE6; --muted:#98A399;
+    --line:#2C352D; --accent:#86BD9E; --accent-soft:#1F2F26; --on-accent:#0F1511;
+    --brass:#CFAC5F; --brass-soft:#2E2716;
+    --ok:#7FC2A0; --ok-soft:#1C2E24; --danger:#E38A73; --danger-soft:#38211B;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 28px rgba(0,0,0,.4);
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0F1520; --surface:#171F2C; --surface2:#202A3A; --ink:#E8ECF4; --muted:#93A0B4;
-  --line:#2A3547; --accent:#6FA0E8; --accent-soft:#1E2E45; --on-accent:#0F1520;
-  --ok:#4FC0BB; --ok-soft:#12312F; --danger:#F08A76; --danger-soft:#3A211C;
-  --amber:#E0B558; --amber-soft:#32290F;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35);
+  --bg:#121713; --surface:#1A201B; --surface2:#242C25; --ink:#EAEDE6; --muted:#98A399;
+  --line:#2C352D; --accent:#86BD9E; --accent-soft:#1F2F26; --on-accent:#0F1511;
+  --brass:#CFAC5F; --brass-soft:#2E2716;
+  --ok:#7FC2A0; --ok-soft:#1C2E24; --danger:#E38A73; --danger-soft:#38211B;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 28px rgba(0,0,0,.4);
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
@@ -34,196 +34,216 @@ body{
   font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   font-size:15.5px; line-height:1.5; min-height:100vh;
 }
-h1,h2,h3{font-family:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif;text-wrap:balance;margin:0}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1{font-family:"Instrument Serif",Georgia,serif;font-weight:400}
 button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
 input,select,textarea{font:inherit;color:var(--ink)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
-#app{display:grid;grid-template-columns:232px 1fr;min-height:100vh;max-width:1200px;margin:0 auto}
+#app{display:grid;grid-template-columns:236px 1fr;min-height:100vh;max-width:1200px;margin:0 auto}
 #sidebar{
-  padding:28px 18px;border-right:1px solid var(--line);
+  padding:30px 18px;border-right:1px solid var(--line);
   display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;
 }
-.brand{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:21px;letter-spacing:-.01em;margin-bottom:4px}
-.brand small{display:block;font-family:"Instrument Sans",sans-serif;font-weight:500;font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+.brand{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:25px;letter-spacing:.01em;margin-bottom:2px;padding-left:12px}
+.brand small{display:block;font-family:"Instrument Sans",sans-serif;font-style:normal;font-weight:600;font-size:10.5px;color:var(--brass);letter-spacing:.22em;text-transform:uppercase;margin-top:4px}
+#sidebar hr{border:none;border-top:1px solid var(--line);margin:14px 0;width:100%}
 .nav-btn{
-  display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;
-  font-weight:500;color:var(--muted);text-align:left;transition:background .15s,color .15s;
+  display:flex;align-items:center;gap:11px;padding:9px 13px;border-radius:99px;
+  font-weight:500;color:var(--muted);text-align:left;transition:background .15s,color .15s;letter-spacing:.01em;
 }
 .nav-btn:hover{background:var(--surface2)}
-.nav-btn.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
-.nav-btn .ic{width:19px;height:19px;flex:none}
-.nav-btn .cnt{margin-left:auto;font-size:11.5px;font-weight:700;background:var(--danger);color:#fff;border-radius:99px;min-width:19px;height:19px;display:grid;place-items:center;padding:0 5px}
-#savechip{margin-top:auto;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:7px;padding:8px 12px}
-#savechip .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
-#savechip.saved .dot{background:var(--ok)} #savechip.saving .dot{background:var(--amber)}
+.nav-btn.active{background:var(--accent);color:var(--on-accent);font-weight:600}
+.nav-btn .ic{width:18px;height:18px;flex:none}
+.nav-btn .cnt{margin-left:auto;font-size:11px;font-weight:700;background:var(--danger);color:#fff;border-radius:99px;min-width:19px;height:19px;display:grid;place-items:center;padding:0 5px;font-variant-numeric:tabular-nums}
+.nav-btn.active .cnt{background:var(--on-accent);color:var(--accent)}
+#savechip{margin-top:auto;font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:7px;padding:8px 13px;letter-spacing:.02em}
+#savechip .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex:none}
+#savechip.saved .dot{background:var(--ok)} #savechip.saving .dot{background:var(--brass)}
 #savechip.local .dot{background:var(--muted)} #savechip.error .dot{background:var(--danger)}
 
-#main{padding:32px 36px 96px;min-width:0}
+#main{padding:34px 40px 100px;min-width:0}
 #tabbar{display:none}
 @media (max-width:820px){
   #app{grid-template-columns:1fr}
   #sidebar{display:none}
-  #main{padding:20px 16px 96px}
+  #main{padding:22px 16px 100px}
   #tabbar{
     display:flex;position:fixed;bottom:0;left:0;right:0;z-index:40;
     background:var(--surface);border-top:1px solid var(--line);
     padding:6px 4px calc(6px + env(safe-area-inset-bottom));
   }
-  #tabbar .nav-btn{flex:1;flex-direction:column;gap:3px;font-size:10.5px;padding:6px 2px;align-items:center;position:relative}
+  #tabbar .nav-btn{flex:1;flex-direction:column;gap:3px;font-size:10.5px;padding:7px 2px;align-items:center;position:relative;border-radius:12px}
   #tabbar .nav-btn .cnt{position:absolute;top:2px;right:calc(50% - 22px);margin:0}
 }
 
-.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:22px;flex-wrap:wrap}
-.page-head h1{font-size:28px;font-weight:700;letter-spacing:-.015em}
-.sub{color:var(--muted);font-size:14px;margin-top:3px}
-.chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:4px 11px;border-radius:99px;background:var(--accent-soft);color:var(--accent)}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin-bottom:6px}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.page-head h1{font-size:36px;letter-spacing:.005em;line-height:1.08}
+.sub{color:var(--muted);font-size:14px;margin-top:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:4px 12px;border-radius:99px;background:var(--accent-soft);color:var(--accent);letter-spacing:.03em}
 .chip.ok{background:var(--ok-soft);color:var(--ok)} .chip.warn{background:var(--danger-soft);color:var(--danger)}
-.chip.amber{background:var(--amber-soft);color:var(--amber)}
+.chip.brass{background:var(--brass-soft);color:var(--brass)}
+
+.quote{margin:0 0 26px;padding:2px 0 0 22px;position:relative;max-width:620px}
+.quote::before{
+  content:"\201C";font-family:"Instrument Serif",Georgia,serif;font-size:58px;line-height:1;
+  color:var(--brass);position:absolute;left:-6px;top:-8px;
+}
+.quote blockquote{
+  margin:0;font-family:"Instrument Serif",Georgia,serif;font-style:italic;
+  font-size:22.5px;line-height:1.32;letter-spacing:.005em;
+}
+.quote figcaption{margin-top:7px;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 
 .btn{
-  display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;
+  display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:99px;
   font-weight:600;font-size:14px;background:var(--accent);color:var(--on-accent);
-  transition:filter .15s;white-space:nowrap;
+  transition:filter .15s;white-space:nowrap;letter-spacing:.01em;
 }
-.btn:hover{filter:brightness(1.08)}
-.btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.btn:hover{filter:brightness(1.12)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .btn.ghost:hover{background:var(--surface2);filter:none}
 .btn.danger{background:var(--danger-soft);color:var(--danger)}
-.btn.sm{padding:6px 12px;font-size:13px;border-radius:8px}
+.btn.sm{padding:6px 14px;font-size:13px}
 
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-.card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 18px 0}
-.card-h h2{font-size:16.5px;font-weight:650}
-.card-b{padding:12px 18px 16px}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px 0}
+.card-h h2{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.card-b{padding:12px 20px 16px}
 
-.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
-.stat .n{font-family:"Bricolage Grotesque",sans-serif;font-size:27px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
-.stat .l{font-size:12.5px;color:var(--muted);font-weight:500;margin-top:2px}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:15px 18px;box-shadow:var(--shadow)}
+.stat .n{font-family:"Instrument Serif",Georgia,serif;font-size:34px;font-variant-numeric:tabular-nums;line-height:1.05}
+.stat .l{font-size:11px;color:var(--muted);font-weight:600;margin-top:3px;letter-spacing:.14em;text-transform:uppercase}
 .stat.warn .n{color:var(--danger)} .stat.ok .n{color:var(--ok)} .stat.acc .n{color:var(--accent)}
-@media (max-width:520px){.stat-row{gap:8px}.stat{padding:11px 12px}.stat .n{font-size:22px}}
+@media (max-width:520px){.stat-row{gap:8px}.stat{padding:12px 13px}.stat .n{font-size:27px}.stat .l{letter-spacing:.08em}}
 
 .digest{
-  border-radius:var(--r);padding:14px 18px;margin-bottom:20px;
+  border-radius:var(--r);padding:14px 18px;margin-bottom:22px;
   background:var(--accent-soft);color:var(--accent);font-weight:500;font-size:14.5px;
   display:flex;gap:10px;align-items:flex-start;
 }
 .digest.warn{background:var(--danger-soft);color:var(--danger)}
+.digest.brass{background:var(--brass-soft);color:var(--brass)}
 .digest .ic{flex:none;margin-top:2px}
 
 .task{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
 .task:last-child{border-bottom:none}
 .task .cb{
   appearance:none;width:21px;height:21px;flex:none;margin-top:2px;cursor:pointer;
-  border:2px solid var(--muted);border-radius:7px;display:grid;place-items:center;transition:all .15s;background:var(--surface);
+  border:1.5px solid var(--muted);border-radius:50%;display:grid;place-items:center;transition:all .15s;background:var(--surface);
 }
-.task .cb:checked{background:var(--ok);border-color:var(--ok)}
-.task .cb:checked::after{content:"";width:10px;height:6px;border:2.5px solid #fff;border-top:none;border-right:none;transform:rotate(-45deg) translate(1px,-1px)}
+.task .cb:checked{background:var(--accent);border-color:var(--accent)}
+.task .cb:checked::after{content:"";width:9px;height:5px;border:2px solid var(--on-accent);border-top:none;border-right:none;transform:rotate(-45deg) translate(1px,-1px)}
 .task .tx{flex:1;min-width:0;cursor:pointer}
 .task .tt{font-weight:550;overflow-wrap:anywhere}
 .task.done .tt{text-decoration:line-through;color:var(--muted);font-weight:450}
 .task .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:3px;font-size:12px;color:var(--muted);align-items:center}
-.tag{padding:1.5px 8px;border-radius:99px;font-size:11.5px;font-weight:600;background:var(--surface2);color:var(--muted)}
+.tag{padding:1.5px 9px;border-radius:99px;font-size:11px;font-weight:600;background:var(--surface2);color:var(--muted);letter-spacing:.04em}
 .tag.course{color:#fff}
 .tag.type-sınav,.tag.type-quiz{background:var(--danger-soft);color:var(--danger)}
 .tag.type-ödev,.tag.type-proje{background:var(--accent-soft);color:var(--accent)}
-.tag.type-okuma,.tag.type-lab{background:var(--amber-soft);color:var(--amber)}
+.tag.type-okuma,.tag.type-lab{background:var(--brass-soft);color:var(--brass)}
 .due{font-variant-numeric:tabular-nums;font-weight:600}
 .due.over{color:var(--danger)} .due.today{color:var(--accent)}
 .imp{color:var(--danger);font-weight:700}
 
-.lesson{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
+.lesson{display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);align-items:center;cursor:pointer}
 .lesson:last-child{border-bottom:none}
-.lesson .time{font-variant-numeric:tabular-nums;font-weight:650;font-size:14px;width:88px;flex:none;color:var(--muted)}
-.lesson .bar{width:4px;align-self:stretch;border-radius:4px;flex:none;min-height:36px}
+.lesson .time{font-variant-numeric:tabular-nums;font-weight:600;font-size:13.5px;width:92px;flex:none;color:var(--muted);letter-spacing:.02em}
+.lesson .bar{width:3px;align-self:stretch;border-radius:4px;flex:none;min-height:36px}
 .lesson .nm{font-weight:600} .lesson .loc{font-size:12.5px;color:var(--muted)}
-.lesson.now{background:var(--accent-soft);border-radius:10px;padding:10px 12px;margin:2px -12px;border-bottom:none}
+.lesson .kind{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--brass);margin-left:7px;vertical-align:1px}
+.lesson.now{background:var(--accent-soft);border-radius:12px;padding:11px 13px;margin:2px -13px;border-bottom:none}
 .lesson.now .time{color:var(--accent)}
-.lesson.past{opacity:.45}
+.lesson.past{opacity:.42}
 
-.empty{color:var(--muted);text-align:center;padding:26px 14px;font-size:14px}
-.empty b{display:block;font-size:15px;color:var(--ink);margin-bottom:4px}
+.empty{color:var(--muted);text-align:center;padding:28px 14px;font-size:14px}
+.empty b{display:block;font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:17px;color:var(--ink);margin-bottom:4px}
 
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.cal-head h2{font-size:19px;font-weight:700;text-transform:capitalize}
+.cal-head h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:23px;text-transform:capitalize}
 .cal-nav{display:flex;gap:6px}
-.cal-nav button{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;font-size:16px}
+.cal-nav button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;font-size:16px}
 .cal-nav button:hover{background:var(--surface2)}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.cal-dow{text-align:center;font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--muted);padding:6px 0;text-transform:uppercase}
+.cal-dow{text-align:center;font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--muted);padding:6px 0;text-transform:uppercase}
 .cal-cell{
-  aspect-ratio:1/.92;border-radius:10px;padding:5px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;
+  aspect-ratio:1/.92;border-radius:12px;padding:5px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;
   cursor:pointer;border:1px solid transparent;font-variant-numeric:tabular-nums;
 }
 .cal-cell:hover{background:var(--surface2)}
-.cal-cell .d{font-size:13.5px;font-weight:550;width:26px;height:26px;display:grid;place-items:center;border-radius:50%}
-.cal-cell.other{opacity:.32}
+.cal-cell .d{font-size:13.5px;font-weight:550;width:27px;height:27px;display:grid;place-items:center;border-radius:50%}
+.cal-cell.other{opacity:.3}
 .cal-cell.today .d{background:var(--accent);color:var(--on-accent);font-weight:700}
 .cal-cell.sel{border-color:var(--accent);background:var(--accent-soft)}
+.cal-cell.hol{background:var(--brass-soft)}
+.cal-cell.hol.sel{border-color:var(--brass)}
 .cal-dots{display:flex;gap:3px;flex-wrap:wrap;justify-content:center;max-width:44px}
 .cal-dots i{width:5.5px;height:5.5px;border-radius:50%;display:block}
 .cal-more{font-size:9px;color:var(--muted);font-weight:700}
 
-.sched-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
-.sched-day h3{font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.sched-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(215px,1fr))}
+.sched-day h3{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
 .sched-day.today h3{color:var(--accent)}
-.slot{border-left:4px solid;border-radius:8px;background:var(--surface);border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 11px;margin-bottom:8px;cursor:pointer}
+.slot{border-left:3px solid;border-radius:10px;background:var(--surface);border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:9px 12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow)}
 .slot:hover{background:var(--surface2)}
-.slot .t{font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted);font-weight:600}
+.slot .t{font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.02em}
 .slot .n{font-weight:600;font-size:14px}
 .slot .p{font-size:12px;color:var(--muted)}
+.slot .kind{font-size:9.5px;font-weight:700;letter-spacing:.12em;color:var(--brass);margin-left:6px}
 
 .course-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer}
 .course-row:last-child{border-bottom:none}
-.course-row .sw{width:15px;height:15px;border-radius:5px;flex:none}
-.course-row .cn{font-weight:600} .course-row .cc{font-size:12.5px;color:var(--muted)}
+.course-row .sw{width:14px;height:14px;border-radius:50%;flex:none}
+.course-row .cn{font-weight:600} .course-row .cc{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
 
-.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
-.fpill{padding:6px 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);font-size:13px;font-weight:550;color:var(--muted)}
-.fpill.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+.fpill{padding:6px 15px;border-radius:99px;border:1px solid var(--line);background:transparent;font-size:13px;font-weight:550;color:var(--muted)}
+.fpill.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 
-.overlay{position:fixed;inset:0;background:rgba(15,21,32,.5);z-index:50;display:grid;place-items:center;padding:16px;backdrop-filter:blur(2px)}
-.modal{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);width:100%;max-width:440px;max-height:90vh;overflow:auto;padding:24px}
-.modal h2{font-size:19px;margin-bottom:16px}
+.overlay{position:fixed;inset:0;background:rgba(18,23,19,.55);z-index:50;display:grid;place-items:center;padding:16px;backdrop-filter:blur(3px)}
+.modal{background:var(--surface);border-radius:20px;box-shadow:var(--shadow);width:100%;max-width:440px;max-height:90vh;overflow:auto;padding:26px}
+.modal h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:24px;margin-bottom:18px}
 .f{margin-bottom:13px}
-.f label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:5px}
+.f label{display:block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
 .f input,.f select,.f textarea{
-  width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);
+  width:100%;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:var(--bg);
 }
 .f textarea{min-height:64px;resize:vertical}
 .f-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .swatches{display:flex;gap:8px;flex-wrap:wrap}
-.swatches button{width:30px;height:30px;border-radius:9px;border:2px solid transparent}
-.swatches button.on{border-color:var(--ink);transform:scale(1.1)}
+.swatches button{width:30px;height:30px;border-radius:50%;border:2px solid transparent}
+.swatches button.on{border-color:var(--ink);transform:scale(1.12)}
 .m-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:20px}
 .m-actions .del{margin-right:auto}
-.checklbl{display:flex;align-items:center;gap:9px;font-weight:550;cursor:pointer;font-size:14px}
+.checklbl{display:flex;align-items:center;gap:9px;font-weight:550;cursor:pointer;font-size:14px;text-transform:none;letter-spacing:0}
 .checklbl input{width:18px;height:18px;accent-color:var(--accent)}
 
-.sec{margin-bottom:22px}
-.sec-title{font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0 0 9px 2px}
+.sec{margin-bottom:24px}
+.sec-title{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 9px 2px}
 .set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
 .set-row:last-child{border-bottom:none}
 .set-row .sl{font-weight:550} .set-row .sd{font-size:12.5px;color:var(--muted);margin-top:1px}
 .toast{
-  position:fixed;bottom:84px;left:50%;transform:translateX(-50%);z-index:60;
-  background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:12px;font-size:14px;font-weight:550;
+  position:fixed;bottom:88px;left:50%;transform:translateX(-50%);z-index:60;
+  background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:99px;font-size:14px;font-weight:550;
   box-shadow:var(--shadow);animation:up .25s ease;max-width:90vw;text-align:center;
 }
 @keyframes up{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
 .fab{
-  position:fixed;bottom:88px;right:20px;z-index:35;width:54px;height:54px;border-radius:17px;
+  position:fixed;bottom:92px;right:20px;z-index:35;width:54px;height:54px;border-radius:50%;
   background:var(--accent);color:var(--on-accent);font-size:26px;display:none;place-items:center;box-shadow:var(--shadow);
 }
 @media (max-width:820px){.fab{display:grid}}
-.link{color:var(--accent);font-weight:600;cursor:pointer;background:none;border:none;padding:0;font-size:inherit}
 </style>
 
 <div id="app">
   <aside id="sidebar">
-    <div class="brand">Kampüs Ajandam<small>2026 – 2027</small></div>
+    <div class="brand">Kampüs Ajandam<small>UofT St. George · 2026–27</small></div>
+    <hr>
     <nav id="nav-side"></nav>
     <div id="savechip"><span class="dot"></span><span class="lbl">Yükleniyor…</span></div>
   </aside>
@@ -242,7 +262,7 @@ const DAYS=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Paz
 const DAYS_S=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
 const MONTHS=["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
 const TYPES=["ödev","sınav","quiz","proje","lab","okuma","kişisel","diğer"];
-const COLORS=["#1D4F91","#147D7E","#8E44AD","#C13E2C","#B07D10","#2E7D32","#AD1457","#546E7A"];
+const COLORS=["#1E4B39","#28418F","#8A3B2E","#9C7A2F","#5B3A6E","#2E6E70","#7A2E4D","#4A5568"];
 const ICONS={
   today:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
   cal:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>',
@@ -251,21 +271,143 @@ const ICONS={
   gear:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.4 2.6a7 7 0 0 0-2.1 1.2l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.4-2.6a7 7 0 0 0 2.1-1.2l2.4 1 2-3.4-2-1.6c.06-.4.1-.8.1-1.2z"/></svg>',
   bell:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>'
 };
+const QUOTES=[
+  {t:"The secret of getting ahead is getting started.",a:"Mark Twain"},
+  {t:"It always seems impossible until it's done.",a:"Nelson Mandela"},
+  {t:"Well begun is half done.",a:"Aristotle"},
+  {t:"We are what we repeatedly do. Excellence, then, is not an act, but a habit.",a:"Will Durant"},
+  {t:"The future depends on what you do today.",a:"Mahatma Gandhi"},
+  {t:"Success is the sum of small efforts, repeated day in and day out.",a:"Robert Collier"},
+  {t:"Don't watch the clock; do what it does. Keep going.",a:"Sam Levenson"},
+  {t:"Action is the foundational key to all success.",a:"Pablo Picasso"},
+  {t:"You don't have to be great to start, but you have to start to be great.",a:"Zig Ziglar"},
+  {t:"Motivation gets you going, but discipline keeps you growing.",a:"John C. Maxwell"},
+  {t:"A year from now you may wish you had started today.",a:"Karen Lamb"},
+  {t:"The expert in anything was once a beginner.",a:""},
+  {t:"Dream big. Start small. Act now.",a:"Robin Sharma"},
+  {t:"Done is better than perfect.",a:""},
+  {t:"Whether you think you can or you think you can't, you're right.",a:"Henry Ford"},
+  {t:"Genius is one percent inspiration, ninety-nine percent perspiration.",a:"Thomas Edison"},
+  {t:"The best way to predict the future is to create it.",a:"Peter Drucker"},
+  {t:"Fall seven times, stand up eight.",a:"Japanese proverb"},
+  {t:"Push yourself, because no one else is going to do it for you.",a:""},
+  {t:"Great things never come from comfort zones.",a:""},
+  {t:"Hard work beats talent when talent doesn't work hard.",a:"Tim Notke"},
+  {t:"If you get tired, learn to rest, not to quit.",a:"Banksy"},
+  {t:"Believe you can and you're halfway there.",a:"Theodore Roosevelt"},
+  {t:"Start where you are. Use what you have. Do what you can.",a:"Arthur Ashe"},
+  {t:"It does not matter how slowly you go as long as you do not stop.",a:"Confucius"},
+  {t:"Perseverance is not a long race; it is many short races one after the other.",a:"Walter Elliot"},
+  {t:"The beautiful thing about learning is that no one can take it away from you.",a:"B.B. King"},
+  {t:"Education is the most powerful weapon which you can use to change the world.",a:"Nelson Mandela"},
+  {t:"An investment in knowledge pays the best interest.",a:"Benjamin Franklin"},
+  {t:"Discipline is the bridge between goals and accomplishment.",a:"Jim Rohn"},
+  {t:"Strive for progress, not perfection.",a:""},
+  {t:"What we learn with pleasure we never forget.",a:"Alfred Mercier"},
+  {t:"Little by little, one travels far.",a:""},
+  {t:"Winners are not people who never fail, but people who never quit.",a:""},
+  {t:"Your only limit is you.",a:""},
+  {t:"Make each day your masterpiece.",a:"John Wooden"}
+];
+function quoteOfDay(){
+  const d=new Date(), start=new Date(d.getFullYear(),0,0);
+  const doy=Math.floor((d-start)/864e5);
+  return QUOTES[(doy+d.getFullYear())%QUOTES.length];
+}
 
 /* ---------- state ---------- */
 const defaultState=()=>({
   v:1, updatedAt:new Date().toISOString(),
-  courses:[], schedule:[], tasks:[],
+  courses:[], schedule:[], tasks:[], meta:{},
   settings:{
     name:"Derin", notif:false,
-    guzStart:"2026-09-14", guzEnd:"2027-01-08",
-    baharStart:"2027-02-08", baharEnd:"2027-06-04"
+    guzStart:"2026-09-08", guzEnd:"2026-12-07",
+    baharStart:"2027-01-11", baharEnd:"2027-04-09",
+    holidays:[], keyDates:[]
   }
 });
+function hydrate(p){
+  return Object.assign(defaultState(),p,{
+    settings:Object.assign(defaultState().settings,p.settings||{}),
+    meta:p.meta||{}
+  });
+}
 let S=defaultState();
-try{ const raw=localStorage.getItem(LS); if(raw){ const p=JSON.parse(raw); if(p&&p.v===1) S=Object.assign(defaultState(),p,{settings:Object.assign(defaultState().settings,p.settings||{})}); } }catch(e){}
+try{ const raw=localStorage.getItem(LS); if(raw){ const p=JSON.parse(raw); if(p&&p.v===1) S=hydrate(p); } }catch(e){}
 
-const UI={view:"today", selDate:null, calY:null, calM:null, taskFilter:"açık"};
+/* ---------- UofT 2026-27 seed (from course calendar .ics) ---------- */
+const SEED_FLAG="uoft-2026-27";
+function ensureSeed(){
+  if(S.meta&&S.meta.seed===SEED_FLAG)return false;
+  const defs=[
+    ["CSC108H1","Introduction to Computer Programming","#28418F"],
+    ["ECO320H1","Economic Analysis of Law","#8A3B2E"],
+    ["ECO358H1","Financial Economics I","#1E4B39"],
+    ["MGT250H1","Fundamentals of Marketing","#9C7A2F"],
+    ["TRN250Y1","Empire & Nationalism","#5B3A6E"],
+    ["ECO359H1","Financial Economics II","#2E6E70"],
+    ["ECO365H1","International Monetary Economics","#7A2E4D"],
+    ["ECO372H1","Data Analysis & Applied Econometrics","#4A5568"],
+    ["MGT230H1","Introduction to Finance","#3E5F8A"]
+  ];
+  const byCode={}; S.courses.forEach(c=>{if(c.code)byCode[c.code]=c;});
+  const idOf={};
+  defs.forEach(d=>{
+    let c=byCode[d[0]];
+    if(!c){ c={id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),name:d[1],code:d[0],color:d[2]}; S.courses.push(c); }
+    idOf[d[0]]=c.id;
+  });
+  const F={from:"2026-09-08",to:"2026-12-07"}, W={from:"2027-01-11",to:"2027-04-09"};
+  const rows=[
+    // Güz 2026
+    ["CSC108H1",0,"12:00","13:00","MP 103","LEC",F],
+    ["CSC108H1",2,"11:00","13:00","AH 100","LEC",F],
+    ["ECO320H1",1,"11:00","13:00","RW 117","LEC",F],
+    ["ECO320H1",3,"13:00","15:00","BR 200","LEC",F],
+    ["ECO358H1",1,"09:00","11:00","RW 110","LEC",F],
+    ["ECO358H1",3,"15:00","16:00","RW 117","TUT",F],
+    ["MGT250H1",3,"09:00","11:00","OI G162","LEC",F],
+    ["TRN250Y1",1,"15:00","17:00","GI 102","LEC",F],
+    ["TRN250Y1",2,"16:00","17:00","TL 1016","TUT",F],
+    // Kış/Bahar 2027
+    ["ECO359H1",1,"09:00","11:00","FE 230","LEC",W],
+    ["ECO359H1",3,"10:00","11:00","SS 2135","LEC",W],
+    ["ECO365H1",2,"11:00","13:00","RW 110","LEC",W],
+    ["ECO365H1",4,"11:00","12:00","RW 117","LEC",W],
+    ["ECO372H1",2,"09:00","11:00","SS 1073","LEC",W],
+    ["ECO372H1",0,"09:00","11:00","AH 100","TUT",W],
+    ["MGT230H1",0,"11:00","13:00","ES 1050","LEC",W],
+    ["TRN250Y1",1,"15:00","17:00","GI 102","LEC",W],
+    ["TRN250Y1",2,"16:00","17:00","TL 1016","TUT",W]
+  ];
+  rows.forEach(r=>{
+    S.schedule.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),
+      courseId:idOf[r[0]],day:r[1],start:r[2],end:r[3],loc:r[4],kind:r[5],from:r[6].from,to:r[6].to});
+  });
+  Object.assign(S.settings,{guzStart:"2026-09-08",guzEnd:"2026-12-07",baharStart:"2027-01-11",baharEnd:"2027-04-09",
+    holidays:[
+      {from:"2026-09-07",to:"2026-09-07",name:"Labour Day"},
+      {from:"2026-10-12",to:"2026-10-12",name:"Thanksgiving"},
+      {from:"2026-10-26",to:"2026-10-30",name:"Güz Okuma Haftası"},
+      {from:"2026-12-23",to:"2027-01-03",name:"Kış Tatili"},
+      {from:"2027-02-15",to:"2027-02-15",name:"Family Day"},
+      {from:"2027-02-15",to:"2027-02-19",name:"Kış Okuma Haftası"},
+      {from:"2027-03-26",to:"2027-03-26",name:"Good Friday"}
+    ],
+    keyDates:[
+      {from:"2026-09-08",to:"2026-09-08",name:"Güz dersleri başlıyor 🎬"},
+      {from:"2026-12-07",to:"2026-12-07",name:"Güz derslerinin son günü"},
+      {from:"2026-12-09",to:"2026-12-22",name:"Güz sınav dönemi (yaklaşık)"},
+      {from:"2027-01-11",to:"2027-01-11",name:"Kış dersleri başlıyor 🎬"},
+      {from:"2027-04-09",to:"2027-04-09",name:"Kış derslerinin son günü"},
+      {from:"2027-04-12",to:"2027-04-30",name:"Kış sınav dönemi (yaklaşık)"}
+    ]});
+  S.meta=Object.assign({},S.meta,{seed:SEED_FLAG});
+  return true;
+}
+if(ensureSeed()){ S.updatedAt=new Date().toISOString(); try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){} }
+
+const UI={view:"today", selDate:null, calY:null, calM:null, taskFilter:"açık", schedTerm:null};
 
 /* ---------- helpers ---------- */
 const $=s=>document.querySelector(s);
@@ -275,14 +417,21 @@ const pad=n=>String(n).padStart(2,"0");
 const dkey=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
 const todayKey=()=>dkey(new Date());
 const parseKey=k=>{const[y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d);};
-const dowIdx=d=>(d.getDay()+6)%7; // 0=Pazartesi
+const dowIdx=d=>(d.getDay()+6)%7;
 const fmtLong=d=>DAYS[dowIdx(d)]+", "+d.getDate()+" "+MONTHS[d.getMonth()];
 const fmtShort=k=>{const d=parseKey(k);return d.getDate()+" "+MONTHS[d.getMonth()].slice(0,3);};
 const daysDiff=k=>Math.round((parseKey(k)-parseKey(todayKey()))/864e5);
 const nowMin=()=>{const n=new Date();return n.getHours()*60+n.getMinutes();};
 const toMin=t=>{if(!t)return null;const[h,m]=t.split(":").map(Number);return h*60+m;};
 const courseOf=id=>S.courses.find(c=>c.id===id);
-
+const activeOn=(e,k)=>(!e.from||k>=e.from)&&(!e.to||k<=e.to);
+const holidayOf=k=>(S.settings.holidays||[]).find(h=>k>=h.from&&k<=h.to);
+const keyDatesOf=k=>(S.settings.keyDates||[]).filter(h=>k>=h.from&&k<=h.to);
+function lessonsOn(k){
+  if(holidayOf(k))return[];
+  const di=dowIdx(parseKey(k));
+  return S.schedule.filter(e=>e.day===di&&activeOn(e,k)).sort((a,b)=>a.start.localeCompare(b.start));
+}
 function weekChip(){
   const t=todayKey(),s=S.settings;
   const inR=(a,b)=>a&&b&&t>=a&&t<=b;
@@ -331,7 +480,7 @@ async function cloudSave(){
     const c=err&&err.code;
     if(["capability_disabled","not_granted","not_writer","not_declared"].includes(c)){
       cloudMode="local"; setChip("local","Bu tarayıcıda kayıtlı");
-    }else if(c==="conflict"){ /* shell reloads to winner; localStorage merge handles it */ }
+    }else if(c==="conflict"){ /* shell reloads to winner */ }
     else if(c==="rate_limited"){ clearTimeout(saveTimer); saveTimer=setTimeout(cloudSave,20000); }
     else { setChip("error","Kaydedilemedi, tekrar denenecek"); clearTimeout(saveTimer); saveTimer=setTimeout(cloudSave,8000); }
   }
@@ -345,7 +494,8 @@ async function initCloud(){
     if(r.ok){const p=await r.json(); if(p&&p.v===1)remote=p;}
   }catch(e){}
   if(remote&&(!S.updatedAt||remote.updatedAt>S.updatedAt)){
-    S=Object.assign(defaultState(),remote,{settings:Object.assign(defaultState().settings,remote.settings||{})});
+    S=hydrate(remote);
+    if(ensureSeed())S.updatedAt=new Date().toISOString();
     try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}
     render();
   }
@@ -365,11 +515,10 @@ function notifLog(){ try{return JSON.parse(localStorage.getItem(LS_NOTIF)||"{}")
 function notifMark(k){ const l=notifLog(); l[k]=1; const t=todayKey(); Object.keys(l).forEach(x=>{if(!x.startsWith(t))delete l[x];}); try{localStorage.setItem(LS_NOTIF,JSON.stringify(l));}catch(e){} }
 function notifTick(){
   const t=todayKey(), log=notifLog();
-  // daily digest, once per day
   if(!log[t+":digest"]){
     const due=S.tasks.filter(x=>!x.done&&x.due===t).length;
     const over=S.tasks.filter(x=>!x.done&&x.due&&x.due<t).length;
-    const cls=S.schedule.filter(e=>e.day===dowIdx(new Date())).length;
+    const cls=lessonsOn(t).length;
     if(due+over+cls>0){
       const parts=[];
       if(cls)parts.push(cls+" ders");
@@ -379,9 +528,8 @@ function notifTick(){
     }
     notifMark(t+":digest");
   }
-  // class starting within 20 min
-  const nm=nowMin(), di=dowIdx(new Date());
-  S.schedule.filter(e=>e.day===di).forEach(e=>{
+  const nm=nowMin();
+  lessonsOn(t).forEach(e=>{
     const st=toMin(e.start); if(st==null)return;
     const k=t+":cls:"+e.id;
     if(st-nm>0&&st-nm<=20&&!log[k]){
@@ -390,7 +538,6 @@ function notifTick(){
       notifMark(k);
     }
   });
-  // task with time due within 60 min
   S.tasks.filter(x=>!x.done&&x.due===t&&x.time).forEach(x=>{
     const tm=toMin(x.time), k=t+":task:"+x.id;
     if(tm-nm>0&&tm-nm<=60&&!log[k]){
@@ -416,7 +563,7 @@ function renderNav(){
   $("#nav-side").innerHTML=html; $("#tabbar").innerHTML=html;
 }
 
-/* ---------- view: today ---------- */
+/* ---------- shared row templates ---------- */
 function taskHTML(x,showDue=true){
   const c=courseOf(x.courseId);
   const due=x.due?relDue(x.due):null;
@@ -438,9 +585,11 @@ function lessonHTML(e,mode){
   return `<div class="lesson ${mode||""}" data-edit-sched="${e.id}">
     <span class="time">${e.start}–${e.end}</span>
     <span class="bar" style="background:${c?c.color:"var(--muted)"}"></span>
-    <div><div class="nm">${esc(c?c.name:"Ders")}</div>${e.loc?`<div class="loc">${esc(e.loc)}</div>`:""}</div>
+    <div><div class="nm">${esc(c?c.name:"Ders")}${e.kind&&e.kind!=="LEC"?`<span class="kind">${esc(e.kind)}</span>`:""}</div>${e.loc?`<div class="loc">${esc(e.loc)}</div>`:""}</div>
   </div>`;
 }
+
+/* ---------- view: today ---------- */
 function viewToday(){
   const now=new Date(), t=todayKey(), nm=nowMin();
   const hour=now.getHours();
@@ -449,31 +598,43 @@ function viewToday(){
   const dueToday=S.tasks.filter(x=>!x.done&&x.due===t).sort((a,b)=>(b.priority?1:0)-(a.priority?1:0)||(a.time||"99").localeCompare(b.time||"99"));
   const noDate=S.tasks.filter(x=>!x.done&&!x.due);
   const doneToday=S.tasks.filter(x=>x.done&&x.doneAt&&x.doneAt.startsWith(t));
-  const lessons=S.schedule.filter(e=>e.day===dowIdx(now)).sort((a,b)=>a.start.localeCompare(b.start));
+  const lessons=lessonsOn(t);
+  const hol=holidayOf(t);
   const upcoming=S.tasks.filter(x=>!x.done&&x.due&&x.due>t&&daysDiff(x.due)<=7)
     .sort((a,b)=>a.due.localeCompare(b.due)||(b.priority?1:0)-(a.priority?1:0));
-  const total=dueToday.length+overdue.length, doneN=doneToday.length;
+  const q=quoteOfDay();
 
+  const keys=keyDatesOf(t);
   let digest="";
-  if(overdue.length){
-    digest=`<div class="digest warn">${ICONS.bell}<span><b>${overdue.length} görev gecikti.</b> En eskisi: ${esc(overdue[0].title)} (${fmtShort(overdue[0].due)}). Bugün halletmeye ne dersin?</span></div>`;
-  }else if(total===0&&lessons.length===0&&S.tasks.length>0){
-    digest=`<div class="digest">${ICONS.bell}<span>Bugün için planlı bir şey yok. Nefes al ya da öne geç 🙂</span></div>`;
+  if(keys.length){
+    digest+=keys.map(kd=>`<div class="digest brass">${ICONS.bell}<span><b>${esc(kd.name)}</b></span></div>`).join("");
+  }
+  if(hol){
+    digest+=`<div class="digest brass">${ICONS.bell}<span><b>${esc(hol.name)}</b> — bugün ders yok. Tadını çıkar 🍂</span></div>`;
+  }else if(overdue.length){
+    digest+=`<div class="digest warn">${ICONS.bell}<span><b>${overdue.length} görev gecikti.</b> En eskisi: ${esc(overdue[0].title)} (${fmtShort(overdue[0].due)}). Bugün halletmeye ne dersin?</span></div>`;
+  }else if(dueToday.length===0&&lessons.length===0&&S.tasks.length>0&&!keys.length){
+    digest+=`<div class="digest">${ICONS.bell}<span>Bugün için planlı bir şey yok. Nefes al ya da öne geç 🙂</span></div>`;
   }
 
   return `
   <div class="page-head">
     <div>
-      <h1>${greet}, ${esc(S.settings.name||"")} 👋</h1>
-      <div class="sub">${fmtLong(now)} · <span class="chip">${weekChip()}</span></div>
+      <div class="eyebrow">${fmtLong(now)}</div>
+      <h1>${greet}, ${esc(S.settings.name||"")}.</h1>
+      <div class="sub"><span class="chip">${weekChip()}</span></div>
     </div>
     <button class="btn" data-act="add-task">+ Görev ekle</button>
   </div>
+  <figure class="quote">
+    <blockquote>${esc(q.t)}</blockquote>
+    ${q.a?`<figcaption>— ${esc(q.a)}</figcaption>`:""}
+  </figure>
   ${digest}
   <div class="stat-row">
     <div class="stat acc"><div class="n">${dueToday.length}</div><div class="l">bugün teslim</div></div>
     <div class="stat ${overdue.length?"warn":""}"><div class="n">${overdue.length}</div><div class="l">gecikmiş</div></div>
-    <div class="stat ok"><div class="n">${doneN}</div><div class="l">bugün tamamlandı</div></div>
+    <div class="stat ok"><div class="n">${doneToday.length}</div><div class="l">tamamlandı</div></div>
   </div>
   <div class="sec card">
     <div class="card-h"><h2>Bugünün dersleri</h2><button class="btn ghost sm" data-act="add-sched">+ Ders</button></div>
@@ -482,7 +643,7 @@ function viewToday(){
         const st=toMin(e.start),en=toMin(e.end);
         const mode=nm>=st&&nm<en?"now":nm>=en?"past":"";
         return lessonHTML(e,mode);
-      }).join(""):`<div class="empty"><b>Bugün ders yok</b>${S.schedule.length?"Programın boş bir günündesin.":"Ders programını “Program” sekmesinden ekle."}</div>`}
+      }).join(""):`<div class="empty"><b>${hol?esc(hol.name)+" — ders yok":"Bugün ders yok"}</b>${S.schedule.length?"Programın boş bir günündesin.":"Ders programını “Program” sekmesinden ekle."}</div>`}
     </div>
   </div>
   <div class="sec card">
@@ -515,16 +676,17 @@ function viewCal(){
   const prevDays=new Date(y,m,0).getDate();
   for(let i=0;i<42;i++){
     const dnum=i-startIdx+1;
-    let cy=y,cm=m,cd=dnum,other=false;
+    let cm=m,cd=dnum,other=false;
     if(dnum<1){cd=prevDays+dnum;cm=m-1;other=true;}
     else if(dnum>daysIn){cd=dnum-daysIn;cm=m+1;other=true;}
-    const dt=new Date(cy,cm,cd), k=dkey(dt);
+    const dt=new Date(y,cm,cd), k=dkey(dt);
     const items=(byDay[k]||[]).filter(x=>!x.done);
     const dots=items.slice(0,4).map(x=>{
       const c=courseOf(x.courseId);
       return `<i style="background:${c?c.color:(x.type==="sınav"||x.type==="quiz")?"var(--danger)":"var(--accent)"}"></i>`;
     }).join("");
-    cells+=`<div class="cal-cell ${other?"other":""} ${k===t?"today":""} ${k===UI.selDate?"sel":""}" data-day="${k}">
+    const holc=holidayOf(k)||keyDatesOf(k).length?"hol":"";
+    cells+=`<div class="cal-cell ${other?"other":""} ${k===t?"today":""} ${k===UI.selDate?"sel":""} ${holc}" data-day="${k}">
       <span class="d">${dt.getDate()}</span>
       <span class="cal-dots">${dots}${items.length>4?`<span class="cal-more">+${items.length-4}</span>`:""}</span>
     </div>`;
@@ -535,25 +697,28 @@ function viewCal(){
   if(sel){
     const d=parseKey(sel);
     const items=(byDay[sel]||[]).sort((a,b)=>(a.done?1:0)-(b.done?1:0)||(a.time||"99").localeCompare(b.time||"99"));
-    const lessons=S.schedule.filter(e=>e.day===dowIdx(d)).sort((a,b)=>a.start.localeCompare(b.start));
+    const lessons=lessonsOn(sel);
+    const hol=holidayOf(sel);
     panel=`<div class="sec card" style="margin-top:18px">
       <div class="card-h"><h2>${fmtLong(d)}</h2><button class="btn sm" data-act="add-task-date" data-date="${sel}">+ Ekle</button></div>
       <div class="card-b">
+        ${keyDatesOf(sel).map(kd=>`<div class="digest brass" style="margin-bottom:12px">${ICONS.bell}<span><b>${esc(kd.name)}</b></span></div>`).join("")}
+        ${hol?`<div class="digest brass" style="margin-bottom:12px">${ICONS.bell}<span><b>${esc(hol.name)}</b> — ders yok.</span></div>`:""}
         ${lessons.length?`<div class="sec-title">Dersler</div>`+lessons.map(e=>lessonHTML(e)).join(""):""}
         ${items.length?`<div class="sec-title" style="margin-top:${lessons.length?"12px":"0"}">Görevler</div>`+items.map(x=>taskHTML(x,false)).join(""):""}
-        ${!items.length&&!lessons.length?`<div class="empty">Bu günde bir şey yok.</div>`:""}
+        ${!items.length&&!lessons.length&&!hol&&!keyDatesOf(sel).length?`<div class="empty">Bu günde bir şey yok.</div>`:""}
       </div>
     </div>`;
   }
   return `
-  <div class="page-head"><div><h1>Takvim</h1><div class="sub">Sınavlar, teslimler ve dersler tek bakışta</div></div>
+  <div class="page-head"><div><div class="eyebrow">Planla</div><h1>Takvim</h1><div class="sub">Sınavlar, teslimler ve dersler tek bakışta</div></div>
     <button class="btn" data-act="add-task">+ Görev ekle</button></div>
-  <div class="card" style="padding:18px">
+  <div class="card" style="padding:20px">
     <div class="cal-head">
-      <h2>${MONTHS[((m%12)+12)%12]} ${y+Math.floor(m/12)}</h2>
+      <h2>${MONTHS[m]} ${y}</h2>
       <div class="cal-nav">
         <button data-act="cal-prev" aria-label="Önceki ay">‹</button>
-        <button data-act="cal-today" style="width:auto;padding:0 12px;font-size:13px;font-weight:600">Bugün</button>
+        <button data-act="cal-today" style="width:auto;padding:0 14px;font-size:13px;font-weight:600;border-radius:99px">Bugün</button>
         <button data-act="cal-next" aria-label="Sonraki ay">›</button>
       </div>
     </div>
@@ -595,34 +760,50 @@ function viewTasks(){
   }
   const pills=["açık","hepsi","tamamlanan","sınav","ödev","proje"];
   return `
-  <div class="page-head"><div><h1>Görevler</h1><div class="sub">${S.tasks.filter(x=>!x.done).length} açık görev</div></div>
+  <div class="page-head"><div><div class="eyebrow">Checklist</div><h1>Görevler</h1><div class="sub">${S.tasks.filter(x=>!x.done).length} açık görev</div></div>
     <button class="btn" data-act="add-task">+ Görev ekle</button></div>
   <div class="filters">${pills.map(p=>`<button class="fpill ${f===p?"on":""}" data-filter="${p}">${p[0].toUpperCase()+p.slice(1)}</button>`).join("")}</div>
   ${groups.length?groups.map(([g,items])=>`<div class="sec"><div class="sec-title">${g} · ${items.length}</div><div class="card"><div class="card-b">${items.map(x=>taskHTML(x)).join("")}</div></div></div>`).join(""):`<div class="card"><div class="card-b"><div class="empty"><b>Burada hiç görev yok</b>“+ Görev ekle” ile başla.</div></div></div>`}`;
 }
 
 /* ---------- view: schedule ---------- */
+function termRanges(){
+  const s=S.settings;
+  return {guz:{from:s.guzStart,to:s.guzEnd,label:"Güz 2026"},bahar:{from:s.baharStart,to:s.baharEnd,label:"Bahar 2027"}};
+}
+function currentTerm(){
+  const t=todayKey(),s=S.settings;
+  if(s.baharStart&&t>=s.baharStart)return"bahar";
+  return"guz";
+}
 function viewSched(){
+  if(!UI.schedTerm)UI.schedTerm=currentTerm();
+  const terms=termRanges(), tr=terms[UI.schedTerm];
+  const overlaps=e=>(!e.from&&!e.to)||((!e.from||!tr.to||e.from<=tr.to)&&(!e.to||!tr.from||e.to>=tr.from));
+  const entries=S.schedule.filter(overlaps);
   const todayIdx=dowIdx(new Date());
-  const hasWeekend=S.schedule.some(e=>e.day>=5);
+  const hasWeekend=entries.some(e=>e.day>=5);
   const days=hasWeekend?[0,1,2,3,4,5,6]:[0,1,2,3,4];
   return `
-  <div class="page-head"><div><h1>Ders Programı</h1><div class="sub">Haftalık düzenin</div></div>
+  <div class="page-head"><div><div class="eyebrow">Haftalık düzen</div><h1>Ders Programı</h1></div>
     <div style="display:flex;gap:8px"><button class="btn ghost" data-act="add-course">+ Ders</button><button class="btn" data-act="add-sched">+ Program saati</button></div></div>
+  <div class="filters">
+    ${Object.entries(terms).map(([k,v])=>`<button class="fpill ${UI.schedTerm===k?"on":""}" data-term="${k}">${v.label}</button>`).join("")}
+  </div>
   <div class="sched-grid">
     ${days.map(d=>{
-      const slots=S.schedule.filter(e=>e.day===d).sort((a,b)=>a.start.localeCompare(b.start));
+      const slots=entries.filter(e=>e.day===d).sort((a,b)=>a.start.localeCompare(b.start));
       return `<div class="sched-day ${d===todayIdx?"today":""}"><h3>${DAYS[d]}${d===todayIdx?" · bugün":""}</h3>
         ${slots.length?slots.map(e=>{
           const c=courseOf(e.courseId);
           return `<div class="slot" style="border-left-color:${c?c.color:"var(--muted)"}" data-edit-sched="${e.id}">
-            <div class="t">${e.start} – ${e.end}</div><div class="n">${esc(c?c.name:"?")}</div>${e.loc?`<div class="p">${esc(e.loc)}</div>`:""}
+            <div class="t">${e.start} – ${e.end}</div><div class="n">${esc(c?c.name:"?")}${e.kind&&e.kind!=="LEC"?`<span class="kind">${esc(e.kind)}</span>`:""}</div>${e.loc?`<div class="p">${esc(e.loc)}</div>`:""}
           </div>`;
         }).join(""):`<div class="empty" style="padding:14px 6px">—</div>`}
       </div>`;
     }).join("")}
   </div>
-  <div class="sec card" style="margin-top:24px">
+  <div class="sec card" style="margin-top:26px">
     <div class="card-h"><h2>Derslerim</h2><button class="btn ghost sm" data-act="add-course">+ Ekle</button></div>
     <div class="card-b">
       ${S.courses.length?S.courses.map(c=>`<div class="course-row" data-edit-course="${c.id}">
@@ -638,17 +819,22 @@ function viewSettings(){
   const s=S.settings;
   const notifState=!("Notification" in window)?"yok":Notification.permission;
   return `
-  <div class="page-head"><div><h1>Ayarlar</h1><div class="sub">Ajandanı kendine göre ayarla</div></div></div>
+  <div class="page-head"><div><div class="eyebrow">Kişiselleştir</div><h1>Ayarlar</h1></div></div>
   <div class="sec card"><div class="card-h"><h2>Kişisel</h2></div><div class="card-b">
     <div class="f"><label>Adın</label><input id="set-name" value="${esc(s.name||"")}" placeholder="Adın"></div>
   </div></div>
   <div class="sec card"><div class="card-h"><h2>Dönem tarihleri</h2></div><div class="card-b">
-    <div class="sub" style="margin-bottom:10px">Hafta sayacı bu tarihlere göre hesaplanır. Sonraki yıllarda güncelleyip kullanmaya devam edebilirsin.</div>
+    <div class="sub" style="margin-bottom:10px">Hafta sayacı ve program dönemleri bu tarihlere göre hesaplanır. Sonraki yıllarda güncelleyip kullanmaya devam edebilirsin.</div>
     <div class="f-row"><div class="f"><label>Güz başlangıç</label><input type="date" id="set-gs" value="${s.guzStart||""}"></div>
     <div class="f"><label>Güz bitiş</label><input type="date" id="set-ge" value="${s.guzEnd||""}"></div></div>
     <div class="f-row"><div class="f"><label>Bahar başlangıç</label><input type="date" id="set-bs" value="${s.baharStart||""}"></div>
     <div class="f"><label>Bahar bitiş</label><input type="date" id="set-be" value="${s.baharEnd||""}"></div></div>
     <button class="btn sm" data-act="save-settings">Kaydet</button>
+  </div></div>
+  <div class="sec card"><div class="card-h"><h2>Tatiller & önemli günler</h2><span class="chip brass">UofT St. George</span></div><div class="card-b">
+    ${(s.holidays||[]).map(h=>`<div class="set-row"><div><div class="sl">${esc(h.name)}</div><div class="sd">${fmtShort(h.from)}${h.from!==h.to?" – "+fmtShort(h.to):""}</div></div><span class="chip brass">ders yok</span></div>`).join("")}
+    ${(s.keyDates||[]).map(h=>`<div class="set-row"><div><div class="sl">${esc(h.name)}</div><div class="sd">${fmtShort(h.from)}${h.from!==h.to?" – "+fmtShort(h.to):""}</div></div><span class="chip">önemli gün</span></div>`).join("")}
+    ${!(s.holidays||[]).length&&!(s.keyDates||[]).length?`<div class="empty">Tanımlı tatil yok.</div>`:""}
   </div></div>
   <div class="sec card"><div class="card-h"><h2>Bildirimler</h2></div><div class="card-b">
     <div class="set-row"><div><div class="sl">Tarayıcı bildirimleri</div><div class="sd">Sayfa açıkken: günlük özet, ders başlamadan 20 dk önce ve saatli teslimlerden önce hatırlatır.</div></div>
@@ -665,7 +851,7 @@ function viewSettings(){
       <label class="btn ghost sm" style="cursor:pointer">Dosya seç<input type="file" id="import-file" accept=".json,application/json" style="display:none"></label></div>
     <div class="set-row"><div><div class="sl">Her şeyi sıfırla</div><div class="sd">Bütün dersler ve görevler silinir. Geri alınamaz.</div></div><button class="btn danger sm" data-act="reset">Sıfırla</button></div>
   </div></div>
-  <div class="sub" style="text-align:center;margin-top:8px">Kampüs Ajandam · sadece sana özel 💙</div>`;
+  <div class="sub" style="text-align:center;margin-top:8px">Kampüs Ajandam · sadece sana özel 🌿</div>`;
 }
 
 /* ---------- modals ---------- */
@@ -679,14 +865,14 @@ function taskModal(task,presetDate){
   const x=task||{title:"",type:"ödev",courseId:"",due:presetDate||"",time:"",priority:false,notes:""};
   openModal(`
     <h2>${task?"Görevi düzenle":"Yeni görev"}</h2>
-    <div class="f"><label>Başlık</label><input id="t-title" value="${esc(x.title)}" placeholder="Örn: Calculus ödev 3" maxlength="120"></div>
+    <div class="f"><label>Başlık</label><input id="t-title" value="${esc(x.title)}" placeholder="Örn: ECO358 problem set 2" maxlength="120"></div>
     <div class="f-row">
       <div class="f"><label>Tür</label><select id="t-type">${TYPES.map(t=>`<option ${x.type===t?"selected":""}>${t}</option>`).join("")}</select></div>
       <div class="f"><label>Ders</label><select id="t-course"><option value="">—</option>${S.courses.map(c=>`<option value="${c.id}" ${x.courseId===c.id?"selected":""}>${esc(c.code||c.name)}</option>`).join("")}</select></div>
     </div>
     <div class="f-row">
       <div class="f"><label>Tarih</label><input type="date" id="t-due" value="${x.due||""}"></div>
-      <div class="f"><label>Saat (opsiyonel)</label><input type="time" id="t-time" value="${x.time||""}"></div>
+      <div class="f"><label>Saat (ops.)</label><input type="time" id="t-time" value="${x.time||""}"></div>
     </div>
     <div class="f"><label class="checklbl"><input type="checkbox" id="t-prio" ${x.priority?"checked":""}> Önemli olarak işaretle</label></div>
     <div class="f"><label>Not</label><textarea id="t-notes" placeholder="Detaylar…" maxlength="500">${esc(x.notes||"")}</textarea></div>
@@ -700,8 +886,8 @@ function courseModal(course){
   const x=course||{name:"",code:"",color:COLORS[S.courses.length%COLORS.length]};
   openModal(`
     <h2>${course?"Dersi düzenle":"Yeni ders"}</h2>
-    <div class="f"><label>Ders adı</label><input id="c-name" value="${esc(x.name)}" placeholder="Örn: Calculus I" maxlength="80"></div>
-    <div class="f"><label>Kod (opsiyonel)</label><input id="c-code" value="${esc(x.code||"")}" placeholder="Örn: MAT101" maxlength="20"></div>
+    <div class="f"><label>Ders adı</label><input id="c-name" value="${esc(x.name)}" placeholder="Örn: Financial Economics I" maxlength="80"></div>
+    <div class="f"><label>Kod (ops.)</label><input id="c-code" value="${esc(x.code||"")}" placeholder="Örn: ECO358H1" maxlength="20"></div>
     <div class="f"><label>Renk</label><div class="swatches" id="c-colors">${COLORS.map(c=>`<button style="background:${c}" data-color="${c}" class="${x.color===c?"on":""}" aria-label="Renk ${c}"></button>`).join("")}</div></div>
     <div class="m-actions">
       ${course?`<button class="btn danger del" data-act="del-course" data-id="${course.id}">Sil</button>`:""}
@@ -709,18 +895,39 @@ function courseModal(course){
       <button class="btn" data-act="save-course" data-id="${course?course.id:""}">${course?"Kaydet":"Ekle"}</button>
     </div>`);
 }
+function termOfEntry(e){
+  const s=S.settings;
+  if(!e.from&&!e.to)return"hep";
+  if(e.from===s.guzStart&&e.to===s.baharEnd)return"yil";
+  if(e.from===s.baharStart)return"bahar";
+  if(e.from===s.guzStart)return"guz";
+  return"ozel";
+}
 function schedModal(entry){
   if(!S.courses.length){ toast("Önce bir ders eklemelisin"); courseModal(); return; }
-  const x=entry||{courseId:S.courses[0].id,day:0,start:"09:00",end:"10:50",loc:""};
+  const x=entry||{courseId:S.courses[0].id,day:0,start:"09:00",end:"11:00",loc:"",kind:"LEC"};
+  const term=entry?termOfEntry(entry):currentTerm();
   openModal(`
     <h2>${entry?"Program saatini düzenle":"Programa ders ekle"}</h2>
     <div class="f"><label>Ders</label><select id="s-course">${S.courses.map(c=>`<option value="${c.id}" ${x.courseId===c.id?"selected":""}>${esc(c.name)}</option>`).join("")}</select></div>
-    <div class="f"><label>Gün</label><select id="s-day">${DAYS.map((d,i)=>`<option value="${i}" ${x.day===i?"selected":""}>${d}</option>`).join("")}</select></div>
+    <div class="f-row">
+      <div class="f"><label>Gün</label><select id="s-day">${DAYS.map((d,i)=>`<option value="${i}" ${x.day===i?"selected":""}>${d}</option>`).join("")}</select></div>
+      <div class="f"><label>Tür</label><select id="s-kind">${["LEC","TUT","LAB"].map(k=>`<option ${x.kind===k?"selected":""}>${k}</option>`).join("")}</select></div>
+    </div>
     <div class="f-row">
       <div class="f"><label>Başlangıç</label><input type="time" id="s-start" value="${x.start}"></div>
       <div class="f"><label>Bitiş</label><input type="time" id="s-end" value="${x.end}"></div>
     </div>
-    <div class="f"><label>Yer (opsiyonel)</label><input id="s-loc" value="${esc(x.loc||"")}" placeholder="Örn: B-204" maxlength="60"></div>
+    <div class="f-row">
+      <div class="f"><label>Dönem</label><select id="s-term">
+        <option value="guz" ${term==="guz"?"selected":""}>Güz</option>
+        <option value="bahar" ${term==="bahar"?"selected":""}>Bahar</option>
+        <option value="yil" ${term==="yil"?"selected":""}>Tüm yıl</option>
+        <option value="hep" ${term==="hep"?"selected":""}>Süresiz</option>
+        ${term==="ozel"?`<option value="ozel" selected>Özel (${x.from||"…"} → ${x.to||"…"})</option>`:""}
+      </select></div>
+      <div class="f"><label>Yer (ops.)</label><input id="s-loc" value="${esc(x.loc||"")}" placeholder="Örn: RW 110" maxlength="60"></div>
+    </div>
     <div class="m-actions">
       ${entry?`<button class="btn danger del" data-act="del-sched" data-id="${entry.id}">Sil</button>`:""}
       <button class="btn ghost" data-close="1">Vazgeç</button>
@@ -744,7 +951,7 @@ function importData(file){
     try{
       const p=JSON.parse(r.result);
       if(!p||p.v!==1||!Array.isArray(p.tasks))throw 0;
-      S=Object.assign(defaultState(),p,{settings:Object.assign(defaultState().settings,p.settings||{})});
+      S=hydrate(p);
       persist(); render(); toast("Yedek geri yüklendi ✓");
     }catch(e){ toast("Bu dosya geçerli bir yedek değil"); }
   };
@@ -770,6 +977,8 @@ document.addEventListener("click",e=>{
   if(day){UI.selDate=UI.selDate===day.dataset.day?null:day.dataset.day;render();return;}
   const fil=t.closest("[data-filter]");
   if(fil){UI.taskFilter=fil.dataset.filter;render();return;}
+  const trm=t.closest("[data-term]");
+  if(trm){UI.schedTerm=trm.dataset.term;render();return;}
   const sw=t.closest("#c-colors button");
   if(sw){document.querySelectorAll("#c-colors button").forEach(b=>b.classList.remove("on"));sw.classList.add("on");return;}
   const et=t.closest("[data-edit-task]");
@@ -818,7 +1027,14 @@ document.addEventListener("click",e=>{
   else if(a==="save-sched"){
     const start=$("#s-start").value,end=$("#s-end").value;
     if(!start||!end||end<=start){toast("Bitiş saati başlangıçtan sonra olmalı");return;}
-    const data={courseId:$("#s-course").value,day:Number($("#s-day").value),start,end,loc:$("#s-loc").value.trim()};
+    const s=S.settings, tv=$("#s-term").value;
+    let from=null,to=null;
+    if(tv==="guz"){from=s.guzStart;to=s.guzEnd;}
+    else if(tv==="bahar"){from=s.baharStart;to=s.baharEnd;}
+    else if(tv==="yil"){from=s.guzStart;to=s.baharEnd;}
+    else if(tv==="ozel"&&id){const old=S.schedule.find(z=>z.id===id);from=old.from;to=old.to;}
+    const data={courseId:$("#s-course").value,day:Number($("#s-day").value),start,end,
+      loc:$("#s-loc").value.trim(),kind:$("#s-kind").value,from,to};
     if(id){Object.assign(S.schedule.find(z=>z.id===id),data);}
     else S.schedule.push(Object.assign({id:uid()},data));
     persist();closeModal();render();toast("Program kaydedildi ✓");
@@ -845,7 +1061,7 @@ document.addEventListener("click",e=>{
   else if(a==="reset"){
     if(!confirm("Bütün veriler silinecek. Emin misin?"))return;
     if(!confirm("Son kontrol: dersler, program ve tüm görevler kalıcı olarak silinecek."))return;
-    S=defaultState();persist();render();toast("Her şey sıfırlandı");
+    S=defaultState();S.meta={seed:SEED_FLAG};persist();render();toast("Her şey sıfırlandı");
   }
 });
 document.addEventListener("change",e=>{
@@ -866,5 +1082,5 @@ render();
 initCloud();
 notifTick();
 setInterval(notifTick,60000);
-setInterval(()=>{if(UI.view==="today")render();},5*60000); // keep "now" markers fresh
+setInterval(()=>{if(UI.view==="today")render();},5*60000);
 </script>
